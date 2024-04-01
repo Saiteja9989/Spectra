@@ -1,37 +1,16 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios'; // Import Axios
 import { AppBar, Toolbar, Typography, IconButton, Tabs, Tab, Grid, Paper, Box, Button, Drawer, List, ListItem, ListItemText, useMediaQuery, useTheme } from '@mui/material';
-import { BatteryFull, Notifications, Search, Person, EventNote, SportsSoccer, Assignment, Feedback, Schedule, Menu } from '@mui/icons-material';
+import { Menu, Notifications, Search, Person, EventNote, SportsSoccer, Assignment, Feedback, Schedule } from '@mui/icons-material';
 import './App.css'; // Import your CSS file for custom styling
 import AttendanceTracker from './AttendanceTracker'; // Import the AttendanceTracker component
 
-function App() {
+
+function App({netraID}) {
   const [attendancePercentage, setAttendancePercentage] = useState(0);
-  const [userName, setUserName] = useState('');
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [responseData, setResponseData] = useState(null);
 
-  useEffect(() => {
-    // Simulate fetching user data from an API
-    // Replace this with your actual API call
-    const fetchUserData = async () => {
-      // Simulated user data
-      const simulatedUserName = 'John Doe';
-      setUserName(simulatedUserName);
-    };
-
-    fetchUserData();
-  }, []);
-
-  useEffect(() => {
-    // Simulate fetching attendance data from an API
-    // Replace this with your actual API call
-    const fetchAttendanceData = async () => {
-      // Simulated attendance percentage
-      const simulatedAttendancePercentage = 56;
-      setAttendancePercentage(simulatedAttendancePercentage);
-    };
-
-    fetchAttendanceData();
-  }, []);
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
@@ -47,6 +26,44 @@ function App() {
     setDrawerOpen(open);
   };
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.post('http://teleuniv.in/netra/api.php', {
+          method: "32",
+          rollno: netraID
+        });
+        // console.log(response.data)
+        setResponseData(response.data); // Log the response data or handle it as needed
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    if (netraID) {
+      fetchData();
+    }
+  }, [netraID]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.post('http://teleuniv.in/netra/api.php', {
+          method: "314",
+          rollno: netraID
+        });
+        // console.log(response.data)
+       setAttendancePercentage(response.data.overallattperformance.totalpercentage); // Store the response data in a variable
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    if (netraID) {
+      fetchData();
+    }
+  }, [netraID]);
+
   const appBar = (
     <AppBar position="static" className="header">
       <Toolbar>
@@ -56,7 +73,7 @@ function App() {
           </IconButton>
         )}
         <Typography variant="h6" className="app-name">
-          {userName}
+          {responseData && responseData.firstname}
         </Typography>
         {!isMobile && (
           <>
