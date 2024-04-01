@@ -45,6 +45,25 @@ function App({netraID}) {
     }
   }, [netraID]);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.post('http://teleuniv.in/netra/api.php', {
+          method: "314",
+          rollno: netraID
+        });
+        // console.log(response.data)
+       setAttendancePercentage(response.data.overallattperformance.totalpercentage); // Store the response data in a variable
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    if (netraID) {
+      fetchData();
+    }
+  }, [netraID]);
+
   const appBar = (
     <AppBar position="static" className="header">
       <Toolbar>
