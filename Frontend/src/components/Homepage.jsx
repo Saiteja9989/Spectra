@@ -5,6 +5,7 @@ import axios from 'axios';
 import { toast,ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from 'react-router-dom';
+import { useNetraID } from '../../netraidcontext';
 import { customErrorCloseStyle, customErrorTitleStyle, customToastStyle, customErrorIconStyle } from './toast'
 function UserInputPage() {
   const [searchQuery, setSearchQuery] = useState('');
@@ -12,6 +13,7 @@ function UserInputPage() {
   const [searchType, setSearchType] = useState(null);
   const [netraId, setNetraId] = useState(null);
   const navigate = useNavigate();
+  const { setNetraID } = useNetraID();
 
   const handleInputChange = async (e) => {
     const inputValue = e.target.value.toUpperCase();
@@ -86,6 +88,7 @@ function UserInputPage() {
       // Handle the response from the backend
       console.log(response.data); // Log the retrieved Netra ID or handle it as needed
       setNetraId(response.data);
+      setNetraID(response.data);
       if (response.data) {
         navigate('/options'); // Replace '/anotherpage' with your desired URL
       } else {
