@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import SearchPage from './components/Homepage'; // Import SearchPage
 import OptionsPage from './components/options';
 import { NetraIDProvider } from '../netraidcontext';
+import Check from './components/check'
 
 const App = () => {
   return (
@@ -10,7 +11,8 @@ const App = () => {
     <Router>
       <Routes>
         <Route path="/" element={<SearchPage/>} /> 
-        <Route path="/options" element={<OptionsPage/>} />
+        <Route path="/check" element={<Check/>} />
+        <Route path="/options" element={<OptionsPage />} />
       </Routes>
       </Router>
       </NetraIDProvider>
