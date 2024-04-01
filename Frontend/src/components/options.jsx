@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { styled } from '@mui/system';
 import { Assignment, BarChart, Feedback, SportsTennis } from '@mui/icons-material';
 import { motion } from 'framer-motion';
-import { useNetraID } from '../../netraidcontext';
+// import { useNetraID } from '../../netraidcontext';
 
 const StyledCard = styled(Card)(({ theme }) => ({
   width: '800px',
@@ -16,7 +16,7 @@ const StyledCard = styled(Card)(({ theme }) => ({
 }));
 
 const ProfilePage = () => {
-  const { netraID } = useNetraID(); // Move the hook call inside the component body
+  // const { netraID } = useNetraID(); // Move the hook call inside the component body
 
   const variants = {
     visible: { opacity: 1, y: 0 },
@@ -25,10 +25,10 @@ const ProfilePage = () => {
 
   return (
     <Container maxWidth="xl">
-      <Grid container justifyContent="center" alignItems="center" style={{ marginBottom: '40px' }}>
+      {/* <Grid container justifyContent="center" alignItems="center" style={{ marginBottom: '40px' }}>
         <StyledCard>
           <CardContent>
-            <Avatar alt={netraID} src={netraID} sx={{ width: 100, height: 100, margin: 'auto' }} />
+            <Avatar alt={} src={} sx={{ width: 100, height: 100, margin: 'auto' }} />
             <Typography variant="h5" gutterBottom>
               {netraID}
             </Typography>
@@ -46,7 +46,7 @@ const ProfilePage = () => {
             </Typography>
           </CardContent>
         </StyledCard>
-      </Grid>
+      </Grid> */}
 
       <Grid container spacing={3} justifyContent="center">
         {/* Options Section */}
