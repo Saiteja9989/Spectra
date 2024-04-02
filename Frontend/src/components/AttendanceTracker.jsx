@@ -1,58 +1,47 @@
-import React from 'react';
-import { CircularProgress, Box, Typography } from '@mui/material';
-import SemiCircleProgressBar from 'react-progressbar-semicircle';
-import './App.css'
-function AttendanceTracker({ attendancePercentage }) {
-  const normalizedPercentage = (attendancePercentage / 100) * 180;
-  const progressColor = attendancePercentage < 51 ? 'red' : attendancePercentage < 75 ? 'orange' : 'green';
+import React, { useState, useEffect } from 'react';
+import CircularProgress from '@mui/material/CircularProgress';
+import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
 
-  // Add transition effect for the stroke-dasharray property
-  const progressBarStyle = {
-    transition: 'stroke-dasharray 10000s ease-out', // 100 seconds duration without delay
-    stroke: progressColor,
-  };
-  
-  const circularProgressContainerStyle = {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    height: '100%',
-  };
-
-  const circularProgressStyle = {
-    width: '300px',
-    height: '200px',
-    position: 'relative',
-  };
-
-  const labelStyle = {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    fontSize: '1.5rem',
-    fontWeight: 'bold',
-    transform: 'translate(-50%, -50%)',
-    textAlign: 'center',
-  };
+function CircularProgressWithLabel(props) {
+  const { value } = props;
 
   return (
-    <Box style={circularProgressContainerStyle}>
-      <Box style={circularProgressStyle}>
-        <SemiCircleProgressBar
-          percentage={attendancePercentage}
-          showPercentValue
-          diameter={300}
-          strokeWidth={20}
-          stroke={progressColor} // Inline style for dynamic color
-          style={progressBarStyle} // Apply the transition effect
-        />
-        {/* Uncomment below if you want to show the label inside the semi-circle */}
-        {/* <Box style={labelStyle}>
-          <Typography variant="h4" style={{ color: progressColor }}>{attendancePercentage}%</Typography>
-        </Box> */}
+    <Box sx={{ position: 'relative', display: 'inline-flex' }}>
+      <CircularProgress variant="determinate" value={value} />
+      <Box
+        sx={{
+          top: 0,
+          left: 0,
+          bottom: 0,
+          right: 0,
+          position: 'absolute',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        <Typography variant="caption" component="div" color="text.secondary">
+          {`${Math.round(value)}%`}
+        </Typography>
       </Box>
     </Box>
   );
 }
 
-export default AttendanceTracker;
+function CircularWithValueLabel() {
+  const [progress, setProgress] = useState(10);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setProgress((prevProgress) => (prevProgress >= 100 ? 0 : prevProgress + 10));
+    }, 800);
+    return () => {
+      clearInterval(timer);
+    };
+  }, []);
+
+  return <CircularProgressWithLabel value={progress} />;
+}
+
+export default CircularWithValueLabel;
