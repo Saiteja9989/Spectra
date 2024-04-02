@@ -10,7 +10,7 @@ function UserInputPage({ setNetraID }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [searchType, setSearchType] = useState(null);
-  const [netraId, setNetraId] = useState(null);
+  // const [netraId, setNetraId] = useState(null);
   const navigate = useNavigate();
 
   const handleInputChange = async (e) => {
@@ -85,11 +85,11 @@ function UserInputPage({ setNetraID }) {
       });
       // Handle the response from the backend
       console.log(response.data); // Log the retrieved Netra ID or handle it as needed
-      setNetraId(response.data);
-      console.log(netraId)
+      // setNetraId(response.data);
+      // console.log(netraId)
       setNetraID(response.data);
       if (response.data) {
-        navigate('/check'); // Replace '/anotherpage' with your desired URL
+        navigate('/user'); // Replace '/anotherpage' with your desired URL
       } else {
         // Display error message if Netra ID is null or invalid
         toast.error('Not a valid phone number, hall ticket number, or name.', {
