@@ -7,7 +7,7 @@ const DonutChart = ({ attendancePer }) => {
 
   // Determine the color based on attendance percentage
   let color;
-  if (percentage < 40) {
+  if (percentage < 45) {
     color = '#FF0000'; // Red for less than 40%
   } else if (percentage < 65) {
     color = '#FFA500'; // Orange for less than 65%
