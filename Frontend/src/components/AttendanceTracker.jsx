@@ -1,47 +1,33 @@
-import React, { useState, useEffect } from 'react';
-import CircularProgress from '@mui/material/CircularProgress';
-import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
+import React from 'react';
+import './AttendanceTracker.css'; // Assuming CSS file is named styles.css
 
-function CircularProgressWithLabel(props) {
-  const { value } = props;
+const DonutChart = ({ attendancePer }) => {
+  // Limit percentage to 100
+  const percentage = attendancePer > 100 ? 100 : attendancePer;
+
+  // Determine the color based on attendance percentage
+  let color;
+  if (percentage < 40) {
+    color = '#FF0000'; // Red for less than 40%
+  } else if (percentage < 65) {
+    color = '#FFA500'; // Orange for less than 65%
+  } else {
+    color = '#00FF00'; // Green for 65% and above
+  }
 
   return (
-    <Box sx={{ position: 'relative', display: 'inline-flex' }}>
-      <CircularProgress variant="determinate" value={value} />
-      <Box
-        sx={{
-          top: 0,
-          left: 0,
-          bottom: 0,
-          right: 0,
-          position: 'absolute',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}
-      >
-        <Typography variant="caption" component="div" color="text.secondary">
-          {`${Math.round(value)}%`}
-        </Typography>
-      </Box>
-    </Box>
+    <div className="semi-donut">
+      <style>
+        {`
+          .semi-donut {
+            --percentage: ${percentage};
+            --fill: ${color};
+          }
+        `}
+      </style>
+      {attendancePer}
+    </div>
   );
-}
+};
 
-function CircularWithValueLabel() {
-  const [progress, setProgress] = useState(10);
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setProgress((prevProgress) => (prevProgress >= 100 ? 0 : prevProgress + 10));
-    }, 800);
-    return () => {
-      clearInterval(timer);
-    };
-  }, []);
-
-  return <CircularProgressWithLabel value={progress} />;
-}
-
-export default CircularWithValueLabel;
+export default DonutChart;

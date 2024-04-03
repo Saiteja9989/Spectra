@@ -3,7 +3,8 @@ import { Layout, Menu, Row, Col, Avatar, Typography, Card } from 'antd';
 import { ClusterOutlined, ScheduleOutlined, SolutionOutlined, UserOutlined, LineChartOutlined, MessageOutlined } from '@ant-design/icons';
 import './dashboard.css';
 import axios from 'axios';
-import CircularProgressWithLabel from './AttendanceTracker';
+import AttendanceTracker from '../components/AttendanceTracker'; // Import the DonutChart component
+// import CircularProgressWithValueLabel from '../components/AttendanceTracker';
 
 const { Header, Content } = Layout;
 const { Title, Text } = Typography;
@@ -94,7 +95,7 @@ const ProfilePage = ({ netraID }) => {
                       <tbody >
                         {attendanceData.slice(0, 5).map((dayObject, index) => (
                           <tr key={index} style={{ padding: '8px' }}>
-                            <td style={{ paddingRight: '8px',paddingLeft:"58px",paddingTop:"0px" }}>{dayObject.date}:</td>
+                            <td className="attendance-date">{dayObject.date}:</td>
                             {Object.values(dayObject.sessions).map((sessionValue, sessionIndex) => (
                               <td key={sessionIndex} style={{ paddingRight: '8px' }}>
                                 {parseInt(sessionValue) === 1 ? ' ✅ ' : parseInt(sessionValue) === 0 ? '❌' : '⭕'}
@@ -106,7 +107,9 @@ const ProfilePage = ({ netraID }) => {
                     </table>
                   </Row>
                 )}
-                
+                <div style={{ textAlign: 'center', marginTop: '20px' }}>
+                  <AttendanceTracker attendancePer={attendancePer} /> {/* Render DonutChart component and pass attendancePer as prop */}
+                </div>
               </div>
             </Card>
           </Col>
