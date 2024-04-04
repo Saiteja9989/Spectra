@@ -1,34 +1,34 @@
 import React, { useState } from 'react';
-import { Container, TextField, Button, List, ListItem, ListItemText, Typography, Grid } from '@mui/material';
-import SearchIcon from '@mui/icons-material/Search';
+// import { Avatar } from 'antd';
+import { Input, Button, List, Avatar, Typography, Row, Col } from 'antd';
 import axios from 'axios';
-import { toast,ToastContainer } from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from 'react-router-dom';
-import { customErrorCloseStyle, customErrorTitleStyle, customToastStyle, customErrorIconStyle } from './toast'
+import { customErrorCloseStyle, customErrorTitleStyle, customToastStyle, customErrorIconStyle } from './toast';
+
+const { Text } = Typography;
+
 function UserInputPage({ setNetraID }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [searchType, setSearchType] = useState(null);
-  // const [netraId, setNetraId] = useState(null);
   const navigate = useNavigate();
 
   const handleInputChange = async (e) => {
     const inputValue = e.target.value.toUpperCase();
     setSearchQuery(inputValue);
 
-    // Return early if searchQuery is empty
     if (!inputValue) {
       setSearchResults([]);
       return;
     }
 
-    // Determine the type of search based on input format
     if (/^\d{10}$/.test(inputValue)) {
       setSearchType('phone');
       try {
         const response = await axios.post('http://localhost:5000/api/search', { searchInput: inputValue });
-        setSearchResults(response.data.slice(0, 5)); // Display only the first 5 results
+        setSearchResults(response.data.slice(0, 5));
       } catch (error) {
         console.error('Error fetching search results:', error);
       }
@@ -36,7 +36,7 @@ function UserInputPage({ setNetraID }) {
       setSearchType('partialPhone');
       try {
         const response = await axios.post('http://localhost:5000/api/search', { searchInput: inputValue });
-        setSearchResults(response.data.slice(0, 5)); // Display only the first 5 results
+        setSearchResults(response.data.slice(0, 5));
       } catch (error) {
         console.error('Error fetching search results:', error);
       }
@@ -44,7 +44,7 @@ function UserInputPage({ setNetraID }) {
       setSearchType('hallticketno');
       try {
         const response = await axios.post('http://localhost:5000/api/search', { searchInput: inputValue });
-        setSearchResults(response.data.slice(0, 5)); // Display only the first 5 results
+        setSearchResults(response.data.slice(0, 5));
       } catch (error) {
         console.error('Error fetching search results:', error);
       }
@@ -52,11 +52,27 @@ function UserInputPage({ setNetraID }) {
       setSearchType('name');
       try {
         const response = await axios.post('http://localhost:5000/api/search', { searchInput: inputValue });
-        setSearchResults(response.data.slice(0, 5)); // Display only the first 5 results
+        setSearchResults(response.data.slice(0, 5));
       } catch (error) {
         console.error('Error fetching search results:', error);
       }
     }
+  };
+
+  const getAvatar = (result) => {
+    if (getResultText(result)) {
+      return (
+        <Avatar.Group>
+          <Avatar
+            style={{ backgroundColor: 'grey', verticalAlign: 'middle' }}
+            icon={<Avatar />}
+          >
+            {getResultText(result).charAt(0)}
+          </Avatar>
+        </Avatar.Group>
+      );
+    }
+    return <Avatar src="https://joeschmoe.io/api/v1/random" />;
   };
 
   const getResultText = (result) => {
@@ -73,32 +89,36 @@ function UserInputPage({ setNetraID }) {
         return '';
     }
   };
- 
-  
-  
-  
+
   const handleSearch = async () => {
     try {
       const response = await axios.post('http://localhost:5000/api/netra-id', {
         searchType: searchType,
         searchValue: searchQuery
       });
-      // Handle the response from the backend
-      console.log(response.data); // Log the retrieved Netra ID or handle it as needed
-      // setNetraId(response.data);
-      // console.log(netraId)
+      console.log(response.data);
       setNetraID(response.data);
       if (response.data) {
-        navigate('/user'); // Replace '/anotherpage' with your desired URL
+        navigate('/user');
       } else {
-        // Display error message if Netra ID is null or invalid
         toast.error('Not a valid phone number, hall ticket number, or name.', {
-          // position: toast.POSITION.TOP_CENTER,
           style: customToastStyle,
-          icon: <div style={customErrorIconStyle}><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm2-13h-4v8h4V7zm-1 5h-2v-2h2v2z" /></svg></div>,
-          closeButton: <div style={customErrorCloseStyle}><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 1L1 12h3v10h14V12h3L12 1zm5 11l-1.41 1.41L12 13.41l-3.59 3.59L7 12.59 10.59 9 7 5.41 8.41 4 12 7.59l3.59-3.59L17 5.41 13.41 9 17 12.59 15.59 14 12 10.41 8.41 14 7 12.59 10.59 9 12 10.41z" /></svg></div>,
+          icon: (
+            <div style={customErrorIconStyle}>
+              <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm2-13h-4v8h4V7zm-1 5h-2v-2h2v2z" />
+              </svg>
+            </div>
+          ),
+          closeButton: (
+            <div style={customErrorCloseStyle}>
+              <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 1L1 12h3v10h14V12h3L12 1zm5 11l-1.41 1.41L12 13.41l-3.59 3.59L7 12.59 10.599 7 5.41 8.41 4 12 7.59 15.59 4 19 5.41 17.41 9 19 12.59 17.41 16 19 18.59 15.59 22 12 19.41 8.41 22 7 18.59z" />
+              </svg>
+            </div>
+          ),
           closeButtonClassName: 'error__close',
-        })
+        });
       }
     } catch (error) {
       console.error('Error fetching Netra ID:', error);
@@ -107,53 +127,82 @@ function UserInputPage({ setNetraID }) {
 
   const handleResultClick = (result) => {
     setSearchQuery(getResultText(result).trim());
+    setSearchResults([]);
   };
 
   return (
-    <Container maxWidth="sm" style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-    <ToastContainer position="top-center" />
-      
-      <Grid container direction="column" alignItems="center" spacing={2}>
-        <Grid item>
-          <Typography variant="h4" align="center">
-            Welcome to KMIT Student Portal
-          </Typography>
-        </Grid>
-        <Grid item>
-          <Typography variant="body1" align="center">
-            Access your academic profile, attendance, results, and provide feedback.
-          </Typography>
-        </Grid>
-        <Grid item>
-          <TextField
-            type="text"
-            value={searchQuery}
-            onChange={handleInputChange}
-            placeholder="Enter Name, Hall Ticket No., or Phone No."
-            fullWidth
-            variant="outlined"
-          />
-        </Grid>
-        
-        <Grid item>
-          <Button variant="contained" color="primary"  onClick={handleSearch} startIcon={<SearchIcon />}>
-            Search
-          </Button>
-        </Grid>
-        {/* Conditionally render the list of results only if searchQuery is not empty */}
+    <div
+    style={{
+      position: 'fixed',
+      top: 15,
+      left: 0,
+      right: 0,
+      width: '80%', // Keep the 35% margin from the left and right root elements
+      boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)',
+      padding: '2rem',
+      borderRadius: '5px',
+      textAlign: 'center',
+      margin: '0 auto', // Center horizontally
+      maxWidth: '600px', // Max width for smaller screens
+    }}
+  >
+      <ToastContainer position="top-center" />
+      <div
+        style={{
+          width: '80%', // Increased container box width
+          boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)',
+          padding: '2rem',
+          borderRadius: '5px',
+          textAlign: 'center',
+          margin: 'auto', // Centered horizontally
+          maxWidth: '600px', // Max width for smaller screens
+        }}
+      >
+        <Row>
+          <Col span={24}>
+            <Text strong style={{ fontSize: '2rem', marginBottom: '1rem' }}>
+              Welcome to KMIT Student Portal
+            </Text>
+          </Col>
+          <Col span={24}>
+            <Text type="secondary" style={{ fontSize: '1.1rem', marginBottom: '1rem',paddingBottom: '4px'}}>
+              Access Your Academic Profile, Attendance, Results....!
+            </Text>
+          </Col>
+        </Row>
+        <Input.Search
+          value={searchQuery}
+          onChange={handleInputChange}
+          placeholder="Enter Name,HallTicket No,or Phone No."
+          enterButton
+          onSearch={handleSearch}
+          size="large"
+          style={{ marginBottom: '1rem', width: '100%' }} // Reduced width from 100% to 50%
+        />
         {searchQuery && (
-          <Grid item>
-            <List>
-              {searchResults.map((result, index) => (
-                <ListItem key={index} button onClick={() => handleResultClick(result)}>
-                  <ListItemText primary={getResultText(result)} />
-                </ListItem>
-              ))}
-            </List>
-          </Grid>
+         <List
+         itemLayout="horizontal"
+         dataSource={searchResults}
+         renderItem={(result, index) => (
+           <List.Item key={index} onClick={() => handleResultClick(result)}>
+             <List.Item.Meta
+               avatar={getAvatar(result)} // Use the custom getAvatar function
+               title={getResultText(result)}
+             />
+           </List.Item>
+         )}
+       />
         )}
-      </Grid>
-    </Container>
+        <style jsx>{`
+          @media screen and (max-width: 480px) {
+            input::placeholder {
+              font-size: 11px;
+            }
+          }
+        `}</style>
+
+      </div>
+    </div>
   );
 }
 
