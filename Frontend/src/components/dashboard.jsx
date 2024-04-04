@@ -1,9 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, } from 'react';
+import { useNavigate } from 'react-router-dom';
+
 import { Layout, Menu, Row, Col, Avatar, Typography, Card } from 'antd';
 import { ClusterOutlined, ScheduleOutlined, SolutionOutlined, UserOutlined, LineChartOutlined, MessageOutlined } from '@ant-design/icons';
 import './dashboard.css';
 import axios from 'axios';
 import AttendanceTracker from '../components/AttendanceTracker'; // Import the DonutChart component
+// import AttendancePage from "./AttendancePage"
 // import CircularProgressWithValueLabel from '../components/AttendanceTracker';
 
 const { Header, Content } = Layout;
@@ -15,6 +18,7 @@ const ProfilePage = ({ netraID }) => {
   const [attendanceData, setAttendanceData] = useState(null);
   const [attendancePer, setAttendancePer] = useState(0);
   const [twoWeekSessions, setTwoWeekSessions] = useState(0);
+  const navigate = useNavigate();
 
 
   useEffect(() => {
@@ -148,7 +152,7 @@ const ProfilePage = ({ netraID }) => {
                   hoverable
                   className="option-card"
                 >
-                  <Meta title="Attendance" avatar={<ScheduleOutlined />} />
+                  <Meta title="Attendance"  onClick={() => navigate('/attendance')} avatar={<ScheduleOutlined />} />
                 </Card>
               </Col>
               <Col xs={12} sm={12} md={8} lg={6} xl={6}>
