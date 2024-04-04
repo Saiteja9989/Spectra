@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Table, Progress, Button } from 'antd';
 import axios from 'axios';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { LeftOutlined } from '@ant-design/icons';
 
 const AttendancePage = ({ netraID }) => {
   const [attendanceData, setAttendanceData] = useState(null);
-  const history = useHistory();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (netraID) {
@@ -28,7 +28,7 @@ const AttendancePage = ({ netraID }) => {
   };
 
   const handleBackButtonClick = () => {
-    history.push('/');
+    navigate('/user');
   };
 
   const columns = [
