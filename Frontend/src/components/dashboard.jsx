@@ -14,6 +14,8 @@ const ProfilePage = ({ netraID }) => {
   const [profileDetails, setProfileDetails] = useState(null);
   const [attendanceData, setAttendanceData] = useState(null);
   const [attendancePer, setAttendancePer] = useState(0);
+  const [twoWeekSessions, setTwoWeekSessions] = useState(0);
+
 
   useEffect(() => {
     if (netraID) {
@@ -43,7 +45,9 @@ const ProfilePage = ({ netraID }) => {
       });
       const data = response.data.attandance.dayobjects;
       const data1 = response.data.overallattperformance.totalpercentage;
+      const data2 = response.data.attandance.twoweeksessions;
       setAttendanceData(data);
+      setTwoWeekSessions(data2);
       setAttendancePer(data1);
     } catch (error) {
       console.error('Error fetching attendance data:', error);
@@ -86,35 +90,46 @@ const ProfilePage = ({ netraID }) => {
             </Card>
           </Col>
           <Col xs={24} sm={24} md={12} lg={16} xl={16}>
-            <Card style={{ minHeight: '400px' }}>
-              <div style={{ textAlign: 'center', marginTop: '20px', }}>
-                <div class="Atten1" style={{display: 'inline-block',marginRight: '100px'}}>
-                  <AttendanceTracker attendancePer={attendancePer} /> {/* Render DonutChart component and pass attendancePer as prop */}
-                  </div>
-                <div class="session1" style={{ textAlign: 'center',display: 'inline-block', verticalAlign: 'top', marginLeft: '20px'} }>
-                <Title level={4}>Latest Attendance</Title>
-                {attendanceData && (
-                  <Row gutter={[16, 16]}>
-                    <table>
-                      <tbody >
-                        {attendanceData.slice(0, 5).map((dayObject, index) => (
-                          <tr key={index} style={{ padding: '8px' }}>
-                            <td className="attendance-date">{dayObject.date}:</td>
-                            {Object.values(dayObject.sessions).map((sessionValue, sessionIndex) => (
-                              <td key={sessionIndex} style={{ paddingRight: '8px' }}>
-                                {parseInt(sessionValue) === 1 ? ' ✅ ' : parseInt(sessionValue) === 0 ? '❌' : '⭕'}
-                              </td>
-                            ))}
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </Row>
-                )}
-                </div>
-              </div>
-            </Card>
-          </Col>
+  <Card style={{ minHeight: '400px' }}>
+    <div style={{ textAlign: 'center', marginTop: '20px' }}>
+      <div class="Atten1" style={{ display: 'inline-block', marginRight: '100px' }}>
+        <AttendanceTracker attendancePer={attendancePer} /> {/* Render DonutChart component and pass attendancePer as prop */}
+      </div>
+      <div class="session1" style={{ textAlign: 'center', display: 'inline-block', verticalAlign: 'top', marginLeft: '20px' }}>
+        <Title level={4}>Latest Attendance</Title>
+        {attendanceData && (
+          <div>
+            <Row gutter={[16, 16]} style={{ marginBottom: '20px' }}>
+              <table>
+                <tbody>
+                  {attendanceData.slice(0, 7).map((dayObject, index) => (
+                    <tr key={index} style={{ padding: '8px' }}>
+                      <td className="attendance-date">{dayObject.date}:</td>
+                      {Object.values(dayObject.sessions).map((sessionValue, sessionIndex) => (
+                        <td key={sessionIndex} style={{ paddingRight: '8px' }}>
+                          {parseInt(sessionValue) === 1 ? ' ✅ ' : parseInt(sessionValue) === 0 ? '❌' : '⭕'}
+                        </td>
+                      ))}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </Row>
+            <Row gutter={[16, 16]}>
+              <Col span={24}>
+                {/* <Title level={4}>Two-Week Sessions</Title> */}
+                <p>Absent: {twoWeekSessions.absent}</p>
+                <p>Present: {twoWeekSessions.present}</p>
+                <p>No Sessions: {twoWeekSessions.nosessions}</p>
+              </Col>
+            </Row>
+          </div>
+        )}
+      </div>
+    </div>
+  </Card>
+</Col>
+
         </Row>
         <Row gutter={[16, 16]} style={{ marginTop: '20px' }}>
           <Col span={24}>
