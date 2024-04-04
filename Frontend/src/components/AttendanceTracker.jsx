@@ -25,7 +25,7 @@ const DonutChart = ({ attendancePer }) => {
           }
         `}
       </style>
-      {attendancePer}
+      {attendancePer}%
     </div>
   );
 };
