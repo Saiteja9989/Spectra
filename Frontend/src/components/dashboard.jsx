@@ -87,7 +87,11 @@ const ProfilePage = ({ netraID }) => {
           </Col>
           <Col xs={24} sm={24} md={12} lg={16} xl={16}>
             <Card style={{ minHeight: '400px' }}>
-              <div style={{ textAlign: 'center', marginTop: '20px' }}>
+              <div style={{ textAlign: 'center', marginTop: '20px', }}>
+                <div class="Atten1" style={{display: 'inline-block',marginRight: '100px'}}>
+                  <AttendanceTracker attendancePer={attendancePer} /> {/* Render DonutChart component and pass attendancePer as prop */}
+                  </div>
+                <div class="session1" style={{ textAlign: 'center',display: 'inline-block', verticalAlign: 'top', marginLeft: '20px'} }>
                 <Title level={4}>Latest Attendance</Title>
                 {attendanceData && (
                   <Row gutter={[16, 16]}>
@@ -107,8 +111,6 @@ const ProfilePage = ({ netraID }) => {
                     </table>
                   </Row>
                 )}
-                <div style={{ textAlign: 'center', marginTop: '20px' }}>
-                  <AttendanceTracker attendancePer={attendancePer} /> {/* Render DonutChart component and pass attendancePer as prop */}
                 </div>
               </div>
             </Card>
