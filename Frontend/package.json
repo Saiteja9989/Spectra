@@ -3,6 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "proxy": "http://teleuniv.in",
   "scripts": {
     "dev": "vite --host",
     "build": "vite build",
@@ -20,6 +21,7 @@
     "babel-runtime": "^6.26.0",
     "bootstrap": "^5.3.3",
     "framer-motion": "^11.0.23",
+    "html-to-react": "^1.7.0",
     "pandas-js": "^0.2.4",
     "react": "^18.2.0",
     "react-bootstrap": "^2.9.0-beta.1",
