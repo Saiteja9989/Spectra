@@ -57,6 +57,7 @@ const ResultPage = ({ netraID }) => {
     }
 };
 
+
   const parseHtml = (htmlData, setData) => {
     const parser = new DOMParser();
     const doc = parser.parseFromString(htmlData, 'text/html');
@@ -135,6 +136,20 @@ const ResultPage = ({ netraID }) => {
       return { columns, data, creditsAcquired, sgpa };
     };
     
+    const parseBacklogHtml = (htmlData) => {
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(htmlData, 'text/html');
+  
+      // Extract the total backlogs from the HTML
+      const totalBacklogsElement = doc.querySelector('#backlogs');
+      let totalBacklogs = 0;
+      if (totalBacklogsElement) {
+          totalBacklogs = parseInt(totalBacklogsElement.textContent.trim(), 10);
+      }
+  
+      return totalBacklogs;
+  };
+  
 
 
     

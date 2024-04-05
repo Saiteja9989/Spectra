@@ -192,7 +192,7 @@ const ProfilePage = ({ netraID }) => {
                   hoverable
                   className="option-card"
                 >
-                  <Meta title="Timetable" avatar={<SolutionOutlined />} />
+                  <Meta title="Timetable" onClick={() => navigate('/timetable')} avatar={<SolutionOutlined />} />
                 </Card>
               </Col>
               <Col xs={12} sm={12} md={8} lg={6} xl={6}>

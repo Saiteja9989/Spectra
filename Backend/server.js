@@ -17,6 +17,15 @@ app.use(cors({
   credentials: true, // Enable credentials (if required)
 }));
 
+// Allow requests only from specific origins
+const corsOptions = {
+  origin: 'http://localhost:5173',
+  optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+};
+
+app.use(cors(corsOptions));
+
+
 // Bodyparser Middleware
 app.use(bodyParser.json());
 
