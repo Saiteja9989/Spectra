@@ -69,21 +69,39 @@ const ProfilePage = ({ netraID }) => {
                 <Avatar size={150} icon={<UserOutlined />} src={profileDetails.picture} />
               )}
               <div style={{ marginTop: '20px' }}>
-                {profileDetails && (
+              {profileDetails && (
                   <div>
                     <Title level={4}>{profileDetails.firstname}</Title>
-                    <Text>Hall Ticket No: {profileDetails.hallticketno}</Text>
-                    <br />
-                    <Text>Department: {profileDetails.dept}</Text>
-                    <br />
-                    <Text>Section: {profileDetails.section}</Text>
-                    <br />
-                    <Text>Current Year: {profileDetails.currentyear}</Text>
-                    <br />
-                    <Text>Year of Admission: {profileDetails.yearofadmision}</Text>
-                    <br />
-                    <Text>Phone: {profileDetails.phone}</Text>
-                    <br />
+                    <div style={{textAlign: 'center' }} >
+                    <table style={{ margin: 'auto' }}>
+                      <tbody>
+                        <tr>
+                          <td>Hall Ticket No:</td>
+                          <td style={{ paddingLeft: '8px' }}>{profileDetails.hallticketno}</td>
+                        </tr>
+                        <tr>
+                          <td>Department:</td>
+                          <td style={{ paddingLeft: '8px' }}>{profileDetails.dept}</td>
+                        </tr>
+                        <tr>
+                          <td>Section:</td>
+                          <td style={{ paddingLeft: '8px' }}>{profileDetails.section}</td>
+                        </tr>
+                        <tr>
+                          <td>Current Year:</td>
+                          <td style={{ paddingLeft: '8px' }}>{profileDetails.currentyear}</td>
+                        </tr>
+                        <tr>
+                          <td>Year of Admission:</td>
+                          <td style={{ paddingLeft: '8px' }}>{profileDetails.yearofadmision}</td>
+                        </tr>
+                        <tr>
+                          <td>Phone:</td>
+                          <td style={{ paddingLeft: '8px' }}>{profileDetails.phone}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                    </div>
                   </div>
                 )}
               </div>
@@ -115,13 +133,25 @@ const ProfilePage = ({ netraID }) => {
                           </tbody>
                         </table>
                       </Row>
-                      <Row gutter={[16, 16]}>
-                        <Col span={24}>
-                          <p>Absent: {twoWeekSessions.absent}</p>
-                          <p>Present: {twoWeekSessions.present}</p>
-                          <p>No Sessions: {twoWeekSessions.nosessions}</p>
-                        </Col>
-                      </Row>
+                      <div class="sessoins2w" style={{textAlign:"center", marginLeft:"60px"}}>
+                <table>
+                  <tr>
+                    <td>Absent:</td>
+                    <td style={{ paddingLeft: '8px' }}>{twoWeekSessions.absent}</td>
+                    <td style={{ paddingLeft: '8px' }}>❌</td>
+                  </tr>
+                  <tr>
+                    <td>Present:</td>
+                    <td style={{ paddingLeft: '8px' }}>{twoWeekSessions.present}</td>
+                    <td style={{ paddingLeft: '8px' }}> ✅ </td>
+                  </tr>
+                  <tr>
+                    <td>No Sessions:</td>
+                    <td style={{ paddingLeft: '8px' }}>{twoWeekSessions.nosessions}</td>
+                    <td style={{ paddingLeft: '8px' }}>⭕</td>
+                  </tr>
+                </table>
+                </div> 
                     </div>
                   )}
                 </div>
