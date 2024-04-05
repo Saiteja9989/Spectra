@@ -38,7 +38,7 @@ const ResultPage = ({ netraID }) => {
                 const response = await axios.get('http://teleuniv.in/trinetra/pages/lib/student_ajaxfile.php', {
                     params: { mid: 57, rollno: netraID, year, sem: semester }
                 });
-
+              console.log(response.data);
                 console.log(`Results for Year ${year}, Semester ${semester}:`, response.data);
                 const parsedData = parseHtml1(response.data); // Parse HTML data
                 if (parsedData) {
@@ -89,33 +89,52 @@ const ResultPage = ({ netraID }) => {
     
 
     const parseHtml1 = (htmlData) => {
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(htmlData, 'text/html');
-        const table = doc.querySelector('.tableofcmm');
-      
-        if (!table) {
-          console.error('Table not found in HTML data');
-          return null;
-        }
-      
-        const columns = Array.from(table.querySelectorAll('th')).map(th => th.textContent.trim());
-        const data = Array.from(table.querySelectorAll('tbody tr')).map(row => {
-          const rowData = {};
-          Array.from(row.querySelectorAll('td')).forEach((td, index) => {
-            let textContent = td.textContent.trim();
-            // Replace 'NA' with 'N/a'
-            if (textContent.toUpperCase() === 'NA') {
-              textContent = 'N/a';
-            }
-            rowData[columns[index]] = textContent;
-          });
-          return rowData;
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(htmlData, 'text/html');
+      const table = doc.querySelector('.tableofcmm');
+    
+      if (!table) {
+        console.error('Table not found in HTML data');
+        return null;
+      }
+    
+      const columns = Array.from(table.querySelectorAll('th')).map(th => th.textContent.trim());
+      const rows = Array.from(table.querySelectorAll('tbody tr'));
+    
+      if (rows.length === 0) {
+        console.warn('No rows found in the table');
+        return { columns, data: [], creditsAcquired: 'N/A', sgpa: 'N/A' }; // Set credits and sgpa as 'N/A'
+      }
+    
+      const data = rows.map(row => {
+        const rowData = {};
+        Array.from(row.querySelectorAll('td')).forEach((td, index) => {
+          let textContent = td.textContent.trim();
+          // Replace 'NA' with 'N/A'
+          if (textContent.toUpperCase() === 'NA') {
+            textContent = 'N/A';
+          }
+          rowData[columns[index]] = textContent;
         });
-      
-        return { columns, data };
-      }; 
-
-
+        return rowData;
+      });
+    
+      // Extract SGPA and credits only if available
+      let creditsAcquired = 'N/A';
+      let sgpa = 'N/A';
+      const tfoot = table.querySelector('tfoot');
+      if (tfoot) {
+        const creditsAcquiredElement = tfoot.querySelector('.creditsacquired');
+        const sgpaElement = tfoot.querySelector('td:last-child');
+        if (creditsAcquiredElement && sgpaElement) {
+          creditsAcquired = creditsAcquiredElement.textContent.trim();
+          sgpa = sgpaElement.textContent.trim();
+        }
+      }
+    
+      return { columns, data, creditsAcquired, sgpa };
+    };
+    
 
 
     
