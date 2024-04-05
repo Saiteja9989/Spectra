@@ -3,11 +3,14 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "proxy": "http://teleuniv.in",
+
   "scripts": {
     "dev": "vite --host",
     "build": "vite build",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
+    
   },
   "dependencies": {
     "@emotion/react": "^11.11.4",
