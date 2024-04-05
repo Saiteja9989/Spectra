@@ -62,9 +62,9 @@ const AttendancePage = ({ netraID }) => {
 
   return (
     <div style={{ padding: '20px', display: 'flex', flexDirection: 'column' }}>
-      <Button type="primary" icon={<LeftOutlined />} onClick={handleBackButtonClick} size="small" style={{ alignSelf: 'flex-start', marginBottom: '10px' }}>
+      {/* <Button type="primary" icon={<LeftOutlined />} onClick={handleBackButtonClick} size="small" style={{ alignSelf: 'flex-start', marginBottom: '10px' }}>
         Back
-      </Button>
+      </Button> */}
       <div style={{ flex: '1' }}>
         <Table
           dataSource={attendanceData}

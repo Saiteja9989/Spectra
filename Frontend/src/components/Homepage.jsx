@@ -196,7 +196,7 @@ function UserInputPage({ setNetraID }) {
         <style jsx>{`
           @media screen and (max-width: 480px) {
             input::placeholder {
-              font-size: 11px;
+              font-size: 9px;
             }
           }
         `}</style>
