@@ -200,7 +200,7 @@ const ProfilePage = ({ netraID }) => {
                   hoverable
                   className="option-card"
                 >
-                  <Meta title="Feedback" avatar={<MessageOutlined />} />
+                  <Meta title="Feedback" onClick={() => navigate('/feedback')} avatar={<MessageOutlined />} />
                 </Card>
               </Col>
             </Row>
