@@ -7,7 +7,7 @@ const search = require("./routes/livesearch")
 const netraid= require('./routes/netraid')
 require('dotenv').config();
 const StudentDetail = require('./models/studentDetails')
-
+const Feedback = require('./routes/feedback')
 
 const app = express();
 const PORT =  5000 || process.env.PORT ;
@@ -31,6 +31,7 @@ app.use(bodyParser.json());
 
 app.use('/api', search)
 app.use('/api', netraid)
+app.use('/api',Feedback)
 
 // DB Config
 const db = process.env.CONNECTION
