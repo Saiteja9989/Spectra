@@ -12,12 +12,16 @@ import Timetable from './components/Timetable';
 import FeedbackForm from './components/Feedback';
 
 const App = () => {
-  const [netraID, setNetraID] = useState(null);
-  // const [profileDetails, setProfileDetails] = useState(null);
-  // const [attendanceData, setAttendanceData] = useState(null);
+  const [netraID, setNetraID] = useState(() => {
+    // Initialize netraID from localStorage or null if not found
+    return localStorage.getItem('netraID') || null;
+  });
 
+  useEffect(() => {
+    // Update localStorage whenever netraID changes
+    localStorage.setItem('netraID', netraID);
+  }, [netraID]);
 
-  
   return (
     <Router>
       <Routes>
