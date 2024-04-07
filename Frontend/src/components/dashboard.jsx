@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Layout, Menu, Row, Col, Avatar, Typography, Card } from 'antd';
 import { ClusterOutlined, ScheduleOutlined, SolutionOutlined, UserOutlined, LineChartOutlined, MessageOutlined } from '@ant-design/icons';
 import './dashboard.css';
@@ -164,43 +164,30 @@ const ProfilePage = ({ netraID }) => {
             <Title level={4}>Options</Title>
             <Row gutter={[16, 16]}>
               <Col xs={12} sm={12} md={8} lg={6} xl={6}>
-                <Card
-                  hoverable
-                  className="option-card"
-                >
-                  <Meta title="Clubs" avatar={<ClusterOutlined />} />
+                <Link to="/clubs">
+                  <Card hoverable className="option-card">
+                    <Meta title="Clubs" avatar={<ClusterOutlined />} />
+                  </Card>
+                </Link>
+              </Col>
+              <Col xs={12} sm={12} md={8} lg={6} xl={6}>
+                <Card hoverable className="option-card" onClick={() => navigate('/attendance')}>
+                  <Meta title="Attendance" avatar={<ScheduleOutlined />} />
                 </Card>
               </Col>
               <Col xs={12} sm={12} md={8} lg={6} xl={6}>
-                <Card
-                  hoverable
-                  className="option-card"
-                >
-                  <Meta title="Attendance" onClick={() => navigate('/attendance')} avatar={<ScheduleOutlined />} />
+                <Card hoverable className="option-card" onClick={() => navigate('/result')}>
+                  <Meta title="Results" avatar={<LineChartOutlined />} />
                 </Card>
               </Col>
               <Col xs={12} sm={12} md={8} lg={6} xl={6}>
-                <Card
-                  hoverable
-                  className="option-card"
-                >
-                  <Meta title="Results" onClick={() => navigate('/result')} avatar={<LineChartOutlined />} />
+                <Card hoverable className="option-card" onClick={() => navigate('/timetable')}>
+                  <Meta title="Timetable" avatar={<SolutionOutlined />} />
                 </Card>
               </Col>
               <Col xs={12} sm={12} md={8} lg={6} xl={6}>
-                <Card
-                  hoverable
-                  className="option-card"
-                >
-                  <Meta title="Timetable" onClick={() => navigate('/timetable')} avatar={<SolutionOutlined />} />
-                </Card>
-              </Col>
-              <Col xs={12} sm={12} md={8} lg={6} xl={6}>
-                <Card
-                  hoverable
-                  className="option-card"
-                >
-                  <Meta title="Feedback" onClick={() => navigate('/feedback')} avatar={<MessageOutlined />} />
+                <Card hoverable className="option-card" onClick={() => navigate('/feedback')}>
+                  <Meta title="Feedback" avatar={<MessageOutlined />} />
                 </Card>
               </Col>
             </Row>
