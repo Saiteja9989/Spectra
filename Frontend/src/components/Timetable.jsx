@@ -1,9 +1,9 @@
-// Timetable.js
 import React, { useState, useEffect, useRef } from 'react';
-import { Tabs, Table, Spin, Card } from 'antd';
+import { Tabs, Table, Card } from 'antd';
 import axios from 'axios';
 import { Parser } from 'html-to-react';
 import './Timetable.css';
+import Loader from './Loader'; // Import the Loader component
 
 const { TabPane } = Tabs;
 
@@ -120,48 +120,44 @@ const Timetable = ({ netraID }) => {
     <div style={{ padding: '20px', maxWidth: '800px', margin: '0 auto' }}>
       <h1 style={{ textAlign: 'center', marginBottom: 20 }}>Timetable</h1>
       {loading ? (
-        <Spin size="large" />
+        <Loader /> // Display the Loader component while loading
       ) : (
         <div style={{ overflowX: 'auto', width: '100%' }}>
-<Tabs
-  defaultActiveKey={null}
-  centered
-  renderTabBar={(props, DefaultTabBar) => (
-    <DefaultTabBar {...props} moreIcon={<span>...</span>} />
-  )}
-  ref={tabsRef}
-  className="custom-tabs"
->
-  {/* Render Monday TabPane if it exists in timetableData */}
-  {timetableData.find((dayData) => dayData.dayname === 'Monday') && (
-    <TabPane
-      tab="Monday"
-      key="Monday"
-      style={{ minWidth: '120px' }}
-    >
-      {/* Render timetable data for Monday */}
-      {timetableData.map((dayData) => (
-        dayData.dayname === 'Monday' && renderTimetableForDay(dayData)
-      ))}
-    </TabPane>
-  )}
-  {/* Render other TabPanels */}
-  {timetableData.map((dayData, index) => (
-    dayData.dayname !== 'Monday' && (
-      <TabPane
-        tab={dayData.dayname}
-        key={`${dayData.dayname}-${index}`} // Ensure unique key by including index
-        style={{ minWidth: '80px' }} // Set a minimum width for other tabs
-      >
-        {renderTimetableForDay(dayData)}
-      </TabPane>
-    )
-  ))}
-</Tabs>
-
-
-
-
+          <Tabs
+            defaultActiveKey={null}
+            centered
+            renderTabBar={(props, DefaultTabBar) => (
+              <DefaultTabBar {...props} moreIcon={<span>...</span>} />
+            )}
+            ref={tabsRef}
+            className="custom-tabs"
+          >
+            {/* Render Monday TabPane if it exists in timetableData */}
+            {timetableData.find((dayData) => dayData.dayname === 'Monday') && (
+              <TabPane
+                tab="Monday"
+                key="Monday"
+                style={{ minWidth: '120px' }}
+              >
+                {/* Render timetable data for Monday */}
+                {timetableData.map((dayData) => (
+                  dayData.dayname === 'Monday' && renderTimetableForDay(dayData)
+                ))}
+              </TabPane>
+            )}
+            {/* Render other TabPanels */}
+            {timetableData.map((dayData, index) => (
+              dayData.dayname !== 'Monday' && (
+                <TabPane
+                  tab={dayData.dayname}
+                  key={`${dayData.dayname}-${index}`} // Ensure unique key by including index
+                  style={{ minWidth: '80px' }} // Set a minimum width for other tabs
+                >
+                  {renderTimetableForDay(dayData)}
+                </TabPane>
+              )
+            ))}
+          </Tabs>
         </div>
       )}
     </div>
