@@ -33,41 +33,48 @@ const FeedbackForm = ({ netraID }) => {
   };
 
   return (
-    <Card title="Feedback Form" style={{ width: '400px' }}>
-      <Form
-        form={form}
-        layout="vertical"
-        onFinish={onFinish}
-        onFinishFailed={onFinishFailed}
+    <div style={{ display: 'flex', justifyContent: 'center' }}>
+      <Card
+        title="Feedback Form"
+        style={{ width: '400px', textAlign: 'center', backgroundColor: '#f0f2f5' }}
+        headStyle={{ backgroundColor: '#001529', color: 'white' }}
+        bodyStyle={{ padding: '20px' }}
       >
-        <Form.Item
-          label="Rating"
-          name="rating"
-          rules={[{ required: true, message: 'Please give a rating!' }]}
+        <Form
+          form={form}
+          layout="vertical"
+          onFinish={onFinish}
+          onFinishFailed={onFinishFailed}
         >
-          <Rate value={rating} onChange={handleRatingChange} />
-        </Form.Item>
-        <Form.Item
-          label="Name"
-          name="name"
-          rules={[{ required: true, message: 'Please enter your name!' }]}
-        >
-          <Input placeholder="Enter your name" />
-        </Form.Item>
-        <Form.Item
-          label="Comments"
-          name="comments"
-          rules={[{ required: true, message: 'Please enter your comments!' }]}
-        >
-          <Input.TextArea placeholder="Enter your comments" rows={4} />
-        </Form.Item>
-        <Form.Item>
-          <Button type="primary" htmlType="submit">
-            Submit Feedback
-          </Button>
-        </Form.Item>
-      </Form>
-    </Card>
+          <Form.Item
+            label="Rating"
+            name="rating"
+            rules={[{ required: true, message: 'Please give a rating!' }]}
+          >
+            <Rate value={rating} onChange={handleRatingChange} style={{ color: '#FFD700' }} />
+          </Form.Item>
+          <Form.Item
+            label="Name"
+            name="name"
+            rules={[{ required: true, message: 'Please enter your name!' }]}
+          >
+            <Input placeholder="Enter your name" />
+          </Form.Item>
+          <Form.Item
+            label="Comments"
+            name="comments"
+            rules={[{ required: true, message: 'Please enter your comments!' }]}
+          >
+            <Input.TextArea placeholder="Enter your comments" rows={4} />
+          </Form.Item>
+          <Form.Item>
+            <Button type="primary" htmlType="submit">
+              Submit Feedback
+            </Button>
+          </Form.Item>
+        </Form>
+      </Card>
+    </div>
   );
 };
 

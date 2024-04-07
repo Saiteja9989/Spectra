@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
-// import { Avatar } from 'antd';
-import { Input, Button, List, Avatar, Typography, Row, Col } from 'antd';
+import { Input, List, Avatar, Typography, Row, Col, Card, Button, Space } from 'antd';
 import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from 'react-router-dom';
-import { customErrorCloseStyle, customErrorTitleStyle, customToastStyle, customErrorIconStyle } from './toast';
+import { customErrorCloseStyle, customToastStyle, customErrorIconStyle } from './toast';
 
 const { Text } = Typography;
 
@@ -26,67 +25,25 @@ function UserInputPage({ setNetraID }) {
 
     if (/^\d{10}$/.test(inputValue)) {
       setSearchType('phone');
-      try {
-        const response = await axios.post('http://localhost:5000/api/search', { searchInput: inputValue });
-        setSearchResults(response.data.slice(0, 5));
-      } catch (error) {
-        console.error('Error fetching search results:', error);
-      }
+      await fetchResults(inputValue);
     } else if (/^\d{1,9}$/.test(inputValue)) {
       setSearchType('partialPhone');
-      try {
-        const response = await axios.post('http://localhost:5000/api/search', { searchInput: inputValue });
-        setSearchResults(response.data.slice(0, 5));
-      } catch (error) {
-        console.error('Error fetching search results:', error);
-      }
+      await fetchResults(inputValue);
     } else if (/^2[a-zA-Z0-9]+$/.test(inputValue)) {
       setSearchType('hallticketno');
-      try {
-        const response = await axios.post('http://localhost:5000/api/search', { searchInput: inputValue });
-        setSearchResults(response.data.slice(0, 5));
-      } catch (error) {
-        console.error('Error fetching search results:', error);
-      }
+      await fetchResults(inputValue);
     } else {
       setSearchType('name');
-      try {
-        const response = await axios.post('http://localhost:5000/api/search', { searchInput: inputValue });
-        setSearchResults(response.data.slice(0, 5));
-      } catch (error) {
-        console.error('Error fetching search results:', error);
-      }
+      await fetchResults(inputValue);
     }
   };
 
-  const getAvatar = (result) => {
-    if (getResultText(result)) {
-      return (
-        <Avatar.Group>
-          <Avatar
-            style={{ backgroundColor: 'grey', verticalAlign: 'middle' }}
-            icon={<Avatar />}
-          >
-            {getResultText(result).charAt(0)}
-          </Avatar>
-        </Avatar.Group>
-      );
-    }
-    return <Avatar src="https://joeschmoe.io/api/v1/random" />;
-  };
-
-  const getResultText = (result) => {
-    switch (searchType) {
-      case 'name':
-        return ` ${result.firstname}`;
-      case 'hallticketno':
-        return ` ${result.hallticketno}`;
-      case 'phone':
-        return `${result.phone}`;
-      case 'partialPhone':
-        return `${result.phone}`;
-      default:
-        return '';
+  const fetchResults = async (inputValue) => {
+    try {
+      const response = await axios.post('http://localhost:5000/api/search', { searchInput: inputValue });
+      setSearchResults(response.data.slice(0, 5));
+    } catch (error) {
+      console.error('Error fetching search results:', error);
     }
   };
 
@@ -96,7 +53,6 @@ function UserInputPage({ setNetraID }) {
         searchType: searchType,
         searchValue: searchQuery
       });
-      console.log(response.data);
       setNetraID(response.data);
       if (response.data) {
         navigate('/user');
@@ -130,78 +86,81 @@ function UserInputPage({ setNetraID }) {
     setSearchResults([]);
   };
 
+  const getAvatar = (result) => {
+    if (getResultText(result)) {
+      return (
+        <Avatar.Group>
+          <Avatar
+            style={{ backgroundColor: 'grey', verticalAlign: 'middle' }}
+            icon={<Avatar />}
+          >
+            {getResultText(result).charAt(0)}
+          </Avatar>
+        </Avatar.Group>
+      );
+    }
+    return <Avatar src="https://joeschmoe.io/api/v1/random" />;
+  };
+
+  const getResultText = (result) => {
+    switch (searchType) {
+      case 'name':
+        return ` ${result.firstname}`;
+      case 'hallticketno':
+        return ` ${result.hallticketno}`;
+      case 'phone':
+        return `${result.phone}`;
+      case 'partialPhone':
+        return `${result.phone}`;
+      default:
+        return '';
+    }
+  };
+
   return (
-    <div
-    style={{
-      position: 'fixed',
-      top: 15,
-      left: 0,
-      right: 0,
-      width: '80%', // Keep the 35% margin from the left and right root elements
-      boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)',
-      padding: '2rem',
-      borderRadius: '5px',
-      textAlign: 'center',
-      margin: '0 auto', // Center horizontally
-      maxWidth: '600px', // Max width for smaller screens
-    }}
-  >
+    <div style={{ padding: '2rem', maxWidth: '800px', margin: '0 auto' }}>
       <ToastContainer position="top-center" />
-      <div
-        style={{
-          width: '80%', // Increased container box width
-          boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)',
-          padding: '2rem',
-          borderRadius: '5px',
-          textAlign: 'center',
-          margin: 'auto', // Centered horizontally
-          maxWidth: '600px', // Max width for smaller screens
-        }}
-      >
-        <Row>
+      <Row justify="center" style={{ marginBottom: '2rem' }}>
+        <Col span={24} style={{ textAlign: 'center' }}>
+          <Text strong style={{ fontSize: '2rem' }}>Welcome to KMIT Student Portal</Text>
+        </Col>
+        <Col span={24} style={{ textAlign: 'center' }}>
+          <Text type="secondary" style={{ fontSize: '1.1rem' }}>Access Your Academic Profile, Attendance, Results....!</Text>
+        </Col>
+      </Row>
+      <Row justify="center">
+        <Col span={24}>
+          <Input.Search
+            value={searchQuery}
+            onChange={handleInputChange}
+            placeholder="Enter Name, HallTicket No, or Phone No."
+            enterButton
+            onSearch={handleSearch}
+            size="large"
+            style={{ width: '100%' }}
+          />
+        </Col>
+      </Row>
+      {searchQuery && (
+        <Row justify="center" style={{ marginTop: '2rem' }}>
           <Col span={24}>
-            <Text strong style={{ fontSize: '2rem', marginBottom: '1rem' }}>
-              Welcome to KMIT Student Portal
-            </Text>
-          </Col>
-          <Col span={24}>
-            <Text type="secondary" style={{ fontSize: '1.1rem', marginBottom: '1rem',paddingBottom: '4px'}}>
-              Access Your Academic Profile, Attendance, Results....!
-            </Text>
+            <Space direction="vertical" style={{ width: '100%' }}>
+              {searchResults.map((result, index) => (
+                <Card
+                  key={index}
+                  style={{ boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', marginBottom: '1rem' }}
+                  onClick={() => handleResultClick(result)}
+                >
+                  <Card.Meta
+                    avatar={getAvatar(result)}
+                    title={<Text strong>{getResultText(result)}</Text>}
+                  />
+                </Card>
+              ))}
+            </Space>
           </Col>
         </Row>
-        <Input.Search
-          value={searchQuery}
-          onChange={handleInputChange}
-          placeholder="Enter Name,HallTicket No,or Phone No."
-          enterButton
-          onSearch={handleSearch}
-          size="large"
-          style={{ marginBottom: '1rem', width: '100%' }} // Reduced width from 100% to 50%
-        />
-        {searchQuery && (
-         <List
-         itemLayout="horizontal"
-         dataSource={searchResults}
-         renderItem={(result, index) => (
-           <List.Item key={index} onClick={() => handleResultClick(result)}>
-             <List.Item.Meta
-               avatar={getAvatar(result)} // Use the custom getAvatar function
-               title={getResultText(result)}
-             />
-           </List.Item>
-         )}
-       />
-        )}
-        <style jsx>{`
-          @media screen and (max-width: 480px) {
-            input::placeholder {
-              font-size: 9px;
-            }
-          }
-        `}</style>
-
-      </div>
+      )}
     </div>
   );
 }
