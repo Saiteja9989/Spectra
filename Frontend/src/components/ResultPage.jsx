@@ -10,6 +10,7 @@ const ResultPage = ({ netraID }) => {
   const [internalResultData, setInternalResultData] = useState([]);
   const [externalResultData, setExternalResultData] = useState([]);
   const [selectedTab, setSelectedTab] = useState('internal'); // Default selected tab
+  const [totalBacklogs, setTotalBacklogs] = useState(null);
 
   useEffect(() => {
     fetchInternalResultData();
@@ -29,33 +30,47 @@ const ResultPage = ({ netraID }) => {
 
   const fetchExternalResultData = async () => {
     try {
-        const yearRange = [1, 2, 3, 4]; // Define the range of years
-        const semesterRange = [1, 2];    // Define the range of semesters
-        const allResults = []; // Accumulate all semester results here
-
-        for (let year of yearRange) {
-            for (let semester of semesterRange) {
-                const response = await axios.get('http://teleuniv.in/trinetra/pages/lib/student_ajaxfile.php', {
-                    params: { mid: 57, rollno: netraID, year, sem: semester }
-                });
-              console.log(response.data);
-                console.log(`Results for Year ${year}, Semester ${semester}:`, response.data);
-                const parsedData = parseHtml1(response.data); // Parse HTML data
-                if (parsedData) {
-                    allResults.push({
-                        year,
-                        semester,
-                        ...parsedData,
-                    });
-                }
-            }
+      const yearRange = [1, 2, 3, 4]; // Define the range of years
+      const semesterRange = [1, 2];    // Define the range of semesters
+      const allResults = []; // Accumulate all semester results here
+  
+      for (let year of yearRange) {
+        for (let semester of semesterRange) {
+          const response = await axios.get('http://teleuniv.in/trinetra/pages/lib/student_ajaxfile.php', {
+            params: { mid: 57, rollno: netraID, year, sem: semester }
+          });
+          console.log(`Response for Year ${year}, Semester ${semester}:`, response.data);
+  
+          console.log(`Results for Year ${year}, Semester ${semester}:`, response.data);
+          const parsedData = parseHtml1(response.data); // Parse HTML data
+          if (parsedData) {
+            allResults.push({
+              year,
+              semester,
+              ...parsedData,
+            });
+          }
         }
-        console.log(allResults)
-        setExternalResultData(allResults); // Update state with all semester results
+      }
+      
+      console.log(allResults)
+      setExternalResultData(allResults); // Update state with all semester results
+  
+      // Fetch backlog information
+      const backlogResponse = await axios.post('http://teleuniv.in/netra/api.php', { method: 316, rollno: netraID }, {
+        withCredentials: true
+      });
+  
+      const totalBacklogs = (backlogResponse.data.backlogs);
+      console.log('Total backlogs:', backlogResponse.data.backlogs);
+  
+      // Set the totalBacklogs state
+      setTotalBacklogs(totalBacklogs);
     } catch (error) {
-        console.error('Error fetching external result data:', error);
+      console.error('Error fetching external result data:', error);
     }
-};
+  };
+  
 
 
   const parseHtml = (htmlData, setData) => {
@@ -144,12 +159,11 @@ const ResultPage = ({ netraID }) => {
       const totalBacklogsElement = doc.querySelector('#backlogs');
       let totalBacklogs = 0;
       if (totalBacklogsElement) {
-          totalBacklogs = parseInt(totalBacklogsElement.textContent.trim(), 10);
+        totalBacklogs = parseInt(totalBacklogsElement.textContent.trim(), 10);
       }
   
       return totalBacklogs;
-  };
-  
+    };
 
 
     
@@ -169,7 +183,7 @@ const ResultPage = ({ netraID }) => {
           </TabPane>
           <TabPane tab="External" key="external">
             <Row gutter={[16, 16]}>
-              <ExternalResultComponent resultData={externalResultData} />
+            <ExternalResultComponent resultData={externalResultData} totalBacklogs={totalBacklogs} />
             </Row>
           </TabPane>
         </Tabs>
