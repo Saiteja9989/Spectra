@@ -49,7 +49,7 @@ function UserInputPage({ setNetraID }) {
 
   const handleSearch = async () => {
     try {
-      const response = await axios.post('http://localhost:5000/api/netra-id', {
+      const response = await axios.post('http://localhost:5000/api/netra-id' , {
         searchType: searchType,
         searchValue: searchQuery
       });
