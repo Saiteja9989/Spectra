@@ -3,8 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "proxy": "http://teleuniv.in"
-,
+  "proxy": "http://teleuniv.in",
   "scripts": {
     "dev": "vite --host",
     "build": "vite build",
@@ -31,6 +30,7 @@
     "react-chartjs-2": "^5.2.0",
     "react-dom": "^18.2.0",
     "react-progressbar-semicircle": "^1.2.1",
+    "react-responsive": "^10.0.0",
     "react-router-dom": "^6.22.3",
     "react-toastify": "^10.0.5",
     "toastify": "^2.0.1",

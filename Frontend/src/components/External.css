@@ -1,0 +1,22 @@
+@media (max-width: 768px) {
+    .ant-card-body {
+      padding: 8px;
+    }
+    
+    .ant-card {
+      width: 95%;
+    }
+  
+    h3 {
+      font-size: 1rem;
+    }
+  
+    .ant-table-small td {
+      padding: 8px;
+    }
+  
+    .ant-table-small th {
+      padding: 8px;
+    }
+  }
+  
