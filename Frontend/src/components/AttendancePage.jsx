@@ -3,9 +3,12 @@ import { Table, Progress, Button } from 'antd';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { LeftOutlined } from '@ant-design/icons';
+import Loader from './Loader'; // Import the Loader component
+
 
 const AttendancePage = ({ netraID }) => {
   const [attendanceData, setAttendanceData] = useState(null);
+  const [loading, setLoading] = useState(true); // Add loading state
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -24,6 +27,8 @@ const AttendancePage = ({ netraID }) => {
       setAttendanceData(data);
     } catch (error) {
       console.error('Error fetching attendance data:', error);
+    } finally {
+      setLoading(false); // Update loading state once data is fetched
     }
   };
 
@@ -66,13 +71,17 @@ const AttendancePage = ({ netraID }) => {
         Back
       </Button> */}
       <div style={{ flex: '1' }}>
-        <Table
-          dataSource={attendanceData}
-          columns={columns}
-          bordered
-          size="small"
-          pagination={false} // Remove pagination
-        />
+        {loading ? (
+          <Loader /> // Render the Loader component while loading
+        ) : (
+          <Table
+            dataSource={attendanceData}
+            columns={columns}
+            bordered
+            size="small"
+            pagination={false} // Remove pagination
+          />
+        )}
       </div>
     </div>
   );

@@ -1,12 +1,13 @@
 import React from 'react';
+import Loader from './Loader'; // Import the Loader component
 import { Card, Table } from 'antd';
 
 const ExternalResultComponent = ({ resultData }) => {
-  const renderSemesterResults = () => {
-    if (!resultData || resultData.length === 0) {
-      return <div>No external data available</div>;
-    }
+  if (!resultData || resultData.length === 0) {
+    return <Loader />; // Render the loader if the resultData prop is empty
+  }
 
+  const renderSemesterResults = () => {
     // Define year and semester combinations
     const yearSemesterCombinations = [
       { year: 1, semester: 1 },
