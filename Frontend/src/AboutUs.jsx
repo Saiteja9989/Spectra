@@ -46,7 +46,7 @@ const AboutUs = () => {
             <strong>Academic Details :</strong> 2-YR CSE C
           </Paragraph>
           <Paragraph>
-            <strong>Email:</strong> example@example.com
+            <strong>Email:</strong> abhigxtheupm@gmail.com
           </Paragraph>
           <Paragraph>
             <strong>Phone:</strong> 9515360456
