@@ -10,7 +10,7 @@ import AttendancePage from './components/AttendancePage';
 import ResultPage from './components/ResultPage';
 import Timetable from './components/Timetable';
 import FeedbackForm from './components/Feedback';
-
+import Clubdetails from './components/Clubs';
 const App = () => {
   const [netraID, setNetraID] = useState(() => {
     // Initialize netraID from localStorage or null if not found
@@ -31,7 +31,7 @@ const App = () => {
         <Route path="/result" element={<ResultPage netraID={netraID} />} />
         <Route path="/timetable" element={<Timetable netraID={netraID} />} />
         <Route path="/feedback" element={<FeedbackForm netraID={netraID} />} />
-
+        <Route path="/clubs" element={<Clubdetails />} /> 
       </Routes>
       </Router>
       

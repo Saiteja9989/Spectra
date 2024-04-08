@@ -5,6 +5,7 @@ import { ClusterOutlined, ScheduleOutlined, SolutionOutlined, UserOutlined, Line
 import './dashboard.css';
 import axios from 'axios';
 import AttendanceTracker from '../components/AttendanceTracker';
+import Swal from 'sweetalert2';
 
 const { Header, Content } = Layout;
 const { Title, Text } = Typography;
@@ -23,6 +24,14 @@ const ProfilePage = ({ netraID }) => {
       fetchAttendanceData(netraID);
     }
   }, [netraID]);
+
+  const handleClubsClick = () => {
+    Swal.fire({
+      icon: 'info',
+      title: 'Club Details',
+      text: 'Club details will be updated soon.',
+    });
+  };
 
   const fetchProfileData = async (netraID) => {
     try {
@@ -154,6 +163,9 @@ const ProfilePage = ({ netraID }) => {
                 </div> 
                     </div>
                   )}
+                  <div style={{ marginTop: '20px' }}>
+                    <p style={{ color: 'gray', fontStyle: 'italic' }}>Note: Attendance prediction will be coming soon</p>
+                  </div>
                 </div>
               </div>
             </Card>
@@ -164,11 +176,9 @@ const ProfilePage = ({ netraID }) => {
             <Title level={4}>Options</Title>
             <Row gutter={[16, 16]}>
               <Col xs={12} sm={12} md={8} lg={6} xl={6}>
-                <Link to="/clubs">
-                  <Card hoverable className="option-card">
-                    <Meta title="Clubs" avatar={<ClusterOutlined />} />
-                  </Card>
-                </Link>
+                <Card hoverable className="option-card" onClick={handleClubsClick}>
+                  <Meta title="Clubs" avatar={<ClusterOutlined />} />
+                </Card>
               </Col>
               <Col xs={12} sm={12} md={8} lg={6} xl={6}>
                 <Card hoverable className="option-card" onClick={() => navigate('/attendance')}>
