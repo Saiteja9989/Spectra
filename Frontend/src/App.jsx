@@ -10,6 +10,7 @@ import AttendancePage from './components/AttendancePage';
 import ResultPage from './components/ResultPage';
 import Timetable from './components/Timetable';
 import FeedbackForm from './components/Feedback';
+import AboutUs from './AboutUs';
 // import Clubdetails from './components/Clubs';
 const App = () => {
   const [netraID, setNetraID] = useState(() => {
@@ -31,6 +32,7 @@ const App = () => {
         <Route path="/result" element={<ResultPage netraID={netraID} />} />
         <Route path="/timetable" element={<Timetable netraID={netraID} />} />
         <Route path="/feedback" element={<FeedbackForm netraID={netraID} />} />
+        <Route path="/AboutUs" element={<AboutUs/>} />
         {/* <Route path="/clubs" element={<Clubdetails />} />  */}
       </Routes>
       </Router>
