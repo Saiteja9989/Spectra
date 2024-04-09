@@ -12,21 +12,21 @@ const Feedback = require('./routes/feedback')
 const app = express();
 const PORT =  5000 || process.env.PORT ;
 app.use(cors({
-  origin: 'http://localhost:5173', // Change this to your React app's URL
+  origin: '*', // Change this to your React app's URL
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   credentials: true, // Enable credentials (if required)
 }));
 
 // Allow requests only from specific origins
 const corsOptions = {
-  origin: 'http://localhost:5173',
+  origin: '*',
   optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
 };
 
 app.use(cors(corsOptions));
 
 app.use(cors({
-  origin: 'http://localhost:5173'
+  origin: '*'
 }));
 
 // Enable CORS for all routes
