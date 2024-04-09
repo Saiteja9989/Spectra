@@ -68,6 +68,7 @@ const ProfilePage = ({ netraID }) => {
       <Header>
         <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['1']}>
           <Menu.Item key="1">Home</Menu.Item>
+          <Menu.Item key="2"><Link to="/AboutUs">About Us</Link></Menu.Item>
         </Menu>
       </Header>
       <Content style={{ padding: '0 10px', marginTop: '20px' }}>
@@ -121,6 +122,9 @@ const ProfilePage = ({ netraID }) => {
               <div style={{ textAlign: 'center', marginTop: '20px' }}>
                 <div class="Atten1" style={{ display: 'inline-block', marginRight: '100px' }}>
                   <AttendanceTracker attendancePer={attendancePer} />
+                  <div style={{ marginTop: '30px' }}>
+                    <p style={{ color: 'gray', fontStyle: 'italic' }}>Note: Attendance prediction will be coming soon</p>
+                  </div>
                 </div>
                 <div class="session1" style={{ textAlign: 'center', display: 'inline-block', verticalAlign: 'top', marginLeft: '20px' }}>
                   <Title level={4}>Latest Attendance</Title>
@@ -163,9 +167,7 @@ const ProfilePage = ({ netraID }) => {
                 </div> 
                     </div>
                   )}
-                  <div style={{ marginTop: '20px' }}>
-                    <p style={{ color: 'gray', fontStyle: 'italic' }}>Note: Attendance prediction will be coming soon</p>
-                  </div>
+                  
                 </div>
               </div>
             </Card>
