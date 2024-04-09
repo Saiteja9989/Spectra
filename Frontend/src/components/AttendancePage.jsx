@@ -4,7 +4,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { LeftOutlined } from '@ant-design/icons';
 import Loader from './Loader'; // Import the Loader component
-
+import Navbar from './Navbar';
 
 const AttendancePage = ({ netraID }) => {
   const [attendanceData, setAttendanceData] = useState(null);
@@ -66,25 +66,26 @@ const AttendancePage = ({ netraID }) => {
   ];
 
   return (
-    <div style={{ padding: '20px', display: 'flex', flexDirection: 'column' }}>
-      {/* <Button type="primary" icon={<LeftOutlined />} onClick={handleBackButtonClick} size="small" style={{ alignSelf: 'flex-start', marginBottom: '10px' }}>
-        Back
-      </Button> */}
-      <div style={{ flex: '1' }}>
-        {loading ? (
-          <Loader /> // Render the Loader component while loading
-        ) : (
-          <Table
-            dataSource={attendanceData}
-            columns={columns}
-            bordered
-            size="small"
-            pagination={false} // Remove pagination
-          />
-        )}
+    <>
+      <Navbar /> {/* Include the Navbar component */}
+      <div style={{ padding: '20px', display: 'flex', flexDirection: 'column' }}>
+        <div style={{ flex: '1' }}>
+          {loading ? (
+            <Loader />
+          ) : (
+            <Table
+              dataSource={attendanceData}
+              columns={columns}
+              bordered
+              size="small"
+              pagination={false}
+            />
+          )}
+        </div>
       </div>
-    </div>
+    </>
   );
 };
+
 
 export default AttendancePage;

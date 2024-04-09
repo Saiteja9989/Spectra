@@ -1,11 +1,13 @@
 import React from 'react';
 import { Typography, Card } from 'antd';
 import { ZoomInOutlined } from '@ant-design/icons'; // Import transition effect
-
+import Navbar from './components/Navbar';
 const { Title, Paragraph } = Typography;
 
 const AboutUs = () => {
   return (
+    <>
+      <Navbar/>
     <div style={{ padding: '20px' }}>
       <Title level={2}>About Agni KMIT</Title>
       <Card hoverable style={{ marginBottom: '20px' }}>
@@ -51,7 +53,8 @@ const AboutUs = () => {
           </Paragraph>
         </Typography>
       </Card>
-    </div>
+      </div>
+      </>
   );
 };
 

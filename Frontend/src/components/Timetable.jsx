@@ -4,7 +4,7 @@ import axios from 'axios';
 import { Parser } from 'html-to-react';
 import './Timetable.css';
 import Loader from './Loader'; // Import the Loader component
-
+import Navbar from './Navbar';
 const { TabPane } = Tabs;
 
 const Timetable = ({ netraID }) => {
@@ -117,6 +117,8 @@ const Timetable = ({ netraID }) => {
   };
 
   return (
+    <>
+      <Navbar/>
     <div style={{ padding: '20px', maxWidth: '800px', margin: '0 auto' }}>
       <h1 style={{ textAlign: 'center', marginBottom: 20 }}>Timetable</h1>
       {loading ? (
@@ -160,7 +162,8 @@ const Timetable = ({ netraID }) => {
           </Tabs>
         </div>
       )}
-    </div>
+      </div>
+      </>
   );
 };
 
