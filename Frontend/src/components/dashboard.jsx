@@ -6,6 +6,7 @@ import './dashboard.css';
 import axios from 'axios';
 import AttendanceTracker from '../components/AttendanceTracker';
 import Swal from 'sweetalert2';
+import Navbar from './Navbar'
 
 const { Header, Content } = Layout;
 const { Title, Text } = Typography;
@@ -65,6 +66,7 @@ const ProfilePage = ({ netraID }) => {
 
   return (
     <Layout>
+      <Navbar />
       <Content style={{ padding: '0 10px', marginTop: '20px', overflowY: 'hidden' }}>
         <Row gutter={[16, 16]}>
           <Col xs={24} sm={24} md={12} lg={8} xl={8}>
@@ -100,10 +102,10 @@ const ProfilePage = ({ netraID }) => {
                               <td>Year of Admission:</td>
                               <td style={{ paddingLeft: '8px' }}>{profileDetails.yearofadmision}</td>
                             </tr>
-                            <tr>
+                            {/* <tr>
                               <td>Phone:</td>
                               <td style={{ paddingLeft: '8px' }}>{profileDetails.phone}</td>
-                            </tr>
+                            </tr> */}
                           </tbody>
                         </table>
                       </div>
