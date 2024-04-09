@@ -107,7 +107,7 @@ function UserInputPage({ setNetraID }) {
     <div style={{ padding: '2rem', maxWidth: '800px', margin: '0 auto' }}>
       <Row justify="center" style={{ marginBottom: '2rem' }}>
         <Col span={24} style={{ textAlign: 'center' }}>
-          <Text strong style={{ fontSize: '2rem' }}>Welcome to KMIT Student Portal</Text>
+          <Text strong style={{ fontSize: '2rem' }}>Welcome to KMIT SPECTRA</Text>
         </Col>
         <Col span={24} style={{ textAlign: 'center' }}>
           <Text type="secondary" style={{ fontSize: '1.1rem' }}>Access Your Academic Profile, Attendance, Results....!</Text>
