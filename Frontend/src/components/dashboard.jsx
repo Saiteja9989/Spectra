@@ -65,12 +65,12 @@ const ProfilePage = ({ netraID }) => {
 
   return (
     <Layout>
-      {/* <Header>
+       <Header>
         <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['1']}>
           <Menu.Item key="1">Home</Menu.Item>
           <Menu.Item key="2"><Link to="/AboutUs">About Us</Link></Menu.Item>
         </Menu>
-      </Header> */}
+      </Header> 
       <Content style={{ padding: '0 10px', marginTop: '20px' }}>
         <Row gutter={[16, 16]}>
           <Col xs={24} sm={24} md={12} lg={8} xl={8}>
@@ -120,7 +120,7 @@ const ProfilePage = ({ netraID }) => {
           <Col xs={24} sm={24} md={12} lg={16} xl={16}>
             <Card style={{ minHeight: '400px' }}>
               <div style={{ textAlign: 'center', marginTop: '20px' }}>
-                <div class="Atten1" style={{ display: 'inline-block', marginRight: '100px' }}>
+                <div class="Atten1" style={{ display: 'inline-block',marginRight:"100px"}}>
                   <AttendanceTracker attendancePer={attendancePer} />
                   <div style={{ marginTop: '30px' }}>
                     <p style={{ color: 'gray', fontStyle: 'italic' }}>Note: Attendance prediction will be coming soon</p>
