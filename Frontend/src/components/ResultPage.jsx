@@ -3,7 +3,7 @@ import axios from 'axios';
 import { Row, Col, Tabs } from 'antd';
 import InternalResultComponent from './InternalResultComponent';
 import ExternalResultComponent from './ExternalResultComponent';
-
+import Navbar from './Navbar';
 const { TabPane } = Tabs;
 
 const ResultPage = ({ netraID }) => {
@@ -151,19 +151,19 @@ const ResultPage = ({ netraID }) => {
       return { columns, data, creditsAcquired, sgpa };
     };
     
-    const parseBacklogHtml = (htmlData) => {
-      const parser = new DOMParser();
-      const doc = parser.parseFromString(htmlData, 'text/html');
+    // const parseBacklogHtml = (htmlData) => {
+    //   const parser = new DOMParser();
+    //   const doc = parser.parseFromString(htmlData, 'text/html');
   
-      // Extract the total backlogs from the HTML
-      const totalBacklogsElement = doc.querySelector('#backlogs');
-      let totalBacklogs = 0;
-      if (totalBacklogsElement) {
-        totalBacklogs = parseInt(totalBacklogsElement.textContent.trim(), 10);
-      }
+    //   // Extract the total backlogs from the HTML
+    //   const totalBacklogsElement = doc.querySelector('#backlogs');
+    //   let totalBacklogs = 0;
+    //   if (totalBacklogsElement) {
+    //     totalBacklogs = parseInt(totalBacklogsElement.textContent.trim(), 10);
+    //   }
   
-      return totalBacklogs;
-    };
+    //   return totalBacklogs;
+    // };
 
 
     
@@ -172,6 +172,8 @@ const ResultPage = ({ netraID }) => {
   };
 
   return (
+    <>
+      <Navbar />
     <Row justify="center">
       <Col xs={24} sm={20}>
         <h1 style={{ textAlign: 'center', marginBottom: '20px' }}>Result Page</h1>
@@ -188,7 +190,8 @@ const ResultPage = ({ netraID }) => {
           </TabPane>
         </Tabs>
       </Col>
-    </Row>
+      </Row>
+      </>
   );
 };
 

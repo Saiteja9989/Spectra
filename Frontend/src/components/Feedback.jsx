@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Form, Input, Button, Rate, Card } from 'antd';
 import axios from 'axios';
 import Loader from './Loader'; // Import the Loader component
+import Navbar from './Navbar';
 
 const FeedbackForm = ({ netraID }) => {
   const [form] = Form.useForm();
@@ -38,6 +39,8 @@ const FeedbackForm = ({ netraID }) => {
   };
 
   return (
+    <>
+      <Navbar/>
     <div style={{ display: 'flex', justifyContent: 'center' }}>
       <Card
         title="Feedback Form"
@@ -85,6 +88,7 @@ const FeedbackForm = ({ netraID }) => {
         )}
       </Card>
     </div>
+    </>
   );
 };
 

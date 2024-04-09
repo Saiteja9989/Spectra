@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
-import { Input, List, Avatar, Typography, Row, Col, Card, Button, Space } from 'antd';
+import { Input, Card, Row,Avatar, Col, Space, Typography } from 'antd';
 import axios from 'axios';
-import { toast, ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
-import { customErrorCloseStyle, customToastStyle, customErrorIconStyle } from './toast';
 
 const { Text } = Typography;
 
@@ -57,23 +55,10 @@ function UserInputPage({ setNetraID }) {
       if (response.data) {
         navigate('/user');
       } else {
-        toast.error('Not a valid phone number, hall ticket number, or name.', {
-          style: customToastStyle,
-          icon: (
-            <div style={customErrorIconStyle}>
-              <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm2-13h-4v8h4V7zm-1 5h-2v-2h2v2z" />
-              </svg>
-            </div>
-          ),
-          closeButton: (
-            <div style={customErrorCloseStyle}>
-              <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path d="M12 1L1 12h3v10h14V12h3L12 1zm5 11l-1.41 1.41L12 13.41l-3.59 3.59L7 12.59 10.599 7 5.41 8.41 4 12 7.59 15.59 4 19 5.41 17.41 9 19 12.59 17.41 16 19 18.59 15.59 22 12 19.41 8.41 22 7 18.59z" />
-              </svg>
-            </div>
-          ),
-          closeButtonClassName: 'error__close',
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'Not a valid phone number, hall ticket number, or name.',
         });
       }
     } catch (error) {
@@ -119,7 +104,6 @@ function UserInputPage({ setNetraID }) {
 
   return (
     <div style={{ padding: '2rem', maxWidth: '800px', margin: '0 auto' }}>
-      <ToastContainer position="top-center" />
       <Row justify="center" style={{ marginBottom: '2rem' }}>
         <Col span={24} style={{ textAlign: 'center' }}>
           <Text strong style={{ fontSize: '2rem' }}>Welcome to KMIT Student Portal</Text>
