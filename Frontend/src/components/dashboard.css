@@ -30,6 +30,9 @@
     .col {
       padding: 0 8px;
     }
+    .Atten1 {
+      margin-right: 0 !important; /* Override margin-right for mobile */
+    }
   
     /* Increase option size for mobile devices */
     .card {
