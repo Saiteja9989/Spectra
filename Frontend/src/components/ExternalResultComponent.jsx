@@ -28,17 +28,27 @@ const ExternalResultComponent = ({ resultData, totalBacklogs }) => {
           >
             <h3 style={{ textAlign: 'center', fontSize: '1.2rem' }}>{`Year ${semester.year}, Semester ${semester.semester}`}</h3>
             {semester.data && semester.data.length > 0 ? (
-              <Table
-                columns={semester.columns.map(col => ({
-                  title: col,
-                  dataIndex: col,
-                  key: col,
-                  width: col === 'CREDITS ACQUIRED' ? 120 : undefined, // Adjusted width for responsiveness
-                }))}
-                dataSource={semester.data}
-                pagination={false}
-                size="small"
-              />
+              <>
+                <Table
+                  columns={semester.columns.map(col => ({
+                    title: col,
+                    dataIndex: col,
+                    key: col,
+                    width: col === 'CREDITS ACQUIRED' ? 120 : undefined, // Adjusted width for responsiveness
+                  }))}
+                  dataSource={semester.data}
+                  pagination={false}
+                  size="small"
+                />
+                {/* Display SGPA and Credits Acquired */}
+                <div style={{ textAlign: 'center', marginTop: '10px' }}>
+                  <span style={{ fontWeight: 'bold' }}>SGPA: </span>
+                  <span>{semester.sgpa}</span>
+                  <span style={{ margin: '0 10px' }}>|</span>
+                  <span style={{ fontWeight: 'bold' }}>Credits Acquired: </span>
+                  <span>{semester.creditsAcquired}</span>
+                </div>
+              </>
             ) : (
               <div style={{ textAlign: 'center', marginTop: '10px', color: 'red', fontSize: '0.9rem' }}>No semester information found for the row</div>
             )}
