@@ -45,11 +45,11 @@ function UserInputPage({ setNetraID }) {
     }
   };
 
-  const handleSearch = async () => {
+  const handleSearch = async (key) => {
     try {
       const response = await axios.post('http://localhost:5000/api/netra-id' , {
         searchType: searchType,
-        searchValue: searchQuery
+        searchValue: key
       });
       setNetraID(response.data);
       if (response.data) {
@@ -68,6 +68,7 @@ function UserInputPage({ setNetraID }) {
 
   const handleResultClick = (result) => {
     setSearchQuery(getResultText(result).trim());
+    handleSearch(getResultText(result).trim());
     setSearchResults([]);
   };
 
