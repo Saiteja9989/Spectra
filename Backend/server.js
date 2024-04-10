@@ -11,7 +11,10 @@ const Feedback = require('./routes/feedback')
 // const Netra = require('./routes/netra')
 const profile = require('./routes/dashboard')
 const subattendance = require('./routes/sub_attendance')
-const timetable= require('./routes/timetable')
+const timetable = require('./routes/timetable')
+const internalexam = require('./routes/internalres')
+
+
 const app = express();
 const PORT = process.env.PORT || 5000  ;
 app.use(cors({
@@ -47,7 +50,9 @@ app.use('/api', netraid)
 app.use('/api', Feedback)
 app.use('/api', profile)
 app.use('/api', subattendance)
-app.use('/api',timetable)
+app.use('/api', timetable)
+app.use('/api',internalexam)
+
 
 
 

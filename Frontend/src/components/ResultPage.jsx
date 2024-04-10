@@ -19,8 +19,9 @@ const ResultPage = ({ netraID }) => {
 
   const fetchInternalResultData = async () => {
     try {
-      const response = await axios.get('http://teleuniv.in/trinetra/pages/lib/student_ajaxfile.php', {
-        params: { mid: 76, rollno: netraID }
+      const response = await axios.post('http://localhost:3000/api/internal-result', {
+        mid: 76,
+        rollno: netraID
       });
       parseHtml(response.data, setInternalResultData);
     } catch (error) {
