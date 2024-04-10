@@ -9,7 +9,7 @@ const AboutUs = () => {
     <>
       <Navbar/>
     <div style={{ padding: '20px' }}>
-      <Title level={2}>About Agni KMIT</Title>
+      <Title level={2}>About KMIT Spectra</Title>
       <Card hoverable style={{ marginBottom: '20px' }}>
         <Typography>
           <Paragraph>
