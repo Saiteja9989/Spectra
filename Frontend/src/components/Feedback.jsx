@@ -4,7 +4,7 @@ import axios from 'axios';
 import Swal from 'sweetalert2'; // Import SweetAlert library
 import Loader from './Loader';
 import Navbar from './Navbar';
-
+import { baseUrl } from '../baseurl';
 const FeedbackForm = ({ netraID }) => {
   const [form] = Form.useForm();
   const [rating, setRating] = useState(0);
@@ -17,7 +17,7 @@ const FeedbackForm = ({ netraID }) => {
   const onFinish = async values => {
     setLoading(true);
     try {
-      const response = await axios.post('http://localhost:5000/api/submit/feedback', {
+      const response = await axios.post(`$${baseUrl}/api/submit/feedback`, {
         ...values,
         rating,
         netraID

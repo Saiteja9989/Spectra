@@ -3,6 +3,7 @@ import { Input, Card, Row,Avatar, Col, Space, Typography } from 'antd';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
+import { baseUrl } from '../baseurl';
 
 const { Text } = Typography;
 
@@ -38,7 +39,7 @@ function UserInputPage({ setNetraID }) {
 
   const fetchResults = async (inputValue) => {
     try {
-      const response = await axios.post('http://localhost:5000/api/search', { searchInput: inputValue });
+      const response = await axios.post(`${baseUrl}/api/search`, { searchInput: inputValue });
       setSearchResults(response.data.slice(0, 5));
     } catch (error) {
       console.error('Error fetching search results:', error);
@@ -47,7 +48,7 @@ function UserInputPage({ setNetraID }) {
 
   const handleSearch = async (key) => {
     try {
-      const response = await axios.post('http://localhost:5000/api/netra-id' , {
+      const response = await axios.post(`${baseUrl}/api/netra-id` , {
         searchType: searchType,
         searchValue: key
       });
