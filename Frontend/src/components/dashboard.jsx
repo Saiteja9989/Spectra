@@ -7,6 +7,7 @@ import axios from 'axios';
 import AttendanceTracker from '../components/AttendanceTracker';
 import Swal from 'sweetalert2';
 import Navbar from './Navbar'
+import { baseUrl } from '../baseurl';
 
 const { Header, Content } = Layout;
 const { Title, Text } = Typography;
@@ -36,7 +37,7 @@ const ProfilePage = ({ netraID }) => {
 
   const fetchProfileData = async (netraID) => {
     try {
-      const response = await axios.post('http://localhost:3000/api/profile', {
+      const response = await axios.post(`${baseUrl}/api/profile`, {
         method: '32',
         rollno: netraID
       });
