@@ -43,6 +43,7 @@ const ProfilePage = ({ netraID }) => {
       });
       const data = response.data;
       setProfileDetails(data);
+      console.log(profileDetails.picture);
     } catch (error) {
       console.error('Error fetching profile data:', error);
     }
@@ -70,7 +71,7 @@ const ProfilePage = ({ netraID }) => {
             <Card style={{ boxShadow: '0 1px 2px rgba(0, 0, 0, 0.1)' }}>
               <div style={{ minHeight: '300px', textAlign: 'center' }}>
                 {profileDetails && (
-                  <Avatar size={150} icon={<UserOutlined />} src={profileDetails.picture} />
+                  <Avatar size={150} icon={<UserOutlined />} src={`data:image/jpeg;base64,${profileDetails.picture}`} />
                 )}
                 <div style={{ marginTop: '20px' }}>
                   {profileDetails && (
