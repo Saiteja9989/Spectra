@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "proxy": "http://teleuniv.in",
+  "proxy": "https://spectra-beta.vercel.app",
   "scripts": {
     "dev": "vite --host",
     "build": "vite build",
