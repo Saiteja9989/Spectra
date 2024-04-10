@@ -36,7 +36,7 @@ const ProfilePage = ({ netraID }) => {
 
   const fetchProfileData = async (netraID) => {
     try {
-      const response = await axios.post('http://teleuniv.in/netra/api.php', {
+      const response = await axios.post('http://localhost:3000/api/profile', {
         method: '32',
         rollno: netraID
       });

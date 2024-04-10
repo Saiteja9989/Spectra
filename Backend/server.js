@@ -9,6 +9,7 @@ require('dotenv').config();
 const StudentDetail = require('./models/studentDetails')
 const Feedback = require('./routes/feedback')
 // const Netra = require('./routes/netra')
+const profile = require('./routes/profile')
 
 const app = express();
 const PORT = process.env.PORT || 5000  ;
@@ -43,7 +44,7 @@ app.use(bodyParser.json());
 app.use('/api', search)
 app.use('/api', netraid)
 app.use('/api', Feedback)
-// app.use('/api',Netra)
+app.use('/api',profile)
 
 // DB Config
 const db = process.env.CONNECTION
