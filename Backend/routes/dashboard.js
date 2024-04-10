@@ -20,7 +20,11 @@ router.post('/profile', async (req, res) => {
 
     // Assuming the response data contains the profile information
     const profileData = response.data;
+    const imageResponse = await axios.get(profileData.picture, { responseType: 'arraybuffer' });
+    const imageBuffer = Buffer.from(imageResponse.data, 'binary');
 
+    // Add the base64 encoded image to the profile data
+    profileData.picture = imageBuffer.toString('base64');
     // Send the profile data as JSON response
     res.json(profileData);
   } catch (error) {
