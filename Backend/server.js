@@ -10,6 +10,7 @@ const StudentDetail = require('./models/studentDetails')
 const Feedback = require('./routes/feedback')
 // const Netra = require('./routes/netra')
 const profile = require('./routes/dashboard')
+const subattendance = require('./routes/sub_attendance')
 
 const app = express();
 const PORT = process.env.PORT || 5000  ;
@@ -44,7 +45,9 @@ app.use(bodyParser.json());
 app.use('/api', search)
 app.use('/api', netraid)
 app.use('/api', Feedback)
-app.use('/api',profile)
+app.use('/api', profile)
+app.use('/api',subattendance)
+
 
 // DB Config
 const db = process.env.CONNECTION

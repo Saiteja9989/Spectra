@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { LeftOutlined } from '@ant-design/icons';
 import Loader from './Loader'; // Import the Loader component
 import Navbar from './Navbar';
+import { baseUrl } from '../baseurl';
 
 const AttendancePage = ({ netraID }) => {
   const [attendanceData, setAttendanceData] = useState(null);
@@ -18,12 +19,12 @@ const AttendancePage = ({ netraID }) => {
   }, [netraID]);
 
   const fetchAttendanceData = async (netraID) => {
+    setLoading(true); // Set loading state to true when fetching data
     try {
-      const response = await axios.post('http://teleuniv.in/netra/api.php', {
-        method: '314',
-        rollno: netraID
+      const response = await axios.post(`${baseUrl}/api/subject/attendance`, {
+        netraID: netraID
       });
-      const data = response.data.overallattperformance.overall;
+      const data = response.data;
       setAttendanceData(data);
     } catch (error) {
       console.error('Error fetching attendance data:', error);
