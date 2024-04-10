@@ -5,6 +5,7 @@ import { Parser } from 'html-to-react';
 import './Timetable.css';
 import Loader from './Loader'; // Import the Loader component
 import Navbar from './Navbar';
+import { baseUrl } from '../baseurl';
 const { TabPane } = Tabs;
 
 const Timetable = ({ netraID }) => {
@@ -16,9 +17,8 @@ const Timetable = ({ netraID }) => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const response = await axios.post('http://teleuniv.in/netra/api.php', {
-          method: '317',
-          rollno: netraID,
+        const response = await axios.post(`${baseUrl}/api/timetable`, {
+          netraID: netraID,
         });
         let timetable = response.data.timetable;
 
@@ -45,7 +45,7 @@ const Timetable = ({ netraID }) => {
     };
 
     fetchData();
-  }, [netraID]);
+  }, [netraID]);;
 
   const parser = new Parser();
 
