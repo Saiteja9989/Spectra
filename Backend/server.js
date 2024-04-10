@@ -9,7 +9,7 @@ require('dotenv').config();
 const StudentDetail = require('./models/studentDetails')
 const Feedback = require('./routes/feedback')
 // const Netra = require('./routes/netra')
-const profile = require('./routes/profile')
+const profile = require('./routes/dashboard')
 
 const app = express();
 const PORT = process.env.PORT || 5000  ;

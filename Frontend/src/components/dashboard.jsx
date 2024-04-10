@@ -50,16 +50,12 @@ const ProfilePage = ({ netraID }) => {
 
   const fetchAttendanceData = async (netraID) => {
     try {
-      const response = await axios.post('http://teleuniv.in/netra/api.php', {
-        method: '314',
-        rollno: netraID
-      });
-      const data = response.data.attandance.dayobjects;
-      const data1 = response.data.overallattperformance.totalpercentage;
-      const data2 = response.data.attandance.twoweeksessions;
-      setAttendanceData(data);
-      setTwoWeekSessions(data2);
-      setAttendancePer(data1);
+      const response = await axios.post(`${baseUrl}/api/attendance`, { netraID });
+      const { dayObjects, totalPercentage, twoWeekSessions } = response.data;
+
+      setAttendanceData(dayObjects);
+      setTwoWeekSessions(twoWeekSessions);
+      setAttendancePer(totalPercentage);
     } catch (error) {
       console.error('Error fetching attendance data:', error);
     }
