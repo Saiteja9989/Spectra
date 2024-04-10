@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "proxy": "https://spectra-beta.vercel.app",
+  "proxy": "https://kmitspectra.onrender.com",
   "scripts": {
     "dev": "vite --host",
     "build": "vite build",
