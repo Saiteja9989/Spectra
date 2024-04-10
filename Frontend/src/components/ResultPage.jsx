@@ -19,7 +19,7 @@ const ResultPage = ({ netraID }) => {
 
   const fetchInternalResultData = async () => {
     try {
-      const response = await axios.post('http://localhost:3000/api/internal-result', {
+      const response = await axios.post('http://localhost:3000/api/internalresult', {
         mid: 76,
         rollno: netraID
       });
