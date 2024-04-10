@@ -117,10 +117,10 @@ const db = process.env.CONNECTION
 // });
 
 // Connect to MongoDB
-mongoose
-  .connect(db, { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect(db)
   .then(() => console.log('MongoDB Connected...'))
-  .catch(err => console.log(err));
+  .catch(err => console.error('MongoDB connection error:', err));
+
 
 
 
