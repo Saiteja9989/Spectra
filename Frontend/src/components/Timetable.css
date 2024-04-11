@@ -58,5 +58,28 @@
     }
     
   }
+
+  /* Add this CSS to your Timetable.css or any appropriate CSS file */
+
+.timetable-tabs-container .ant-tabs-nav {
+  overflow-x: auto; /* Enable horizontal scrolling */
+  -webkit-overflow-scrolling: touch; /* Enable smooth scrolling on iOS devices */
+  scrollbar-width: none; /* Hide scrollbar for browsers that support it */
+  -ms-overflow-style: none; /* Hide scrollbar for IE and Edge */
+}
+
+.timetable-tabs-container .ant-tabs-nav::-webkit-scrollbar {
+  display: none; /* Hide scrollbar for Webkit browsers (Chrome, Safari, etc.) */
+}
+
+.timetable-tabs-container .ant-tabs-nav-scroll {
+  white-space: nowrap; /* Prevent tab items from wrapping */
+}
+
+.timetable-tabs-container .ant-tabs-tab {
+  display: inline-block; /* Display tabs in a single line */
+  margin-right: 8px; /* Add space between tabs */
+}
+
   
   
