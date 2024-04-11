@@ -24,7 +24,7 @@ const AboutUs = () => {
       <Card hoverable style={{ marginBottom: '20px' }}>
         <Typography>
           <Paragraph>
-            <strong>Host1 :</strong> KASOJU SAITEJA (22BD1A054V)
+            <strong>Name :</strong> KASOJU SAITEJA (22BD1A054V)
           </Paragraph>
           <Paragraph>
             <strong>Academic Details:</strong> 2-YR CSE A
@@ -32,15 +32,15 @@ const AboutUs = () => {
           <Paragraph>
             <strong>Email:</strong> kasojusaiteja10@gmail.com
           </Paragraph>
-          <Paragraph>
+          {/* <Paragraph>
             <strong>Phone:</strong> 7569295934
-          </Paragraph>
+          </Paragraph> */}
         </Typography>
       </Card>
       <Card hoverable style={{ marginBottom: '20px' }}>
         <Typography>
           <Paragraph>
-            <strong>Host2 :</strong> ABHILASH REDDY (22BD1A054Q)
+            <strong>Name :</strong> ABHILASH REDDY (22BD1A054Q)
           </Paragraph>
           <Paragraph>
             <strong>Academic Details :</strong> 2-YR CSE C
@@ -48,9 +48,9 @@ const AboutUs = () => {
           <Paragraph>
             <strong>Email:</strong> abhigxtheupm@gmail.com
           </Paragraph>
-          <Paragraph>
+          {/* <Paragraph>
             <strong>Phone:</strong> 9515360456
-          </Paragraph>
+          </Paragraph> */}
         </Typography>
       </Card>
       </div>
