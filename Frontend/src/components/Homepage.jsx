@@ -49,6 +49,8 @@ function UserInputPage({ setNetraID }) {
 
   const fetchResults = async (inputValue) => {
     try {
+      inputValue=inputValue+".";
+      console.log(inputValue)
       const response = await axios.post(`${baseUrl}/api/search`, { searchInput: inputValue });
       // console.log('Response data:', response.data);
 setSearchResults(response.data.slice(0, 5));
