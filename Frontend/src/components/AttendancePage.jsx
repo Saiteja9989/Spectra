@@ -49,7 +49,7 @@ const AttendancePage = ({ netraID }) => {
       dataIndex: 'percentage',
       key: 'percentage',
       render: (percentage) => {
-        const percentValue = percentage === '--' ? 0 : parseFloat(percentage);
+        const percentValue = percentage === '--' ? 0 : parseFloat(percentage).toFixed(1);
         const color = percentage === '100' || percentage === '--' ? '#137512' : null;
         return <Progress percent={percentValue} size="small" style={{ width: '80px' }} strokeColor={color} />;
       },
@@ -59,13 +59,12 @@ const AttendancePage = ({ netraID }) => {
       dataIndex: 'practical',
       key: 'practical',
       render: (practical) => {
-        const percentValue = practical === '--' ? 0 : parseFloat(practical);
+        const percentValue = practical === '--' ? 0 : parseFloat(practical).toFixed(1);
         const color = practical === '100' || practical === '--' ? '#137512' : null;
         return <Progress percent={percentValue} size="small" style={{ width: '80px' }} strokeColor={color} />;
       },
     },
   ];
-
   return (
     <>
       <Navbar /> {/* Include the Navbar component */}
