@@ -38,3 +38,16 @@
     transform: rotate(135deg);
   }
 }
+@media (max-width: 768px) {
+  .semi-donut {
+    width: 285px; /* 95% of the default width */
+    height: 142.5px; /* 95% of the default height */
+    font-size: 20.9px; /* 95% of the default font size */
+  }
+  
+  .semi-donut::after {
+    width: 285px; /* 95% of the default width */
+    height: 285px; /* 95% of the default height */
+    border-width: 47.5px; /* 95% of the default border width */
+  }
+}

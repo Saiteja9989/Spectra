@@ -122,7 +122,7 @@ const ProfilePage = ({ netraID }) => {
                     <p style={{ color: 'gray', fontStyle: 'italic' }}>Note: Attendance prediction will be coming soon</p>
                   </div>
                 </div>
-                <div class="session1" style={{ textAlign: 'center', display: 'inline-block', verticalAlign: 'top', marginLeft: '20px' }}>
+                <div className="session1" style={{ textAlign: 'center', display: 'inline-block', verticalAlign: 'top', marginLeft: '20px' }}>
                   <Title level={4}>Latest Attendance</Title>
                   {attendanceData && (
                     <div>
