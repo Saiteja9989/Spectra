@@ -5,6 +5,7 @@ import InternalResultComponent from './InternalResultComponent';
 import ExternalResultComponent from './ExternalResultComponent';
 import Navbar from './Navbar';
 const { TabPane } = Tabs;
+import { baseUrl } from '../baseurl';
 
 const ResultPage = ({ netraID }) => {
   const [internalResultData, setInternalResultData] = useState([]);
@@ -19,7 +20,7 @@ const ResultPage = ({ netraID }) => {
 
   const fetchInternalResultData = async () => {
     try {
-      const response = await axios.post('http://localhost:3000/api/internalresult', {
+      const response = await axios.post(`${baseUrl}/api/internalResultData`, {
         mid: 76,
         rollno: netraID
       });
@@ -28,6 +29,7 @@ const ResultPage = ({ netraID }) => {
       console.error('Error fetching internal result data:', error);
     }
   };
+  
 
   const fetchExternalResultData = async () => {
     try {
