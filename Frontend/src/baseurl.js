@@ -1,1 +1,1 @@
-export const baseUrl="https://kmitspectra.onrender.com"
+export const baseUrl="https://spectra-server-rust.vercel.app"
