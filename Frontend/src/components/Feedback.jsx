@@ -17,7 +17,7 @@ const FeedbackForm = ({ netraID }) => {
   const onFinish = async values => {
     setLoading(true);
     try {
-      const response = await axios.post(`$${baseUrl}/api/submit/feedback`, {
+      const response = await axios.post(`${baseUrl}/api/submit/feedback`, {
         ...values,
         rating,
         netraID
