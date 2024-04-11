@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Tabs, Table, Card } from 'antd';
 import axios from 'axios';
 import { Parser } from 'html-to-react';
@@ -11,7 +11,6 @@ const { TabPane } = Tabs;
 const Timetable = ({ netraID }) => {
   const [loading, setLoading] = useState(false);
   const [timetableData, setTimetableData] = useState([]);
-  const tabsRef = useRef(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -49,15 +48,6 @@ const Timetable = ({ netraID }) => {
 
   const parser = new Parser();
 
-  useEffect(() => {
-    if (tabsRef.current) {
-      const tabListWidth = tabsRef.current.offsetWidth;
-      const numTabs = timetableData.length;
-      const minTabsWidth = numTabs * 120; // Increase the minimum width for each tab to 120px
-      tabsRef.current.style.width = `${Math.max(tabListWidth, minTabsWidth)}px`;
-    }
-  }, [timetableData]);
-
   const renderTimetableForDay = (dayData) => {
     const columns = [
       {
@@ -66,15 +56,6 @@ const Timetable = ({ netraID }) => {
         key: 'hour',
         render: (text) => parser.parse(text),
       },
-      {
-        title: 'Subject',
-        dataIndex: 'subject',
-        key: 'subject',
-      },
-    ];
-
-    // Hide the 'hour' column on smaller screens
-    const mobileColumns = [
       {
         title: 'Subject',
         dataIndex: 'subject',
@@ -124,14 +105,13 @@ const Timetable = ({ netraID }) => {
         {loading ? (
           <Loader /> // Display the Loader component while loading
         ) : (
-          <div style={{ overflowX: 'auto', width: '100%' }}>
+          <div className="timetable-tabs-container">
             <Tabs
               defaultActiveKey={null}
               centered
               renderTabBar={(props, DefaultTabBar) => (
                 <DefaultTabBar {...props} moreIcon={<span>...</span>} />
               )}
-              ref={tabsRef}
               className="custom-tabs"
             >
               {/* Render each day's timetable data */}
