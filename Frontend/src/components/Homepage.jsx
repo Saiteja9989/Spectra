@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Input, Card, Row,Avatar, Col, Space, Typography } from 'antd';
+import { Input, Card, Row, Avatar, Col, Space, Typography, Spin } from 'antd'; // Import Spin component
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
@@ -11,9 +11,12 @@ function UserInputPage({ setNetraID }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [searchType, setSearchType] = useState(null);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleInputChange = async (e) => {
+  let timer;
+
+  const handleInputChange = (e) => {
     const inputValue = e.target.value.toUpperCase();
     setSearchQuery(inputValue);
 
@@ -22,19 +25,25 @@ function UserInputPage({ setNetraID }) {
       return;
     }
 
-    if (/^\d{10}$/.test(inputValue)) {
-      setSearchType('phone');
-      await fetchResults(inputValue);
-    } else if (/^\d{1,9}$/.test(inputValue)) {
-      setSearchType('partialPhone');
-      await fetchResults(inputValue);
-    } else if (/^2[a-zA-Z0-9]+$/.test(inputValue)) {
-      setSearchType('hallticketno');
-      await fetchResults(inputValue);
-    } else {
-      setSearchType('name');
-      await fetchResults(inputValue);
-    }
+    clearTimeout(timer);
+    setLoading(true);
+
+    timer = setTimeout(async () => {
+      if (/^\d{10}$/.test(inputValue)) {
+        setSearchType('phone');
+        await fetchResults(inputValue);
+      } else if (/^\d{1,9}$/.test(inputValue)) {
+        setSearchType('partialPhone');
+        await fetchResults(inputValue);
+      } else if (/^2[a-zA-Z0-9]+$/.test(inputValue)) {
+        setSearchType('hallticketno');
+        await fetchResults(inputValue);
+      } else {
+        setSearchType('name');
+        await fetchResults(inputValue);
+      }
+      setLoading(false);
+    }, 0);
   };
 
   const fetchResults = async (inputValue) => {
@@ -48,7 +57,7 @@ function UserInputPage({ setNetraID }) {
 
   const handleSearch = async (key) => {
     try {
-      const response = await axios.post(`${baseUrl}/api/netra-id` , {
+      const response = await axios.post(`${baseUrl}/api/netra-id`, {
         searchType: searchType,
         searchValue: key
       });
@@ -127,7 +136,10 @@ function UserInputPage({ setNetraID }) {
           />
         </Col>
       </Row>
-      {searchQuery && (
+      <Row justify="center" style={{ marginTop: '2rem' }}>
+        <Spin spinning={loading} size="large" /> {/* Use Spin component */}
+      </Row>
+      {!loading && searchQuery && (
         <Row justify="center" style={{ marginTop: '2rem' }}>
           <Col span={24}>
             <Space direction="vertical" style={{ width: '100%' }}>
