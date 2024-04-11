@@ -6,7 +6,7 @@ import { LeftOutlined } from '@ant-design/icons';
 import Loader from './Loader'; // Import the Loader component
 import Navbar from './Navbar';
 import { baseUrl } from '../baseurl';
-
+import './AttendancePage.css';
 const AttendancePage = ({ netraID }) => {
   const [attendanceData, setAttendanceData] = useState(null);
   const [loading, setLoading] = useState(true); // Add loading state
