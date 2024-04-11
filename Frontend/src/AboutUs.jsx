@@ -20,39 +20,6 @@ const AboutUs = () => {
           </Paragraph>
         </Typography>
       </Card>
-      <Title level={4}>Contact Details</Title>
-      <Card hoverable style={{ marginBottom: '20px' }}>
-        <Typography>
-          <Paragraph>
-            <strong>Name :</strong> KASOJU SAITEJA (22BD1A054V)
-          </Paragraph>
-          <Paragraph>
-            <strong>Academic Details:</strong> 2-YR CSE A
-          </Paragraph>
-          <Paragraph>
-            <strong>Email:</strong> kasojusaiteja10@gmail.com
-          </Paragraph>
-          {/* <Paragraph>
-            <strong>Phone:</strong> 7569295934
-          </Paragraph> */}
-        </Typography>
-      </Card>
-      <Card hoverable style={{ marginBottom: '20px' }}>
-        <Typography>
-          <Paragraph>
-            <strong>Name :</strong> ABHILASH REDDY (22BD1A054Q)
-          </Paragraph>
-          <Paragraph>
-            <strong>Academic Details :</strong> 2-YR CSE C
-          </Paragraph>
-          <Paragraph>
-            <strong>Email:</strong> abhigxtheupm@gmail.com
-          </Paragraph>
-          {/* <Paragraph>
-            <strong>Phone:</strong> 9515360456
-          </Paragraph> */}
-        </Typography>
-      </Card>
       </div>
       </>
   );
