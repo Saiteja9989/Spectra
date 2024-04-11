@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Input, Card, Row, Avatar, Col, Space, Typography, Spin } from 'antd'; // Import Spin component
+import { Input, Card, Row, Avatar, Col, Space, Typography, Spin } from 'antd';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
@@ -17,7 +17,7 @@ function UserInputPage({ setNetraID }) {
   let timer;
 
   const handleInputChange = (e) => {
-    const inputValue = e.target.value.toUpperCase();
+    const inputValue = e.target.value.trim().toUpperCase();
     setSearchQuery(inputValue);
 
     if (!inputValue) {
@@ -29,6 +29,7 @@ function UserInputPage({ setNetraID }) {
     setLoading(true);
 
     timer = setTimeout(async () => {
+      setSearchResults([]);
       if (/^\d{10}$/.test(inputValue)) {
         setSearchType('phone');
         await fetchResults(inputValue);
@@ -43,13 +44,15 @@ function UserInputPage({ setNetraID }) {
         await fetchResults(inputValue);
       }
       setLoading(false);
-    }, 0);
+    }, 500);
   };
 
   const fetchResults = async (inputValue) => {
     try {
       const response = await axios.post(`${baseUrl}/api/search`, { searchInput: inputValue });
-      setSearchResults(response.data.slice(0, 5));
+      console.log('Response data:', response.data);
+setSearchResults(response.data.slice(0, 5));
+
     } catch (error) {
       console.error('Error fetching search results:', error);
     }
@@ -130,14 +133,13 @@ function UserInputPage({ setNetraID }) {
             onChange={handleInputChange}
             placeholder="Enter Name, HallTicket No, or Phone No."
             enterButton
-            onSearch={handleSearch}
             size="large"
             style={{ width: '100%' }}
           />
         </Col>
       </Row>
       <Row justify="center" style={{ marginTop: '2rem' }}>
-        <Spin spinning={loading} size="large" /> {/* Use Spin component */}
+        <Spin spinning={loading} size="large" />
       </Row>
       {!loading && searchQuery && (
         <Row justify="center" style={{ marginTop: '2rem' }}>
