@@ -62,7 +62,7 @@ const ResultPage = ({ netraID }) => {
       setExternalResultData(allResults); // Update state with all semester results
   
       // Fetch backlog information
-      const backlogResponse = await axios.post('http://localhost:3000/api/backlogs', { method: 316, rollno: netraID });
+      const backlogResponse = await axios.post(`${baseUrl}/api/backlogs`, { method: 316, rollno: netraID });
   
       const totalBacklogs = backlogResponse.data.backlogs;
       console.log('Total backlogs:', totalBacklogs);
