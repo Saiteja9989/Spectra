@@ -1,6 +1,7 @@
 import React from 'react';
 import Loader from './Loader'; // Import the Loader component
 import { Col, Card, Table } from 'antd';
+import './internal.css'; // Import the CSS file
 
 const InternalResultComponent = ({ resultData }) => {
   if (!resultData || resultData.length === 0) {
