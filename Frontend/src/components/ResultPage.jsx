@@ -44,9 +44,9 @@ const ResultPage = ({ netraID }) => {
             semester,
             rollno: netraID
           });
-          console.log(`Response for Year ${year}, Semester ${semester}:`, response.data);
+          // console.log(`Response for Year ${year}, Semester ${semester}:`, response.data);
   
-          console.log(`Results for Year ${year}, Semester ${semester}:`, response.data);
+          // console.log(`Results for Year ${year}, Semester ${semester}:`, response.data);
           const parsedData = parseHtml1(response.data); // Parse HTML data
           if (parsedData) {
             allResults.push({
@@ -58,7 +58,7 @@ const ResultPage = ({ netraID }) => {
         }
       }
       
-      console.log(allResults)
+      // console.log(allResults)
       setExternalResultData(allResults); // Update state with all semester results
   
       // Fetch backlog information

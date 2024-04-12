@@ -1,10 +1,10 @@
 import React from 'react';
 import { Card, Table } from 'antd';
-
+import Loader from './Loader';
 const ExternalResultComponent = ({ resultData, totalBacklogs }) => {
   const renderSemesterResults = () => {
     if (!resultData || resultData.length === 0) {
-      return <div>No external result data available</div>;
+      return <Loader />;
     }
 
     return (

@@ -29,7 +29,8 @@ router.post('/backlogs', async (req, res) => {
       mid: '58',
       rollno:rollno
     };
-    const response = await axios.get('http://teleuniv.in/trinetra/pages/lib/student_ajaxfile.php', {params});
+    const response = await axios.get('http://teleuniv.in/trinetra/pages/lib/student_ajaxfile.php', { params });
+    // console.log(response.data.length)
     res.json(response.data.length);
   } catch (error) {
     console.error('Error fetching backlog data:', error);
