@@ -17,6 +17,7 @@
     "@mui/material": "^5.15.14",
     "@mui/system": "^5.15.14",
     "@react-pdf/renderer": "^3.4.2",
+    "@vercel/analytics": "^1.2.2",
     "antd": "^5.15.4",
     "axios": "^1.6.8",
     "babel-runtime": "^6.26.0",

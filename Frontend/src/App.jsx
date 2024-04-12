@@ -1,6 +1,6 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
-
+import { Analytics } from "@vercel/analytics/react"
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import SearchPage from './components/Homepage'; // Import SearchPage
 // import OptionsPage from './components/options';
@@ -32,7 +32,8 @@ const App = () => {
         <Route path="/result" element={<ResultPage netraID={netraID} />} />
         <Route path="/timetable" element={<Timetable netraID={netraID} />} />
         <Route path="/feedback" element={<FeedbackForm netraID={netraID} />} />
-        <Route path="/aboutus" element={<AboutUs/>} />
+        <Route path="/aboutus" element={<AboutUs />} />
+        {/* <Analytics/> */}
         {/* <Route path="/clubs" element={<Clubdetails />} />  */}
       </Routes>
       </Router>
