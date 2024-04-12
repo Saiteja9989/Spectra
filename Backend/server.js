@@ -35,8 +35,8 @@ app.use(cors({
   origin: '*'
 }));
 
-app.get('/', (req, res) => {
-  res.send("server uploaded..")
+app.use('/', (req, res) => {
+  res.json({message:"hello server started"})
 })
 
 // app.use(cors({
