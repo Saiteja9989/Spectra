@@ -50,7 +50,7 @@ const Timetable = ({ netraID }) => {
     if (tabsRef.current) {
       const tabListWidth = tabsRef.current.offsetWidth;
       const numTabs = timetableData.length;
-      const minTabsWidth = numTabs * 80; // Adjusted width for mobile devices
+      const minTabsWidth = numTabs * 120; // Adjust width as needed
       tabsRef.current.style.width = `${Math.max(tabListWidth, minTabsWidth)}px`;
     }
   }, [timetableData]);
@@ -63,14 +63,6 @@ const Timetable = ({ netraID }) => {
         key: 'hour',
         render: (text) => parser.parse(text),
       },
-      {
-        title: 'Subject',
-        dataIndex: 'subject',
-        key: 'subject',
-      },
-    ];
-
-    const mobileColumns = [
       {
         title: 'Subject',
         dataIndex: 'subject',
@@ -115,32 +107,33 @@ const Timetable = ({ netraID }) => {
   return (
     <>
       <Navbar />
-      <div style={{ padding: '20px', maxWidth: '100%', margin: '0 auto' }}>
+      <div style={{ padding: '20px', maxWidth: '800px', margin: '0 auto' }}>
         <h1 style={{ textAlign: 'center', marginBottom: 20 }}>Timetable</h1>
         {loading ? (
           <Loader />
         ) : (
           <div>
-            <Tabs
-              defaultActiveKey={null}
-              centered
-              renderTabBar={(props, DefaultTabBar) => (
-                <DefaultTabBar {...props} moreIcon={<span>...</span>} />
-              )}
-              ref={tabsRef}
-              className="custom-tabs"
-              style={{ maxWidth: '100%' }}
-            >
-              {timetableData.map((dayData, index) => (
-                <TabPane
-                  tab={dayData.dayname}
-                  key={`${dayData.dayname}-${index}`}
-                  style={{ minWidth: '80px' }}
-                >
-                  {renderTimetableForDay(dayData)}
-                </TabPane>
-              ))}
-            </Tabs>
+            <div style={{ overflowX: 'auto' }}>
+              <Tabs
+                defaultActiveKey={null}
+                centered
+                renderTabBar={(props, DefaultTabBar) => (
+                  <DefaultTabBar {...props} moreIcon={<span>...</span>} />
+                )}
+                ref={tabsRef}
+                className="custom-tabs"
+              >
+                {timetableData.map((dayData, index) => (
+                  <TabPane
+                    tab={dayData.dayname}
+                    key={`${dayData.dayname}-${index}`}
+                    style={{ minWidth: '120px' }}
+                  >
+                    {renderTimetableForDay(dayData)}
+                  </TabPane>
+                ))}
+              </Tabs>
+            </div>
           </div>
         )}
       </div>
