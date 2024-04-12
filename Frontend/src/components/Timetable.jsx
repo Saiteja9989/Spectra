@@ -1,17 +1,16 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Tabs, Table, Card } from 'antd';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Parser } from 'html-to-react';
+import { Table, Card } from 'antd';
 import './Timetable.css';
 import Loader from './Loader';
 import Navbar from './Navbar';
 import { baseUrl } from '../baseurl';
-const { TabPane } = Tabs;
 
 const Timetable = ({ netraID }) => {
   const [loading, setLoading] = useState(false);
   const [timetableData, setTimetableData] = useState([]);
-  const tabsRef = useRef(null);
+  const [selectedDay, setSelectedDay] = useState('Monday'); // Default selected day
   const parser = new Parser();
 
   useEffect(() => {
@@ -46,16 +45,8 @@ const Timetable = ({ netraID }) => {
     fetchData();
   }, [netraID]);
 
-  useEffect(() => {
-    if (tabsRef.current) {
-      const tabListWidth = tabsRef.current.offsetWidth;
-      const numTabs = timetableData.length;
-      const minTabsWidth = numTabs * 120; // Adjust width as needed
-      tabsRef.current.style.width = `${Math.max(tabListWidth, minTabsWidth)}px`;
-    }
-  }, [timetableData]);
-
   const renderTimetableForDay = (dayData) => {
+    if (!dayData || !dayData.dayname) return null; // Check if dayData is defined and has a dayname property
     const columns = [
       {
         title: 'Period',
@@ -71,37 +62,32 @@ const Timetable = ({ netraID }) => {
     ];
 
     return (
-      <Card
-        title={dayData.dayname}
-        style={{
-          marginBottom: 20,
-          width: '100%',
-          boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
-          borderRadius: 6,
-        }}
-      >
-        <div>
-          <h3 style={{ marginBottom: 10, fontSize: '1.2rem' }}>Before Lunch</h3>
-          <Table
-            dataSource={dayData.beforelunch}
-            columns={columns}
-            pagination={false}
-            size="small"
-            scroll={{ x: true }}
-          />
-          <h3 style={{ margin: '12px 0', fontSize: '1.2rem' }}>Lunch</h3>
-          <p style={{ marginBottom: 12, fontSize: '1rem' }}>{dayData.lunch}</p>
-          <h3 style={{ marginBottom: 10, fontSize: '1.2rem' }}>After Lunch</h3>
-          <Table
-            dataSource={dayData.afterlunch}
-            columns={columns}
-            pagination={false}
-            size="small"
-            scroll={{ x: true }}
-          />
-        </div>
-      </Card>
+      <div>
+        <h1 style={{ marginBottom: 10, fontSize: '1rem' }}>{dayData.dayname}</h1>
+        <h3 style={{ marginBottom: 10, fontSize: '1rem' }}>Before Lunch</h3>
+        <Table
+          dataSource={dayData.beforelunch}
+          columns={columns}
+          pagination={false}
+          size="small"
+          scroll={{ x: true }}
+        />
+        <h3 style={{ margin: '12px 0', fontSize: '1.2rem' }}>Lunch</h3>
+        <p style={{ marginBottom: 12, fontSize: '1rem' }}>{dayData.lunch}</p>
+        <h3 style={{ marginBottom: 10, fontSize: '1rem' }}>After Lunch</h3>
+        <Table
+          dataSource={dayData.afterlunch}
+          columns={columns}
+          pagination={false}
+          size="small"
+          scroll={{ x: true }}
+        />
+      </div>
     );
+  };
+
+  const handleDayClick = (day) => {
+    setSelectedDay(day);
   };
 
   return (
@@ -112,30 +98,28 @@ const Timetable = ({ netraID }) => {
         {loading ? (
           <Loader />
         ) : (
-          <div>
-            <div style={{ overflowX: 'auto' }}>
-              <Tabs
-                defaultActiveKey={null}
-                centered
-                renderTabBar={(props, DefaultTabBar) => (
-                  <DefaultTabBar {...props} moreIcon={<span>...</span>} />
-                )}
-                ref={tabsRef}
-                className="custom-tabs"
+          <div style={{ display: 'flex', overflowX: 'auto', marginBottom: 20 }}>
+            {timetableData.map((dayData) => (
+              <button
+                key={dayData.dayname}
+                style={{
+                  marginRight: 10,
+                  padding: '5px 10px',
+                  backgroundColor: selectedDay === dayData.dayname ? '#1890ff' : '#e8e8e8',
+                  color: selectedDay === dayData.dayname ? 'white' : 'black',
+                  border: 'none',
+                  borderRadius: 5,
+                  cursor: 'pointer',
+                  outline: 'none',
+                }}
+                onClick={() => handleDayClick(dayData.dayname)}
               >
-                {timetableData.map((dayData, index) => (
-                  <TabPane
-                    tab={dayData.dayname}
-                    key={`${dayData.dayname}-${index}`}
-                    style={{ minWidth: '120px' }}
-                  >
-                    {renderTimetableForDay(dayData)}
-                  </TabPane>
-                ))}
-              </Tabs>
-            </div>
+                {dayData.dayname}
+              </button>
+            ))}
           </div>
         )}
+        {renderTimetableForDay(timetableData.find((dayData) => dayData.dayname === selectedDay))}
       </div>
     </>
   );
