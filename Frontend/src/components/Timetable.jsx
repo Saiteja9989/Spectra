@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Parser } from 'html-to-react';
-import { Table, Card } from 'antd';
+import { Table, Card, Tabs } from 'antd';
 import './Timetable.css';
 import Loader from './Loader';
 import Navbar from './Navbar';
 import { baseUrl } from '../baseurl';
+
+const { TabPane } = Tabs;
 
 const Timetable = ({ netraID }) => {
   const [loading, setLoading] = useState(false);
@@ -86,7 +88,7 @@ const Timetable = ({ netraID }) => {
     );
   };
 
-  const handleDayClick = (day) => {
+  const handleTabClick = (day) => {
     setSelectedDay(day);
   };
 
@@ -98,28 +100,14 @@ const Timetable = ({ netraID }) => {
         {loading ? (
           <Loader />
         ) : (
-          <div style={{ display: 'flex', overflowX: 'auto', marginBottom: 20 }}>
+          <Tabs activeKey={selectedDay} onTabClick={handleTabClick}>
             {timetableData.map((dayData) => (
-              <button
-                key={dayData.dayname}
-                style={{
-                  marginRight: 10,
-                  padding: '5px 10px',
-                  backgroundColor: selectedDay === dayData.dayname ? '#1890ff' : '#e8e8e8',
-                  color: selectedDay === dayData.dayname ? 'white' : 'black',
-                  border: 'none',
-                  borderRadius: 5,
-                  cursor: 'pointer',
-                  outline: 'none',
-                }}
-                onClick={() => handleDayClick(dayData.dayname)}
-              >
-                {dayData.dayname}
-              </button>
+              <TabPane tab={dayData.dayname} key={dayData.dayname}>
+                {renderTimetableForDay(dayData)}
+              </TabPane>
             ))}
-          </div>
+          </Tabs>
         )}
-        {renderTimetableForDay(timetableData.find((dayData) => dayData.dayname === selectedDay))}
       </div>
     </>
   );
