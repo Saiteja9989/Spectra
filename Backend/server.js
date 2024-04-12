@@ -35,9 +35,11 @@ app.use(cors({
   origin: '*'
 }));
 
-// app.use('/', (req, res) => {
-//   res.json({message:"hello server started"})
-// })
+app.use(express.json());
+
+app.get('/', (req, res) => {
+  res.send('products api running new deploy');
+});
 
 // app.use(cors({
 //   origin: 'http://localhost:5173',
