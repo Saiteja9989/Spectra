@@ -35,9 +35,9 @@ app.use(cors({
   origin: '*'
 }));
 
-// app.use('/', (req, res) => {
-//   res.send("server uploaded..")
-// })
+app.get('/', (req, res) => {
+  res.send("server uploaded..")
+})
 
 // app.use(cors({
 //   origin: 'http://localhost:5173',
