@@ -3,7 +3,7 @@ import { Tabs, Table, Card } from 'antd';
 import axios from 'axios';
 import { Parser } from 'html-to-react';
 import './Timetable.css';
-import Loader from './Loader'; // Import the Loader component
+import Loader from './Loader';
 import Navbar from './Navbar';
 import { baseUrl } from '../baseurl';
 const { TabPane } = Tabs;
@@ -12,6 +12,7 @@ const Timetable = ({ netraID }) => {
   const [loading, setLoading] = useState(false);
   const [timetableData, setTimetableData] = useState([]);
   const tabsRef = useRef(null);
+  const parser = new Parser();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -22,14 +23,12 @@ const Timetable = ({ netraID }) => {
         });
         let timetable = response.data.timetable;
 
-        // Ensure all days of the week are present
         const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
         const updatedTimetable = daysOfWeek.map((day) => {
           const dayData = timetable.find((item) => item.dayname === day);
           return dayData || { dayname: day, beforelunch: [], lunch: '', afterlunch: [] };
         });
 
-        // Sort the timetable data so that Monday comes first
         const sortedTimetable = updatedTimetable.sort((a, b) => {
           if (a.dayname === 'Monday') return -1;
           if (b.dayname === 'Monday') return 1;
@@ -45,15 +44,13 @@ const Timetable = ({ netraID }) => {
     };
 
     fetchData();
-  }, [netraID]);;
-
-  const parser = new Parser();
+  }, [netraID]);
 
   useEffect(() => {
     if (tabsRef.current) {
       const tabListWidth = tabsRef.current.offsetWidth;
       const numTabs = timetableData.length;
-      const minTabsWidth = numTabs * 120; // Increase the minimum width for each tab to 120px
+      const minTabsWidth = numTabs * 80; // Adjusted width for mobile devices
       tabsRef.current.style.width = `${Math.max(tabListWidth, minTabsWidth)}px`;
     }
   }, [timetableData]);
@@ -73,7 +70,6 @@ const Timetable = ({ netraID }) => {
       },
     ];
 
-    // Hide the 'hour' column on smaller screens
     const mobileColumns = [
       {
         title: 'Subject',
@@ -87,7 +83,7 @@ const Timetable = ({ netraID }) => {
         title={dayData.dayname}
         style={{
           marginBottom: 20,
-          width: '100%', // Adjust card width to fit the screen width
+          width: '100%',
           boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
           borderRadius: 6,
         }}
@@ -118,52 +114,37 @@ const Timetable = ({ netraID }) => {
 
   return (
     <>
-      <Navbar/>
-    <div style={{ padding: '20px', maxWidth: '800px', margin: '0 auto' }}>
-      <h1 style={{ textAlign: 'center', marginBottom: 20 }}>Timetable</h1>
-      {loading ? (
-        <Loader /> // Display the Loader component while loading
-      ) : (
-        <div style={{ overflowX: 'auto', width: '100%' }}>
-          <Tabs
-            defaultActiveKey={null}
-            centered
-            renderTabBar={(props, DefaultTabBar) => (
-              <DefaultTabBar {...props} moreIcon={<span>...</span>} />
-            )}
-            ref={tabsRef}
-            className="custom-tabs"
-          >
-            {/* Render Monday TabPane if it exists in timetableData */}
-            {timetableData.find((dayData) => dayData.dayname === 'Monday') && (
-              <TabPane
-                tab="Monday"
-                key="Monday"
-                style={{ minWidth: '120px' }}
-              >
-                {/* Render timetable data for Monday */}
-                {timetableData.map((dayData) => (
-                  dayData.dayname === 'Monday' && renderTimetableForDay(dayData)
-                ))}
-              </TabPane>
-            )}
-            {/* Render other TabPanels */}
-            {timetableData.map((dayData, index) => (
-              dayData.dayname !== 'Monday' && (
+      <Navbar />
+      <div style={{ padding: '20px', maxWidth: '100%', margin: '0 auto' }}>
+        <h1 style={{ textAlign: 'center', marginBottom: 20 }}>Timetable</h1>
+        {loading ? (
+          <Loader />
+        ) : (
+          <div>
+            <Tabs
+              defaultActiveKey={null}
+              centered
+              renderTabBar={(props, DefaultTabBar) => (
+                <DefaultTabBar {...props} moreIcon={<span>...</span>} />
+              )}
+              ref={tabsRef}
+              className="custom-tabs"
+              style={{ maxWidth: '100%' }}
+            >
+              {timetableData.map((dayData, index) => (
                 <TabPane
                   tab={dayData.dayname}
-                  key={`${dayData.dayname}-${index}`} // Ensure unique key by including index
-                  style={{ minWidth: '80px' }} // Set a minimum width for other tabs
+                  key={`${dayData.dayname}-${index}`}
+                  style={{ minWidth: '80px' }}
                 >
                   {renderTimetableForDay(dayData)}
                 </TabPane>
-              )
-            ))}
-          </Tabs>
-        </div>
-      )}
+              ))}
+            </Tabs>
+          </div>
+        )}
       </div>
-      </>
+    </>
   );
 };
 
