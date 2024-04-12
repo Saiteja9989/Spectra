@@ -35,9 +35,9 @@ app.use(cors({
   origin: '*'
 }));
 
-app.use('/', (req, res) => {
-  res.json({message:"hello server started"})
-})
+// app.use('/', (req, res) => {
+//   res.json({message:"hello server started"})
+// })
 
 // app.use(cors({
 //   origin: 'http://localhost:5173',
