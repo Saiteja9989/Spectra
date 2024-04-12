@@ -7,6 +7,7 @@ import axios from 'axios';
 import AttendanceTracker from '../components/AttendanceTracker';
 import Swal from 'sweetalert2';
 import Navbar from './Navbar'
+import { baseUrl } from '../baseurl';
 
 const { Header, Content } = Layout;
 const { Title, Text } = Typography;
@@ -36,12 +37,13 @@ const ProfilePage = ({ netraID }) => {
 
   const fetchProfileData = async (netraID) => {
     try {
-      const response = await axios.post('http://teleuniv.in/netra/api.php', {
+      const response = await axios.post(`${baseUrl}/api/profile`, {
         method: '32',
         rollno: netraID
       });
       const data = response.data;
       setProfileDetails(data);
+      console.log(profileDetails.picture);
     } catch (error) {
       console.error('Error fetching profile data:', error);
     }
@@ -49,16 +51,12 @@ const ProfilePage = ({ netraID }) => {
 
   const fetchAttendanceData = async (netraID) => {
     try {
-      const response = await axios.post('http://teleuniv.in/netra/api.php', {
-        method: '314',
-        rollno: netraID
-      });
-      const data = response.data.attandance.dayobjects;
-      const data1 = response.data.overallattperformance.totalpercentage;
-      const data2 = response.data.attandance.twoweeksessions;
-      setAttendanceData(data);
-      setTwoWeekSessions(data2);
-      setAttendancePer(data1);
+      const response = await axios.post(`${baseUrl}/api/attendance`, { netraID });
+      const { dayObjects, totalPercentage, twoWeekSessions } = response.data;
+
+      setAttendanceData(dayObjects);
+      setTwoWeekSessions(twoWeekSessions);
+      setAttendancePer(totalPercentage);
     } catch (error) {
       console.error('Error fetching attendance data:', error);
     }
@@ -73,7 +71,7 @@ const ProfilePage = ({ netraID }) => {
             <Card style={{ boxShadow: '0 1px 2px rgba(0, 0, 0, 0.1)' }}>
               <div style={{ minHeight: '300px', textAlign: 'center' }}>
                 {profileDetails && (
-                  <Avatar size={150} icon={<UserOutlined />} src={profileDetails.picture} />
+                  <Avatar size={150} icon={<UserOutlined />} src={`data:image/jpeg;base64,${profileDetails.picture}`} />
                 )}
                 <div style={{ marginTop: '20px' }}>
                   {profileDetails && (
@@ -124,7 +122,7 @@ const ProfilePage = ({ netraID }) => {
                     <p style={{ color: 'gray', fontStyle: 'italic' }}>Note: Attendance prediction will be coming soon</p>
                   </div>
                 </div>
-                <div class="session1" style={{ textAlign: 'center', display: 'inline-block', verticalAlign: 'top', marginLeft: '20px' }}>
+                <div className="session1" style={{ textAlign: 'center', display: 'inline-block', verticalAlign: 'top', marginLeft: '20px' }}>
                   <Title level={4}>Latest Attendance</Title>
                   {attendanceData && (
                     <div>

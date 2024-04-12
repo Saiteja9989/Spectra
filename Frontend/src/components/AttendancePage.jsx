@@ -5,7 +5,8 @@ import { useNavigate } from 'react-router-dom';
 import { LeftOutlined } from '@ant-design/icons';
 import Loader from './Loader'; // Import the Loader component
 import Navbar from './Navbar';
-
+import { baseUrl } from '../baseurl';
+import './AttendancePage.css';
 const AttendancePage = ({ netraID }) => {
   const [attendanceData, setAttendanceData] = useState(null);
   const [loading, setLoading] = useState(true); // Add loading state
@@ -18,12 +19,12 @@ const AttendancePage = ({ netraID }) => {
   }, [netraID]);
 
   const fetchAttendanceData = async (netraID) => {
+    setLoading(true); // Set loading state to true when fetching data
     try {
-      const response = await axios.post('http://teleuniv.in/netra/api.php', {
-        method: '314',
-        rollno: netraID
+      const response = await axios.post(`${baseUrl}/api/subject/attendance`, {
+        netraID: netraID
       });
-      const data = response.data.overallattperformance.overall;
+      const data = response.data;
       setAttendanceData(data);
     } catch (error) {
       console.error('Error fetching attendance data:', error);
@@ -48,7 +49,7 @@ const AttendancePage = ({ netraID }) => {
       dataIndex: 'percentage',
       key: 'percentage',
       render: (percentage) => {
-        const percentValue = percentage === '--' ? 0 : parseFloat(percentage);
+        const percentValue = percentage === '--' ? 0 : parseFloat(percentage).toFixed(1);
         const color = percentage === '100' || percentage === '--' ? '#137512' : null;
         return <Progress percent={percentValue} size="small" style={{ width: '80px' }} strokeColor={color} />;
       },
@@ -58,13 +59,12 @@ const AttendancePage = ({ netraID }) => {
       dataIndex: 'practical',
       key: 'practical',
       render: (practical) => {
-        const percentValue = practical === '--' ? 0 : parseFloat(practical);
+        const percentValue = practical === '--' ? 0 : parseFloat(practical).toFixed(1);
         const color = practical === '100' || practical === '--' ? '#137512' : null;
         return <Progress percent={percentValue} size="small" style={{ width: '80px' }} strokeColor={color} />;
       },
     },
   ];
-
   return (
     <>
       <Navbar /> {/* Include the Navbar component */}

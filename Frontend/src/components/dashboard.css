@@ -22,7 +22,7 @@
   }
   
   /* Styles for screens smaller than 768px (mobile) */
-  @media screen and (max-width: 767px) {
+  @media screen and (max-width: 768px) {
     .content {
       padding: 20px 10px;
     }
@@ -31,9 +31,10 @@
       padding: 0 8px;
     }
     .Atten1 {
-      margin-right: 0 !important; /* Override margin-right for mobile */
+      margin-right: 0 !important;
+      text-align: center; /* Override margin-right for mobile */
     }
-  
+    
     /* Increase option size for mobile devices */
     .card {
       padding: 24px; /* Adjust padding to increase the size */
@@ -54,7 +55,7 @@
   
   @media only screen and (max-width: 767px) {
     .attendance-date {
-      font-size: 12px;
+      font-size: 10px;
     }
   }
   

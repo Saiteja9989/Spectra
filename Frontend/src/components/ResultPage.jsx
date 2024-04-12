@@ -5,6 +5,7 @@ import InternalResultComponent from './InternalResultComponent';
 import ExternalResultComponent from './ExternalResultComponent';
 import Navbar from './Navbar';
 const { TabPane } = Tabs;
+import { baseUrl } from '../baseurl';
 
 const ResultPage = ({ netraID }) => {
   const [internalResultData, setInternalResultData] = useState([]);
@@ -19,14 +20,16 @@ const ResultPage = ({ netraID }) => {
 
   const fetchInternalResultData = async () => {
     try {
-      const response = await axios.get('http://teleuniv.in/trinetra/pages/lib/student_ajaxfile.php', {
-        params: { mid: 76, rollno: netraID }
+      const response = await axios.post(`${baseUrl}/api/internalResultData`, {
+        mid: 76,
+        rollno: netraID
       });
       parseHtml(response.data, setInternalResultData);
     } catch (error) {
       console.error('Error fetching internal result data:', error);
     }
   };
+  
 
   const fetchExternalResultData = async () => {
     try {
@@ -36,8 +39,10 @@ const ResultPage = ({ netraID }) => {
   
       for (let year of yearRange) {
         for (let semester of semesterRange) {
-          const response = await axios.get('http://teleuniv.in/trinetra/pages/lib/student_ajaxfile.php', {
-            params: { mid: 57, rollno: netraID, year, sem: semester }
+          const response = await axios.post(`${baseUrl}/api/externalResultData`, {
+            year,
+            semester,
+            rollno: netraID
           });
           console.log(`Response for Year ${year}, Semester ${semester}:`, response.data);
   
@@ -57,12 +62,10 @@ const ResultPage = ({ netraID }) => {
       setExternalResultData(allResults); // Update state with all semester results
   
       // Fetch backlog information
-      const backlogResponse = await axios.post('http://teleuniv.in/netra/api.php', { method: 316, rollno: netraID }, {
-        withCredentials: true
-      });
+      const backlogResponse = await axios.post(`${baseUrl}/api/backlogs`, { method: 316, rollno: netraID });
   
-      const totalBacklogs = (backlogResponse.data.backlogs);
-      console.log('Total backlogs:', backlogResponse.data.backlogs);
+      const totalBacklogs = backlogResponse.data.backlogs;
+      console.log('Total backlogs:', totalBacklogs);
   
       // Set the totalBacklogs state
       setTotalBacklogs(totalBacklogs);
@@ -70,6 +73,7 @@ const ResultPage = ({ netraID }) => {
       console.error('Error fetching external result data:', error);
     }
   };
+  
   
 
 

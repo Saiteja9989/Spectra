@@ -46,12 +46,13 @@
     }
   }
 
-  @media screen and (max-width: 768px) {
+  @media (max-width: 768px) {
     .custom-tabs .ant-tabs-nav-list {
       flex-wrap: nowrap;
       overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
+      /* -webkit-overflow-scrolling: touch; */
     }
+    
   }
   
   

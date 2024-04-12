@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
-import { Input, Card, Row,Avatar, Col, Space, Typography } from 'antd';
+import React, { useState, useEffect } from 'react';
+import { Input, Card, Row, Avatar, Col, Space, Typography, Spin } from 'antd';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
+import { baseUrl } from '../baseurl';
 
 const { Text } = Typography;
 
@@ -10,7 +11,18 @@ function UserInputPage({ setNetraID }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [searchType, setSearchType] = useState(null);
+  const [loading, setLoading] = useState(false); // State variable for loading
+  const [source, setSource] = useState(null); // Axios cancellation token source
   const navigate = useNavigate();
+
+  useEffect(() => {
+    // Cleanup function to cancel previous requests when component unmounts
+    return () => {
+      if (source) {
+        source.cancel('Operation canceled by cleanup.');
+      }
+    };
+  }, [source]);
 
   const handleInputChange = async (e) => {
     const inputValue = e.target.value.toUpperCase();
@@ -21,33 +33,49 @@ function UserInputPage({ setNetraID }) {
       return;
     }
 
+    if (source) {
+      source.cancel('Operation canceled due to new input.');
+    }
+
+    const cancelToken = axios.CancelToken;
+    const newSource = cancelToken.source();
+    setSource(newSource);
+
     if (/^\d{10}$/.test(inputValue)) {
       setSearchType('phone');
-      await fetchResults(inputValue);
+      await fetchResults(inputValue, newSource);
     } else if (/^\d{1,9}$/.test(inputValue)) {
       setSearchType('partialPhone');
-      await fetchResults(inputValue);
+      await fetchResults(inputValue, newSource);
     } else if (/^2[a-zA-Z0-9]+$/.test(inputValue)) {
       setSearchType('hallticketno');
-      await fetchResults(inputValue);
+      await fetchResults(inputValue, newSource);
     } else {
       setSearchType('name');
-      await fetchResults(inputValue);
+      await fetchResults(inputValue, newSource);
     }
   };
 
-  const fetchResults = async (inputValue) => {
+  const fetchResults = async (inputValue, cancelTokenSource) => {
     try {
-      const response = await axios.post('http://localhost:5000/api/search', { searchInput: inputValue });
+      setLoading(true); // Show loader while fetching results
+      const response = await axios.post(`${baseUrl}/api/search`, { searchInput: inputValue }, { cancelToken: cancelTokenSource.token });
       setSearchResults(response.data.slice(0, 5));
     } catch (error) {
-      console.error('Error fetching search results:', error);
+      if (axios.isCancel(error)) {
+        console.log('Request canceled:', error.message);
+      } else {
+        console.error('Error fetching search results:', error);
+      }
+    } finally {
+      setLoading(false); // Hide loader after fetching results
     }
   };
 
   const handleSearch = async (key) => {
     try {
-      const response = await axios.post('http://localhost:5000/api/netra-id' , {
+      setLoading(true); // Show loader while fetching Netra ID
+      const response = await axios.post(`${baseUrl}/api/netra-id`, {
         searchType: searchType,
         searchValue: key
       });
@@ -63,6 +91,8 @@ function UserInputPage({ setNetraID }) {
       }
     } catch (error) {
       console.error('Error fetching Netra ID:', error);
+    } finally {
+      setLoading(false); // Hide loader after fetching Netra ID
     }
   };
 
@@ -126,7 +156,14 @@ function UserInputPage({ setNetraID }) {
           />
         </Col>
       </Row>
-      {searchQuery && (
+      {loading && ( // Show loader if loading state is true
+        <Row justify="center" style={{ marginTop: '2rem' }}>
+          <Col span={24} style={{ textAlign: 'center' }}>
+            <Spin size="large" />
+          </Col>
+        </Row>
+      )}
+      {!loading && searchQuery && (
         <Row justify="center" style={{ marginTop: '2rem' }}>
           <Col span={24}>
             <Space direction="vertical" style={{ width: '100%' }}>

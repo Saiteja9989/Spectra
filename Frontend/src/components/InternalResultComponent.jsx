@@ -1,6 +1,7 @@
 import React from 'react';
 import Loader from './Loader'; // Import the Loader component
 import { Col, Card, Table } from 'antd';
+import './internal.css'; // Import the CSS file
 
 const InternalResultComponent = ({ resultData }) => {
   if (!resultData || resultData.length === 0) {
@@ -10,7 +11,7 @@ const InternalResultComponent = ({ resultData }) => {
   return (
     <>
       {resultData.map((semester, index) => (
-        <Col key={index} xs={24}>
+        <Col key={index} xs={24} >
           <Card style={{ marginBottom: '20px', boxShadow: '0 8px 16px rgba(0, 0, 0, 0.2)', borderRadius: '8px' }}>
             <h2 style={{ textAlign: 'center' }}>{semester.title}</h2>
             <Table
@@ -23,7 +24,7 @@ const InternalResultComponent = ({ resultData }) => {
               dataSource={semester.data}
               pagination={false}
               size="small"
-              style={{ color: 'blue' }}
+              style={{ color: 'blue'}}
             />
           </Card>
         </Col>
