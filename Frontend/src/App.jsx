@@ -11,16 +11,20 @@ import ResultPage from './components/ResultPage';
 import Timetable from './components/Timetable';
 import FeedbackForm from './components/Feedback';
 import AboutUs from './AboutUs';
+<<<<<<< HEAD
 import Netraqr from './components/Netraqr'
 // import Clubdetails from './components/Clubs';
+=======
+
+>>>>>>> 78ac9102e895a6125d49e79425aa40f38ee06ccd
 const App = () => {
   const [netraID, setNetraID] = useState(() => {
-    // Initialize netraID from localStorage or null if not found
+    
     return localStorage.getItem('netraID') || null;
   });
 
   useEffect(() => {
-    // Update localStorage whenever netraID changes
+    
     localStorage.setItem('netraID', netraID);
   }, [netraID]);
 

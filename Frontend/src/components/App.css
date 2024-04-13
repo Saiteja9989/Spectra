@@ -1,4 +1,4 @@
-/* For mobile view */
+
 @media (max-width: 601px) {
   .card {
     width: 42vw;
@@ -12,16 +12,16 @@
 
 
 
-/* For desktop view */
+
 @media (min-width: 601px) {
   .card {
-    width: 20vw; /* Adjust the width as needed */
-    height: 20vh; /* Adjust the height as needed */
-    max-width: 400px; /* Adjust the max-width as needed */
+    width: 20vw; 
+    height: 20vh; 
+    max-width: 400px; 
   }
 }
 
-/* Styles for option content */
+
 .option-content {
   display: flex;
   flex-direction: column;
@@ -30,31 +30,27 @@
   height: 100%;
 }
 
-/* Styles for option icon */
+
 .option-icon {
   font-size: 5vh;
 }
 
-/* For desktop view */
-/* For desktop view */
 
-
-/* CSS Media Query for Desktop View */
 @media (min-width: 1080px) {
   .attendance-tracker {
     height: 20vh !important;
     margin-bottom: 1%;
     margin-left: 2.2%;
     margin-top: 3%;
-    /* width: 100vw  */
-    width: 50% !important;/* Adjust this value as needed */
-    max-width: none !important; /* This 
-    /* max-width:100000000 px !important; */
+    
+    width: 50% !important;
+    max-width: none !important; 
+    
   }
   .desktop-layout {
     display: flex;
-    flex-direction: row; /* Display items in rows for desktop view */
-    justify-content: space-between; /* Add space between items */
+    flex-direction: row; 
+    justify-content: space-between; 
   }
 
   .working-days {
@@ -92,17 +88,17 @@
   to { opacity: 1; }
 }
 
-/* Dynamic color change based on percentage */
+
 .AttendanceTracker .SemiCircleProgressBar-path {
-  stroke: #ff0000; /* Default to red */
+  stroke: #ff0000; 
 }
 
 .AttendanceTracker .SemiCircleProgressBar-path[data-percentage='40'] {
-  stroke: #ffa500; /* Change to orange at 40% */
+  stroke: #ffa500; 
 }
 
 .AttendanceTracker .SemiCircleProgressBar-path[data-percentage='75'] {
-  stroke: #008000; /* Change to green at 75% */
+  stroke: #008000; 
 }
 
 

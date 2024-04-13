@@ -11,12 +11,12 @@ function UserInputPage({ setNetraID }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [searchType, setSearchType] = useState(null);
-  const [loading, setLoading] = useState(false); // State variable for loading
-  const [source, setSource] = useState(null); // Axios cancellation token source
+  const [loading, setLoading] = useState(false); 
+  const [source, setSource] = useState(null); 
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Cleanup function to cancel previous requests when component unmounts
+    
     return () => {
       if (source) {
         source.cancel('Operation canceled by cleanup.');
@@ -58,7 +58,7 @@ function UserInputPage({ setNetraID }) {
 
   const fetchResults = async (inputValue, cancelTokenSource) => {
     try {
-      setLoading(true); // Show loader while fetching results
+      setLoading(true); 
       const response = await axios.post(`${baseUrl}/api/search`, { searchInput: inputValue }, { cancelToken: cancelTokenSource.token });
       setSearchResults(response.data.slice(0, 5));
     } catch (error) {
@@ -68,13 +68,13 @@ function UserInputPage({ setNetraID }) {
         console.error('Error fetching search results:', error);
       }
     } finally {
-      setLoading(false); // Hide loader after fetching results
+      setLoading(false); 
     }
   };
 
   const handleSearch = async (key) => {
     try {
-      setLoading(true); // Show loader while fetching Netra ID
+      setLoading(true); 
       const response = await axios.post(`${baseUrl}/api/netra-id`, {
         searchType: searchType,
         searchValue: key
@@ -92,7 +92,7 @@ function UserInputPage({ setNetraID }) {
     } catch (error) {
       console.error('Error fetching Netra ID:', error);
     } finally {
-      setLoading(false); // Hide loader after fetching Netra ID
+      setLoading(false); 
     }
   };
 
@@ -156,7 +156,7 @@ function UserInputPage({ setNetraID }) {
           />
         </Col>
       </Row>
-      {loading && ( // Show loader if loading state is true
+      {loading && ( 
         <Row justify="center" style={{ marginTop: '2rem' }}>
           <Col span={24} style={{ textAlign: 'center' }}>
             <Spin size="large" />

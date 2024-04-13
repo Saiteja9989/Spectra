@@ -21,8 +21,8 @@ const ExternalResultComponent = ({ resultData, totalBacklogs }) => {
               marginBottom: '10px',
               boxShadow: '0 8px 16px rgba(0, 0, 0, 0.2)',
               borderRadius: '8px',
-              width: '90%', // Adjusted for responsiveness
-              padding: '10px', // Reduced padding for mobile phones
+              width: '90%', 
+              padding: '10px', 
             }}
             bodyStyle={{ overflow: 'hidden' }}
           >
@@ -34,13 +34,13 @@ const ExternalResultComponent = ({ resultData, totalBacklogs }) => {
                     title: col,
                     dataIndex: col,
                     key: col,
-                    width: col === 'CREDITS ACQUIRED' ? 120 : undefined, // Adjusted width for responsiveness
+                    width: col === 'CREDITS ACQUIRED' ? 120 : undefined, 
                   }))}
                   dataSource={semester.data}
                   pagination={false}
                   size="small"
                 />
-                {/* Display SGPA and Credits Acquired */}
+               
                 <div style={{ textAlign: 'center', marginTop: '10px' }}>
                   <span style={{ fontWeight: 'bold' }}>SGPA: </span>
                   <span>{semester.sgpa}</span>
