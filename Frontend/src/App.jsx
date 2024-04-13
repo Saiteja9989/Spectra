@@ -34,7 +34,7 @@ const App = () => {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<SearchPage setNetraID={ setNetraID} sendCustomPageView={sendCustomPageView} />} /> 
+        <Route path="/" element={<SearchPage setNetraID={ setNetraID}  />} /> 
         <Route path="/user" element={<Dashboard netraID={ netraID} />} />
         <Route path="/attendance" element={<AttendancePage netraID={netraID} />} />
         <Route path="/result" element={<ResultPage netraID={netraID} />} />
