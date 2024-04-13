@@ -30,9 +30,7 @@ const App = () => {
     localStorage.setItem('netraID', netraID);
   }, [netraID]);
 
-  const sendCustomPageView = (path) => {
-    ReactGA.pageview(path);
-  };
+ 
   return (
     <Router>
       <Routes>
