@@ -1,7 +1,7 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 import { Analytics } from "@vercel/analytics/react"
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import SearchPage from './components/Homepage'; // Import SearchPage
 // import OptionsPage from './components/options';
 // import Check from './components/check'
@@ -11,13 +11,19 @@ import ResultPage from './components/ResultPage';
 import Timetable from './components/Timetable';
 import FeedbackForm from './components/Feedback';
 import AboutUs from './AboutUs';
-import Netraqr from './components/Netraqr'
+import Netraqr from './components/Netraqr';
+import ReactGA from 'react-ga';
 // import Clubdetails from './components/Clubs';
+ReactGA.initialize('G-8TEK79JG7J');
 const App = () => {
   const [netraID, setNetraID] = useState(() => {
     
     return localStorage.getItem('netraID') || null;
   });
+
+  useEffect(() => {
+    ReactGA.pageview(location.pathname + location.search);
+  }, [location]);
 
   useEffect(() => {
     
