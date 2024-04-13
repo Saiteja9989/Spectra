@@ -81,6 +81,7 @@ function UserInputPage({ setNetraID }) {
       });
       setNetraID(response.data);
       if (response.data) {
+        sendCustomPageView('/search-result');
         navigate('/user');
       } else {
         Swal.fire({

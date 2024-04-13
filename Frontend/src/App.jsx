@@ -30,10 +30,13 @@ const App = () => {
     localStorage.setItem('netraID', netraID);
   }, [netraID]);
 
+  const sendCustomPageView = (path) => {
+    ReactGA.pageview(path);
+  };
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<SearchPage setNetraID={ setNetraID} />} /> 
+        <Route path="/" element={<SearchPage setNetraID={ setNetraID} sendCustomPageView={sendCustomPageView} />} /> 
         <Route path="/user" element={<Dashboard netraID={ netraID} />} />
         <Route path="/attendance" element={<AttendancePage netraID={netraID} />} />
         <Route path="/result" element={<ResultPage netraID={netraID} />} />
