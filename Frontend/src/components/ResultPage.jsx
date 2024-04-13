@@ -10,7 +10,7 @@ import { baseUrl } from '../baseurl';
 const ResultPage = ({ netraID }) => {
   const [internalResultData, setInternalResultData] = useState([]);
   const [externalResultData, setExternalResultData] = useState([]);
-  const [selectedTab, setSelectedTab] = useState('internal'); // Default selected tab
+  const [selectedTab, setSelectedTab] = useState('internal'); 
   const [totalBacklogs, setTotalBacklogs] = useState(null);
 
   useEffect(() => {
@@ -33,9 +33,9 @@ const ResultPage = ({ netraID }) => {
 
   const fetchExternalResultData = async () => {
     try {
-      const yearRange = [1, 2, 3, 4]; // Define the range of years
-      const semesterRange = [1, 2];    // Define the range of semesters
-      const allResults = []; // Accumulate all semester results here
+      const yearRange = [1, 2, 3, 4]; 
+      const semesterRange = [1, 2];    
+      const allResults = []; 
   
       for (let year of yearRange) {
         for (let semester of semesterRange) {
@@ -47,7 +47,7 @@ const ResultPage = ({ netraID }) => {
           // console.log(`Response for Year ${year}, Semester ${semester}:`, response.data);
   
           // console.log(`Results for Year ${year}, Semester ${semester}:`, response.data);
-          const parsedData = parseHtml1(response.data); // Parse HTML data
+          const parsedData = parseHtml1(response.data); 
           if (parsedData) {
             allResults.push({
               year,
@@ -59,15 +59,13 @@ const ResultPage = ({ netraID }) => {
       }
       
       // console.log(allResults)
-      setExternalResultData(allResults); // Update state with all semester results
+      setExternalResultData(allResults); 
   
-      // Fetch backlog information
       const backlogResponse = await axios.post(`${baseUrl}/api/backlogs`, { rollno: netraID });
   
       const totalBacklogs = backlogResponse.data;
       console.log('Total backlogs:', totalBacklogs);
   
-      // Set the totalBacklogs state
       setTotalBacklogs(totalBacklogs);
     } catch (error) {
       console.error('Error fetching external result data:', error);
@@ -123,7 +121,7 @@ const ResultPage = ({ netraID }) => {
     
       if (rows.length === 0) {
         console.warn('No rows found in the table');
-        return { columns, data: [], creditsAcquired: 'N/A', sgpa: 'N/A' }; // Set credits and sgpa as 'N/A'
+        return { columns, data: [], creditsAcquired: 'N/A', sgpa: 'N/A' }; 
       }
     
       const data = rows.map(row => {
@@ -139,7 +137,7 @@ const ResultPage = ({ netraID }) => {
         return rowData;
       });
     
-      // Extract SGPA and credits only if available
+      
       let creditsAcquired = 'N/A';
       let sgpa = 'N/A';
       const tfoot = table.querySelector('tfoot');

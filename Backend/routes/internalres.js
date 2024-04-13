@@ -4,7 +4,6 @@ const axios = require('axios');
 
 const router = express.Router();
 
-// Middleware to parse incoming JSON requests
 router.use(bodyParser.json());
 
 router.post('/internalResultData', async (req, res) => {
@@ -14,7 +13,7 @@ router.post('/internalResultData', async (req, res) => {
       const response = await axios.get('http://teleuniv.in/trinetra/pages/lib/student_ajaxfile.php', {
         params: { mid, rollno }
       });
-      // You might want to parse the HTML here before sending it to the client
+      
       res.send(response.data);
     } catch (error) {
       console.error('Error fetching internal result data:', error);

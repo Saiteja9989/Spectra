@@ -22,13 +22,13 @@
    */
    @media (max-width: 767px) {
     .ant-table-content table {
-      width: 100% !important; /* Set the desired width */
-      font-size: 8px; /* Set the desired font size */
+      width: 100% !important; 
+      font-size: 8px; 
     }
   }
   @media (min-width: 768px) {
     .ant-table-content table {
-      width: 100% !important; /* Set the desired width */
-      font-size: 11px; /* Set the desired font size */
+      width: 100% !important; 
+      font-size: 11px; 
     }
   }

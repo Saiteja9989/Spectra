@@ -1,1 +1,1 @@
-export const baseUrl="https://kmitspectra.onrender.com"
+export const baseUrl=" http://localhost:3000"

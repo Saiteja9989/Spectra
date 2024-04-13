@@ -40,14 +40,14 @@
 }
 @media (max-width: 768px) {
   .semi-donut {
-    width: 285px; /* 95% of the default width */
-    height: 142.5px; /* 95% of the default height */
-    font-size: 20.9px; /* 95% of the default font size */
+    width: 285px; 
+    height: 142.5px; 
+    font-size: 20.9px; 
   }
   
   .semi-donut::after {
-    width: 285px; /* 95% of the default width */
-    height: 285px; /* 95% of the default height */
-    border-width: 47.5px; /* 95% of the default border width */
+    width: 285px; 
+    height: 285px; 
+    border-width: 47.5px; 
   }
 }

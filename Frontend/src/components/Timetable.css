@@ -28,21 +28,21 @@
      }
    }
 
-   /* Timetable.css */
+   
 .ant-tabs {
     width: 100%;
   }
   
   .ant-tabs-tab {
     min-width: 100px;
-    padding: 8px; /* Adjust padding as needed */
+    padding: 8px; 
   }
   
   @media (max-width: 768px) {
     .ant-tabs-tab {
-      min-width: auto; /* Allow tabs to wrap on smaller screens */
-      padding: 4px; /* Adjust padding for smaller screens */
-      font-size: 12px; /* Reduce font size for smaller screens */
+      min-width: auto; 
+      padding: 4px;
+      font-size: 12px; 
     }
   }
 
@@ -50,7 +50,7 @@
     .custom-tabs .ant-tabs-nav-list {
       flex-wrap: nowrap;
       overflow-x: auto;
-      /* -webkit-overflow-scrolling: touch; */
+      
     }
     
   }

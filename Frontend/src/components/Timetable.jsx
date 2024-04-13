@@ -12,7 +12,7 @@ const { TabPane } = Tabs;
 const Timetable = ({ netraID }) => {
   const [loading, setLoading] = useState(false);
   const [timetableData, setTimetableData] = useState([]);
-  const [selectedDay, setSelectedDay] = useState('Monday'); // Default selected day
+  const [selectedDay, setSelectedDay] = useState('Monday'); 
   const parser = new Parser();
 
   useEffect(() => {
@@ -48,7 +48,7 @@ const Timetable = ({ netraID }) => {
   }, [netraID]);
 
   const renderTimetableForDay = (dayData) => {
-    if (!dayData || !dayData.dayname) return null; // Check if dayData is defined and has a dayname property
+    if (!dayData || !dayData.dayname) return null; 
     const columns = [
       {
         title: 'Period',

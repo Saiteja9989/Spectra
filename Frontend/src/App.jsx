@@ -11,15 +11,15 @@ import ResultPage from './components/ResultPage';
 import Timetable from './components/Timetable';
 import FeedbackForm from './components/Feedback';
 import AboutUs from './AboutUs';
-// import Clubdetails from './components/Clubs';
+
 const App = () => {
   const [netraID, setNetraID] = useState(() => {
-    // Initialize netraID from localStorage or null if not found
+    
     return localStorage.getItem('netraID') || null;
   });
 
   useEffect(() => {
-    // Update localStorage whenever netraID changes
+    
     localStorage.setItem('netraID', netraID);
   }, [netraID]);
 

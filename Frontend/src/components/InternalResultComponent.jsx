@@ -1,11 +1,11 @@
 import React from 'react';
-import Loader from './Loader'; // Import the Loader component
+import Loader from './Loader'; 
 import { Col, Card, Table } from 'antd';
-import './internal.css'; // Import the CSS file
+import './internal.css'; 
 
 const InternalResultComponent = ({ resultData }) => {
   if (!resultData || resultData.length === 0) {
-    return <Loader />; // Render the loader if the resultData prop is empty
+    return <Loader />; 
   }
 
   return (
