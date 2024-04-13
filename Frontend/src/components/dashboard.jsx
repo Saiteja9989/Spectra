@@ -198,6 +198,11 @@ const ProfilePage = ({ netraID }) => {
                     <Meta title="Feedback" avatar={<MessageOutlined />} />
                   </Card>
                 </Col>
+                <Col xs={12} sm={12} md={8} lg={6} xl={6}>
+                  <Card hoverable className="option-card" onClick={() => navigate('/netraqr')}>
+                    <Meta title="Netra QR" avatar={<MessageOutlined />} />
+                  </Card>
+                </Col>
               </Row>
             </Card>
           </Col>
