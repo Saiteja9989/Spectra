@@ -36,6 +36,12 @@ const ProfilePage = ({ netraID }) => {
   };
 
   const fetchProfileData = async (netraID) => {
+    Swal.fire({
+      icon: 'warning',
+      title: 'KINDLY WAIT',
+      text: 'CURRENTLY NETRA SERVER IS DOWN',
+      confirmButtonText: 'OK'
+    });
     try {
       const response = await axios.post(`${baseUrl}/api/profile`, {
         method: '32',
@@ -43,6 +49,7 @@ const ProfilePage = ({ netraID }) => {
       });
       const data = response.data;
       setProfileDetails(data);
+      
       console.log(profileDetails.picture);
     } catch (error) {
       console.error('Error fetching profile data:', error);
@@ -207,6 +214,7 @@ const ProfilePage = ({ netraID }) => {
             </Card>
           </Col>
         </Row>
+        
       </Content>
     </Layout>
   );
