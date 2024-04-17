@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Input, Card, Row, Avatar, Col, Space, Typography, Spin } from 'antd';
 import axios from 'axios';
@@ -118,12 +119,12 @@ function UserInputPage({ setNetraID }) {
     return <Avatar src="https://joeschmoe.io/api/v1/random" />;
   };
 
-  const getResultText = (result, searchType) => {
+  const getResultText = (result) => {
     switch (searchType) {
       case 'name':
-        return `${result.firstname}`;
+        return ` ${result.firstname}`;
       case 'hallticketno':
-        return `${result.hallticketno}`;
+        return ` ${result.hallticketno}`;
       case 'phone':
         return `${result.phone}`;
       case 'partialPhone':
@@ -132,7 +133,6 @@ function UserInputPage({ setNetraID }) {
         return '';
     }
   };
-  
 
   return (
     <div style={{ padding: '2rem', maxWidth: '800px', margin: '0 auto' }}>
