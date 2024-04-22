@@ -123,10 +123,10 @@ const ProfilePage = ({ netraID }) => {
                           </tbody>
                         </table>
                       </div>
-                      <div style={{marginTop:"10px"}}>
+                      {/* <div style={{marginTop:"10px"}}> */}
                           {/* "Remember me" button */}
-                          <Button type="primary" onClick={handleRememberMe}>Remember me</Button>
-                        </div>
+                          {/* <Button type="primary" onClick={handleRememberMe}>Remember me</Button> */}
+                        {/* </div> */}
                     </div>
                   )}
                 </div>
