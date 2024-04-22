@@ -20,13 +20,26 @@ const App = () => {
     
     return localStorage.getItem('netraID') || null;
   });
+  const [netraID2, setNetraID2] = useState('');
 
+  useEffect(() => {
+    const storedNetraID2 = localStorage.getItem('netraID2');
+    if (storedNetraID2) {
+      setNetraID2(storedNetraID2);
+    }
+  }, []);
   useEffect(() => {
     ReactGA.pageview(location.pathname + location.search);
   }, [location]);
-
+  const renderDashboard = () => {
+    console.log(netraID2);
+    if (netraID2!=='') {
+      return <Dashboard netraID={netraID2} />;
+    } else {
+      return <SearchPage setNetraID={ setNetraID}  />;
+    }
+  };
   useEffect(() => {
-    
     localStorage.setItem('netraID', netraID);
   }, [netraID]);
 
@@ -34,7 +47,8 @@ const App = () => {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<SearchPage setNetraID={ setNetraID}  />} /> 
+      <Route path="/" element={renderDashboard()} /> 
+        <Route path="/search" element={<SearchPage setNetraID={ setNetraID}  />} /> 
         <Route path="/user" element={<Dashboard netraID={ netraID} />} />
         <Route path="/attendance" element={<AttendancePage netraID={netraID} />} />
         <Route path="/result" element={<ResultPage netraID={netraID} />} />

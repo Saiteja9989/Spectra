@@ -13,7 +13,7 @@ const Navbar = () => {
           <NavLink to="/user" activeClassName="active-link">Home</NavLink>
         </Menu.Item>
         <Menu.Item key="2">
-          <NavLink to="/" activeClassName="active-link">Search</NavLink>
+          <NavLink to="/search" activeClassName="active-link">Search</NavLink>
         </Menu.Item>
         <Menu.Item key="3">
           <NavLink to="/aboutus" activeClassName="active-link">About Us</NavLink>
