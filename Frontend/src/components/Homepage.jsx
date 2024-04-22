@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Input, Card, Row, Avatar, Col, Space, Typography, Spin } from 'antd';
 import axios from 'axios';
@@ -17,13 +16,51 @@ function UserInputPage({ setNetraID }) {
   const navigate = useNavigate();
 
   useEffect(() => {
+    const lastInput = getLastInput();
+    if (lastInput) {
+      setSearchQuery(lastInput.value);
+      setSearchType(lastInput.type);
+      fetchResults(lastInput.value);
+    } else {
+      setSearchResults([]);
+      showRememberMePrompt();
+    }
     
     return () => {
       if (source) {
         source.cancel('Operation canceled by cleanup.');
       }
     };
-  }, [source]);
+  }, []);
+
+  const showRememberMePrompt = () => {
+    Swal.fire({
+      title: 'Remember Me',
+      text: 'Would you like us to remember your search query for future visits?',
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonText: 'Yes',
+      cancelButtonText: 'No',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        rememberInput(searchQuery, searchType);
+      }
+    });
+  };
+
+  const rememberInput = (input, type) => {
+    localStorage.setItem('lastInput', JSON.stringify({ value: input, type: type }));
+  };
+
+  const getLastInput = () => {
+    try {
+      const lastInput = localStorage.getItem('lastInput');
+      return lastInput ? JSON.parse(lastInput) : null;
+    } catch (error) {
+      console.error('Error parsing JSON:', error);
+      return null;
+    }
+  };
 
   const handleInputChange = async (e) => {
     const inputValue = e.target.value.toUpperCase();
@@ -98,10 +135,25 @@ function UserInputPage({ setNetraID }) {
   };
 
   const handleResultClick = (result) => {
-    setSearchQuery(getResultText(result).trim());
-    handleSearch(getResultText(result).trim());
+    const resultText = getResultText(result).trim();
+    setSearchQuery(resultText);
+    handleSearch(resultText);
     setSearchResults([]);
+  
+    Swal.fire({
+      title: 'Remember This?',
+      text: 'Do you want to remember this Name/ph.no/rollno for future visits?',
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonText: 'Yes',
+      cancelButtonText: 'No',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        rememberInput(resultText, searchType);
+      }
+    });
   };
+  
 
   const getAvatar = (result) => {
     if (getResultText(result)) {
