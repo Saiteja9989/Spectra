@@ -41,9 +41,6 @@ const ProfilePage = ({ netraID }) => {
       icon: 'info',
       title: 'Club Details',
       text: 'Club details will be updated soon.',
-      showCancelButton: true,
-      confirmButtonText: 'Remember',
-      cancelButtonText: 'Cancel',
     })
   };
 
