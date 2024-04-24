@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Layout, Row, Col, Avatar, Typography, Card } from 'antd';
-import { ClusterOutlined, ScheduleOutlined, SolutionOutlined, UserOutlined, LineChartOutlined, MessageOutlined } from '@ant-design/icons';
+import { ClusterOutlined, ScheduleOutlined, SolutionOutlined, UserOutlined, LineChartOutlined, MessageOutlined,QrcodeOutlined } from '@ant-design/icons';
 import './dashboard.css';
+import { Button } from 'antd';
 import axios from 'axios';
 import AttendanceTracker from '../components/AttendanceTracker';
 import Swal from 'sweetalert2';
@@ -26,16 +27,30 @@ const ProfilePage = ({ netraID }) => {
       fetchAttendanceData(netraID);
     }
   }, [netraID]);
+  const handleRememberMe = () => {
+    localStorage.setItem('netraID2', netraID);
+    Swal.fire({
+      icon: 'success',
+      title: 'Remember Me',
+      text: 'You will be remembered next time!',
+    });
+  };
 
   const handleClubsClick = () => {
     Swal.fire({
       icon: 'info',
       title: 'Club Details',
       text: 'Club details will be updated soon.',
-    });
+    })
   };
 
   const fetchProfileData = async (netraID) => {
+    // Swal.fire({
+    //   icon: 'warning',
+    //   title: 'KINDLY WAIT',
+    //   text: 'CURRENTLY NETRA SERVER IS DOWN',
+    //   confirmButtonText: 'OK'
+    // });
     try {
       const response = await axios.post(`${baseUrl}/api/profile`, {
         method: '32',
@@ -43,6 +58,7 @@ const ProfilePage = ({ netraID }) => {
       });
       const data = response.data;
       setProfileDetails(data);
+      
       console.log(profileDetails.picture);
     } catch (error) {
       console.error('Error fetching profile data:', error);
@@ -107,6 +123,10 @@ const ProfilePage = ({ netraID }) => {
                           </tbody>
                         </table>
                       </div>
+                      {/* <div style={{marginTop:"10px"}}> */}
+                          {/* "Remember me" button */}
+                          {/* <Button type="primary" onClick={handleRememberMe}>Remember me</Button> */}
+                        {/* </div> */}
                     </div>
                   )}
                 </div>
@@ -129,7 +149,7 @@ const ProfilePage = ({ netraID }) => {
                       <Row gutter={[16, 16]} style={{ marginBottom: '20px' }}>
                         <table>
                           <tbody>
-                            {attendanceData.slice(0, 7).map((dayObject, index) => (
+                            {attendanceData.slice(0, 10).map((dayObject, index) => (
                               <tr key={index} style={{ padding: '8px' }}>
                                 <td className="attendance-date">{dayObject.date}:</td>
                                 {Object.values(dayObject.sessions).map((sessionValue, sessionIndex) => (
@@ -198,10 +218,16 @@ const ProfilePage = ({ netraID }) => {
                     <Meta title="Feedback" avatar={<MessageOutlined />} />
                   </Card>
                 </Col>
+                <Col xs={12} sm={12} md={8} lg={6} xl={6}>
+                  <Card hoverable className="option-card" onClick={() => navigate('/netraqr')}>
+                    <Meta title="Netra QR" avatar={<QrcodeOutlined />} />
+                  </Card>
+                </Col>
               </Row>
             </Card>
           </Col>
         </Row>
+        
       </Content>
     </Layout>
   );

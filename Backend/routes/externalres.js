@@ -22,13 +22,16 @@ router.post('/externalResultData', async (req, res) => {
 });
 
 router.post('/backlogs', async (req, res) => {
-  const { method, rollno } = req.body;
+  const { rollno } = req.body;
 
   try {
-    const backlogResponse = await axios.post('http://teleuniv.in/netra/api.php', { method, rollno }, {
-      withCredentials: true
-    });
-    res.json(backlogResponse.data);
+    const params = {
+      mid: '58',
+      rollno:rollno
+    };
+    const response = await axios.get('http://teleuniv.in/trinetra/pages/lib/student_ajaxfile.php', { params });
+    // console.log(response.data.length)
+    res.json(response.data.length);
   } catch (error) {
     console.error('Error fetching backlog data:', error);
     res.status(500).json({ error: 'Error fetching backlog data' });

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Form, Input, Button, Rate, Card } from 'antd';
 import axios from 'axios';
-import Swal from 'sweetalert2'; // Import SweetAlert library
+import Swal from 'sweetalert2'; 
 import Loader from './Loader';
 import Navbar from './Navbar';
 import { baseUrl } from '../baseurl';

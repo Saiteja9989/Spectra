@@ -1,6 +1,6 @@
 import React from 'react';
 import { Typography, Card } from 'antd';
-import { ZoomInOutlined } from '@ant-design/icons'; // Import transition effect
+import { ZoomInOutlined } from '@ant-design/icons'; 
 import Navbar from './components/Navbar';
 const { Title, Paragraph } = Typography;
 

@@ -14,7 +14,8 @@ const subattendance = require('./routes/sub_attendance')
 const timetable = require('./routes/timetable')
 const internalexam = require('./routes/internalres')
 const externalexam= require('./routes/externalres')
-
+const Netraqr = require('./routes/gethallticketnumfromnetraid')
+const Fetchqr = require('./routes/fetchqr')
 const app = express();
 const PORT = process.env.PORT || 5000  ;
 app.use(cors({
@@ -35,9 +36,11 @@ app.use(cors({
   origin: '*'
 }));
 
-app.use('/', (req, res) => {
-  res.json({message:"hello server started"})
-})
+app.use(express.json());
+
+app.get('/', (req, res) => {
+  res.send('backend uploaded..');
+});
 
 // app.use(cors({
 //   origin: 'http://localhost:5173',
@@ -61,7 +64,11 @@ app.use('/api', profile)
 app.use('/api', subattendance)
 app.use('/api', timetable)
 app.use('/api', internalexam)
-app.use('/api',externalexam)
+app.use('/api', externalexam)
+app.use('/api', Netraqr)
+app.use('/api',Fetchqr)
+
+
 
 
 
