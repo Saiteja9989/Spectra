@@ -16,6 +16,7 @@ const internalexam = require('./routes/internalres')
 const externalexam= require('./routes/externalres')
 const Netraqr = require('./routes/gethallticketnumfromnetraid')
 const Fetchqr = require('./routes/fetchqr')
+const Getsubjects =require('./routes/getSemSubjects')
 const app = express();
 const PORT = process.env.PORT || 5000  ;
 app.use(cors({
@@ -66,7 +67,9 @@ app.use('/api', timetable)
 app.use('/api', internalexam)
 app.use('/api', externalexam)
 app.use('/api', Netraqr)
-app.use('/api',Fetchqr)
+app.use('/api', Fetchqr)
+app.use('/api',Getsubjects)
+
 
 
 
