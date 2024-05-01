@@ -52,16 +52,14 @@ const ProfilePage = ({ netraID }) => {
       });
       const data = response.data;
       setProfileDetails(data);
-      
-      console.log(profileDetails.picture);
     } catch (error) {
-      // Swal.fire({
-      //   icon: 'warning',
-      //   title: 'KINDLY WAIT',
-      //   text: 'CURRENTLY NETRA SERVER IS DOWN',
-      //   confirmButtonText: 'OK'
-      // });
       console.error('Error fetching profile data:', error);
+      Swal.fire({
+        icon: 'warning',
+        title: 'KINDLY WAIT',
+        text: 'CURRENTLY NETRA SERVER IS DOWN',
+        confirmButtonText: 'OK'
+      });
     }
   };
 
