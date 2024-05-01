@@ -45,12 +45,6 @@ const ProfilePage = ({ netraID }) => {
   };
 
   const fetchProfileData = async (netraID) => {
-    // Swal.fire({
-    //   icon: 'warning',
-    //   title: 'KINDLY WAIT',
-    //   text: 'CURRENTLY NETRA SERVER IS DOWN',
-    //   confirmButtonText: 'OK'
-    // });
     try {
       const response = await axios.post(`${baseUrl}/api/profile`, {
         method: '32',
@@ -61,6 +55,12 @@ const ProfilePage = ({ netraID }) => {
       
       console.log(profileDetails.picture);
     } catch (error) {
+      Swal.fire({
+        icon: 'warning',
+        title: 'KINDLY WAIT',
+        text: 'CURRENTLY NETRA SERVER IS DOWN',
+        confirmButtonText: 'OK'
+      });
       console.error('Error fetching profile data:', error);
     }
   };
