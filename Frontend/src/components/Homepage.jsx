@@ -98,7 +98,7 @@ function UserInputPage({ setNetraID }) {
     try {
       setLoading(true); 
       const response = await axios.post(`${baseUrl}/api/search`, { searchInput: inputValue }, { cancelToken: cancelTokenSource.token });
-      setSearchResults(response.data.slice(0, 5));
+      setSearchResults(response.data);
     } catch (error) {
       if (axios.isCancel(error)) {
         console.log('Request canceled:', error.message);
