@@ -7,7 +7,7 @@ import { baseUrl } from '../baseurl';
 
 const { Text } = Typography;
 
-function UserInputPage({ setNetraID }) {
+function UserInputPage({ setNetraID, netraID2}) {
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [searchType, setSearchType] = useState(null);
@@ -115,7 +115,8 @@ function UserInputPage({ setNetraID }) {
       setLoading(true); 
       const response = await axios.post(`${baseUrl}/api/netra-id`, {
         searchType: searchType,
-        searchValue: key
+        searchValue: key,
+        netraID2:netraID2
       });
       setNetraID(response.data);
       if (response.data) {

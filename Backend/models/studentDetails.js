@@ -62,8 +62,9 @@ const studentSchema = new mongoose.Schema({
     required: true
   },
   email: {
-    type: String,
-    default: ''
+    type: Array,
+    required: true,
+    of: Number
   }
 });
 

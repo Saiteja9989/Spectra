@@ -15,7 +15,6 @@ const { method, rollno } = req.body;
       rollno: rollno
     });
     const profileData = response.data;
-    console.log(profileData);
     try{
       const student = await StudentDetail.findOne({ hallticketno: profileData.hallticketno});
       profileData.psflag=student.psflag;
@@ -23,11 +22,9 @@ const { method, rollno } = req.body;
     catch(error){
       console.error('Error fetching profile views from external database:', error);
     }
-    const student = await StudentDetail.findOne({ hallticketno: profileData.hallticketno});
     const imageResponse = await axios.get(profileData.picture, { responseType: 'arraybuffer' });
     const imageBuffer = Buffer.from(imageResponse.data, 'binary');
     profileData.picture = imageBuffer.toString('base64');
-    console.log(student);
     res.json(profileData);
   } catch (error) {
     console.error('Error fetching profile data from external API:', error);

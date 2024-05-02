@@ -35,7 +35,7 @@ const App = () => {
     if (netraID2!=='') {
       return <Dashboard netraID={netraID2} />;
     } else {
-      return <SearchPage setNetraID={ setNetraID}  />;
+      return <SearchPage setNetraID={ setNetraID} netraID2={netraID2} />;
     }
   };
   useEffect(() => {
@@ -47,7 +47,7 @@ const App = () => {
     <Router>
       <Routes>
       <Route path="/" element={renderDashboard()} /> 
-        <Route path="/search" element={<SearchPage setNetraID={ setNetraID}  />} /> 
+        <Route path="/search" element={<SearchPage setNetraID={ setNetraID} netraID2={netraID2} />} /> 
         <Route path="/user" element={<Dashboard netraID={ netraID} />} />
         <Route path="/attendance" element={<AttendancePage netraID={netraID} />} />
         <Route path="/result" element={<ResultPage netraID={netraID} />} />
