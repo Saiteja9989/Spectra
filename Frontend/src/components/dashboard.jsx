@@ -114,10 +114,10 @@ const ProfilePage = ({ netraID }) => {
                               <td>Year of Admission:</td>
                               <td style={{ paddingLeft: '8px' }}>{profileDetails.yearofadmision}</td>
                             </tr>
-                            {/* <tr>
-                              <td>Phone:</td>
-                              <td style={{ paddingLeft: '8px' }}>{profileDetails.phone}</td>
-                            </tr> */}
+                            <tr>
+                              <td>Profile Views:</td>
+                              <td style={{ paddingLeft: '8px' ,color: 'red'}}>{profileDetails.psflag}</td>
+                            </tr>
                           </tbody>
                         </table>
                       </div>

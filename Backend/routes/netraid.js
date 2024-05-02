@@ -13,21 +13,23 @@ router.post('/netra-id', async (req, res) => {
         
         const student = await StudentDetail.findOne({ firstname: searchValue });
         netraID = student ? student.rollno : null;
+        await StudentDetail.updateOne({ rollno: student.rollno }, { $inc: { psflag: 1 } });
       } else if (searchType === 'hallticketno') {
        
         const student = await StudentDetail.findOne({ hallticketno: searchValue });
         netraID = student ? student.rollno : null;
+        await StudentDetail.updateOne({ rollno: student.rollno }, { $inc: { psflag: 1 } });
       } else if (searchType === 'phone') {
         
         const student = await StudentDetail.findOne({ phone: searchValue });
         netraID = student ? student.rollno : null;
+        await StudentDetail.updateOne({ rollno: student.rollno }, { $inc: { psflag: 1 } });
       } else if (searchType === 'partialPhone') {
         
         const student = await StudentDetail.findOne({ phone: { $regex: `^${searchValue}` } });
         netraID = student ? student.rollno : null;
+        await StudentDetail.updateOne({ rollno: student.rollno }, { $inc: { psflag: 1 } });
       }
-  
-      
       res.json(netraID);
     } catch (error) {
       console.error('Error finding Netra ID:', error);

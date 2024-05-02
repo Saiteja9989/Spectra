@@ -1,7 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const axios = require('axios');
-
+const  StudentDetail=require('../models/studentDetails');
 const router = express.Router();
 
 
@@ -15,11 +15,11 @@ const { method, rollno } = req.body;
       rollno: rollno
     });
     const profileData = response.data;
+    const student = await StudentDetail.findOne({ picture: profileData.picture });
     const imageResponse = await axios.get(profileData.picture, { responseType: 'arraybuffer' });
     const imageBuffer = Buffer.from(imageResponse.data, 'binary');
-
-   
     profileData.picture = imageBuffer.toString('base64');
+    profileData.psflag=student.psflag;
     res.json(profileData);
   } catch (error) {
     console.error('Error fetching profile data from external API:', error);
