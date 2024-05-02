@@ -32,7 +32,6 @@ const App = () => {
     ReactGA.pageview(location.pathname + location.search);
   }, [location]);
   const renderDashboard = () => {
-    console.log(netraID2);
     if (netraID2!=='') {
       return <Dashboard netraID={netraID2} />;
     } else {

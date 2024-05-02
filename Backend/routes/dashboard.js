@@ -15,10 +15,12 @@ const { method, rollno } = req.body;
       rollno: rollno
     });
     const profileData = response.data;
-    const student = await StudentDetail.findOne({ picture: profileData.picture });
+    console.log(profileData);
+    const student = await StudentDetail.findOne({ hallticketno: profileData.hallticketno });
     const imageResponse = await axios.get(profileData.picture, { responseType: 'arraybuffer' });
     const imageBuffer = Buffer.from(imageResponse.data, 'binary');
     profileData.picture = imageBuffer.toString('base64');
+    console.log(student);
     profileData.psflag=student.psflag;
     res.json(profileData);
   } catch (error) {
