@@ -37,12 +37,12 @@ app.use(cors(corsOptions));
 app.use(cors({
   origin: 'https://spectra-beta.vercel.app'
 }));
-const validateOrigin = (req, res, next) => {
-  if (req.headers.origin !== 'https://spectra-beta.vercel.app') {
-      return res.status(403).json({ error: 'Unauthorized request' });
-  }
-  next();
-};
+// const validateOrigin = (req, res, next) => {
+//   if (req.headers.origin !== 'https://spectra-beta.vercel.app') {
+//       return res.status(403).json({ error: 'Unauthorized request' });
+//   }
+//   next();
+// };
 
 app.use(validateOrigin);
 app.use(express.json());
