@@ -44,7 +44,7 @@ app.use(cors({
 //   next();
 // };
 
-app.use(validateOrigin);
+// app.use(validateOrigin);
 app.use(express.json());
 
 app.get('/', (req, res) => {
@@ -86,7 +86,7 @@ app.use('/api',Getsubjects)
 
 
 // DB Config
-const db = process.env.CONNECTION
+// const db = process.env.CONNECTION
 
 // app.post('/search', async (req, res) => {
 //   const searchInput = req.body.searchInput;
