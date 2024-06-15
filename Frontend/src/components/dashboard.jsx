@@ -57,7 +57,7 @@ const ProfilePage = ({ netraID }) => {
       Swal.fire({
         icon: 'warning',
         title: 'KINDLY WAIT',
-        text: 'CURRENTLY NETRA SERVER IS DOWN',
+        text: 'Under maintanance',
         confirmButtonText: 'OK'
       });
     }
