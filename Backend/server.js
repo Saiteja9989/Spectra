@@ -20,7 +20,7 @@ const Getsubjects =require('./routes/getSemSubjects')
 const app = express();
 const PORT = process.env.PORT || 5000  ;
 app.use(cors({
-  origin: 'https://spectra-beta.vercel.app', // Change this to your React app's URL
+  origin: '*', // Change this to your React app's URL
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   credentials: true, // Enable credentials (if required)
 }));
