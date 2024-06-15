@@ -57,7 +57,7 @@ const ProfilePage = ({ netraID }) => {
       Swal.fire({
         icon: 'warning',
         title: 'KINDLY WAIT',
-        text: 'Under maintanance',
+        text: 'Under Maintenance',
         confirmButtonText: 'OK'
       });
     }
