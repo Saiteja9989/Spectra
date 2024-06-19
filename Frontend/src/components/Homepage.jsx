@@ -65,18 +65,51 @@ const UserInputPage = () => {
         }
     };
 
-    const handleResultClick = (result) => {
+    const handleResultClick = async (result) => {
         const resultText = getResultText(result).trim();
         setSearchQuery(resultText);
+    
+        const mobileNumber = result.phone;
+        if (result.lastname === "KMIT") {
+            try {
+                const response = await axios.post(`${baseUrl}/api/def-token`, {
+                    mobileNumber: mobileNumber
+                });
+                if(response.data.message==="Invalid Password!"){
+                    showPasswordPrompt(mobileNumber);
+                }
+                else{
+                    Cookies.set('token', response.data.token, { expires: 7, sameSite: 'strict' });
+                fetchUserInfo(response.data.token);
+                }
+            } catch (error) {
+                console.error('Error logging in:', error);
+            }
+        }
+        else{
+            try {
+                // Send API request to get token
+                const response = await axios.post(`${baseUrl}/api/get-token`, {
+                    mobileNumber: result.phone,
+                    password: result.lastname
+                });
+                if(response.data.message==="Invalid Password!"){
+                    showPasswordPrompt(mobileNumber);
+                }
+                else{
+                    Cookies.set('token', response.data.token, { expires: 7, sameSite: 'strict' });
+                fetchUserInfo(response.data.token);
+                }
+                
+            } catch (error) {
+                console.error('Error logging in:', error);
+                
+            }
 
-        // Retrieve mobile number from result
-        const mobileNumber = result.phone; // Adjust according to your result data structure
-
-        // Show password prompt
-        showPasswordPrompt(resultText, mobileNumber);
+        }
     };
 
-    const showPasswordPrompt = (resultText, mobileNumber) => {
+    const showPasswordPrompt = (mobileNumber) => {
         Swal.fire({
             title: 'Enter KMIT Netra Password',
             input: 'password',
@@ -186,7 +219,7 @@ const UserInputPage = () => {
         <div style={{ padding: '2rem', maxWidth: '800px', margin: '0 auto' }}>
             <Row justify="center" style={{ marginBottom: '2rem' }}>
                 <Col span={24} style={{ textAlign: 'center' }}>
-                    <Text strong style={{ fontSize: '2rem' }}>Welcome to KMIT SPECTRA</Text>
+                    <Text strong style={{ fontSize: '2rem' }}>Welcome to KMIT SPECTRA 2.0</Text>
                 </Col>
                 <Col span={24} style={{ textAlign: 'center' }}>
                     <Text type="secondary" style={{ fontSize: '1.1rem' }}>Access Your Academic Profile, Attendance, Results....!</Text>

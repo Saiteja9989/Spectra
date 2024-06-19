@@ -117,10 +117,10 @@ const ProfilePage = () => {
                               <td>Year of Admission:</td>
                               <td style={{ paddingLeft: '8px' }}>{profileDetails.yearofadmision}</td>
                             </tr>
-                            <tr>
+                            {/* <tr>
                               <td>Profile Views:</td>
                               <td style={{ paddingLeft: '8px', color: 'red' }}>{profileDetails.psflag}</td>
-                            </tr>
+                            </tr> */}
                           </tbody>
                         </table>
                       </div>
