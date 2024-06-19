@@ -1,1 +1,1 @@
-export const baseUrl="https://spectra-20-git-main-saiteja9989s-projects.vercel.app/";
+export const baseUrl="http://localhost:5173/";
