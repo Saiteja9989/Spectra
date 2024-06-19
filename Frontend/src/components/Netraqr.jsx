@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Card } from 'antd';
-import { baseUrl } from '../baseurl';
+import { baseUrl } from '../baseurl'; // Ensure this is the correct base URL for your backend
 import Navbar from './Navbar';
 
 const { Meta } = Card;
 
-function Netraqr({ netraID }) {
+function Netraqr({ token }) {
   const [hallticketno, setHallticketno] = useState('');
   const [qrImageUrl, setQrImageUrl] = useState('');
   const [error, setError] = useState('');
@@ -14,14 +14,24 @@ function Netraqr({ netraID }) {
   useEffect(() => {
     const processNetraid = async () => {
       try {
+        if (!token) {
+          setError('Token is missing');
+          return;
+        }
+
         const response = await axios.post(`${baseUrl}/api/netraqr`, {
-          netraid: netraID
+          method: "32", // Adjust method as needed
+        }, {
+          headers: {
+            Authorization: `Bearer ${token}` // Set token as Authorization header
+          }
         });
 
         if (response.data && response.data.hallticketno) {
-          setHallticketno(response.data.hallticketno);
+          const fetchedHallticketno = response.data.hallticketno;
+          setHallticketno(fetchedHallticketno);
           setError('');
-          fetchQRImage(response.data.hallticketno);
+          fetchQRImage(fetchedHallticketno);
         } else {
           setError('Unable to retrieve hall ticket number');
         }
@@ -31,10 +41,8 @@ function Netraqr({ netraID }) {
       }
     };
 
-    if (netraID) {
-      processNetraid();
-    }
-  }, [netraID]);
+    processNetraid();
+  }, [token]);
 
   const fetchQRImage = async (hallticketno) => {
     try {
@@ -60,7 +68,6 @@ function Netraqr({ netraID }) {
         <Card style={{ width: '90%', maxWidth: 400, textAlign: 'center', boxShadow: '0 8px 16px rgba(0, 0, 0, 0.2)' }}>
           <Meta title="Netra Details" />
           {error && <p>{error}</p>}
-          {netraID && <p style={{ fontWeight: 'bold' }}>Netraid: {netraID}</p>}
           {hallticketno && <p style={{ marginBottom: 10 }}>Hall Ticket Number: {hallticketno}</p>}
           {qrImageUrl && <img src={qrImageUrl} alt="QR Code" style={{ width: '50%', height: 'auto', marginTop: 20 }} />}
         </Card>

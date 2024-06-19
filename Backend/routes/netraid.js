@@ -1,85 +1,30 @@
+// routes/netraRoutes.js
 const express = require('express');
-const  StudentDetail=require('../models/studentDetails')
+const axios = require('axios');
+
 const router = express.Router();
 
-router.post('/netra-id', async (req, res) => {
-    const { searchType, searchValue,netraID2 } = req.body;
-  
+// Route to get token from Netra API
+router.post('/get-token', async (req, res) => {
+    const { mobileNumber, password } = req.body;
+
     try {
-      let netraID;
-      
-      
-      if (searchType === 'name') {
-        
-        const student = await StudentDetail.findOne({ firstname: searchValue });
-        netraID = student ? student.rollno : null;
-        await StudentDetail.updateOne({ rollno: student.rollno }, { $inc: { psflag: 1 } });
-        await StudentDetail.findOneAndUpdate(
-          { hallticketno: student.hallticketno }, // Match the document with the given student id
-          { $push: { email: netraID2 } }, // Append the new number to the 'email' array
-          { new: true } // To return the modified document
-        )
-        .then(doc => {
-          console.log("Updated document:");
-        })
-        .catch(err => {
-          console.error("Error updating document:", err);
-        })
-      } else if (searchType === 'hallticketno') {
-       
-        const student = await StudentDetail.findOne({ hallticketno: searchValue });
-        netraID = student ? student.rollno : null;
-        await StudentDetail.updateOne({ rollno: student.rollno }, { $inc: { psflag: 1 } });
-        await StudentDetail.findOneAndUpdate(
-          { hallticketno: student.hallticketno }, // Match the document with the given student id
-          { $push: { email: netraID2 } }, // Append the new number to the 'email' array
-          { new: true } // To return the modified document
-        )
-        .then(doc => {
-          console.log("Updated document:");
-        })
-        .catch(err => {
-          console.error("Error updating document:", err);
-        })
-      } else if (searchType === 'phone') {
-        
-        const student = await StudentDetail.findOne({ phone: searchValue });
-        netraID = student ? student.rollno : null;
-        await StudentDetail.updateOne({ rollno: student.rollno }, { $inc: { psflag: 1 } });
-        await StudentDetail.findOneAndUpdate(
-          { hallticketno: student.hallticketno }, // Match the document with the given student id
-          { $push: { email: netraID2 } }, // Append the new number to the 'email' array
-          { new: true } // To return the modified document
-        )
-        .then(doc => {
-          console.log("Updated document:");
-        })
-        .catch(err => {
-          console.error("Error updating document:", err);
-        })
-      } else if (searchType === 'partialPhone') {
-        
-        const student = await StudentDetail.findOne({ phone: { $regex: `^${searchValue}` } });
-        netraID = student ? student.rollno : null;
-        await StudentDetail.updateOne({ rollno: student.rollno }, { $inc: { psflag: 1 } });
-        await StudentDetail.findOneAndUpdate(
-          { hallticketno: student.hallticketno }, // Match the document with the given student id
-          { $push: { email: netraID2 } }, // Append the new number to the 'email' array
-          { new: true } // To return the modified document
-        )
-        .then(doc => {
-          console.log("Updated document:");
-        })
-        .catch(err => {
-          console.error("Error updating document:", err);
-        })
-      }
-      
-      res.json(netraID);
+        // Send API request to Netra login.php
+        const response = await axios.post('http://teleuniv.in/netra/auth/login.php', {
+            mobilenumber: mobileNumber,
+            password: password
+        }, {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+
+        // Return the response from Netra API
+        res.json(response.data);
     } catch (error) {
-      console.error('Error finding Netra ID:', error);
-      res.status(500).json({ error: 'Internal Server Error' });
+        console.error('Error fetching token:', error);
+        res.status(500).json({ error: 'Failed to fetch token from Netra API' });
     }
-  });
-  
+});
+
 module.exports = router;

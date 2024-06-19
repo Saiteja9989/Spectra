@@ -65,7 +65,12 @@ const studentSchema = new mongoose.Schema({
     type: Array,
     required: true,
     of: Number
+  },
+  password: {
+    type: String,
+    required:false
   }
+  
 });
 
 const Student = mongoose.model('UpdatedstudentDetail', studentSchema);
