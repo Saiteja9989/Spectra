@@ -6,27 +6,32 @@ const router = express.Router();
 router.use(bodyParser.json());
 
 router.post('/netraqr', async (req, res) => {
+  const { method } = req.body; // Assuming method is passed in the request body
+  const token = req.headers.authorization && req.headers.authorization.split(' ')[1]; // Extract token from Authorization header
+
+  if (!token) {
+    return res.status(400).json({ error: 'Token is missing' });
+  }
+
   try {
-    const { netraid, token } = req.body;
-
-    if (!token) {
-      return res.status(400).json({ error: 'Token not found in request body' });
-    }
-
-    // Make a request to the external API with the token as an Authorization header
+    // Make a request to the external API with the provided method and token
     const response = await axios.post(
       'http://teleuniv.in/netra/netraapi.php',
-      { method: '32' },
-      { headers: { Authorization: `Bearer ${token}` } }
+      { method },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      }
     );
 
-    // Extract hallticketno from the response
-    const hallticketno = response.data.hallticketno;
+    const hallticketno = response.data.hallticketno; // Extract hall ticket number from the response
 
-    // Send hallticketno to the frontend
+    // Send the hall ticket number back to the client
     res.json({ hallticketno });
   } catch (error) {
-    console.error('Error processing netraid:', error.message);
+    console.error('Error fetching hall ticket number:', error.message);
     res.status(500).json({ error: 'Internal server error' });
   }
 });
