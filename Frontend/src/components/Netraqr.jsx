@@ -14,14 +14,23 @@ function Netraqr({ netraID }) {
   useEffect(() => {
     const processNetraid = async () => {
       try {
+        const token = getCookie('token'); // Function to retrieve token from cookies
+        console.log(token);
+        if (!token) {
+          setError('Token not found in cookies');
+          return;
+        }
+
         const response = await axios.post(`${baseUrl}/api/netraqr`, {
-          netraid: netraID
+          netraid: netraID,
+          token: token
         });
 
         if (response.data && response.data.hallticketno) {
-          setHallticketno(response.data.hallticketno);
+          const fetchedHallticketno = response.data.hallticketno;
+          setHallticketno(fetchedHallticketno);
           setError('');
-          fetchQRImage(response.data.hallticketno);
+          fetchQRImage(fetchedHallticketno);
         } else {
           setError('Unable to retrieve hall ticket number');
         }
@@ -51,6 +60,19 @@ function Netraqr({ netraID }) {
       console.error('Error fetching QR image:', error.message);
       setError('Error fetching QR image');
     }
+  };
+
+  // Function to get cookie by name
+  const getCookie = (name) => {
+    const cookieString = document.cookie;
+    const cookies = cookieString.split(';');
+    for (let cookie of cookies) {
+      const [cookieName, cookieValue] = cookie.split('=');
+      if (cookieName.trim() === name) {
+        return cookieValue;
+      }
+    }
+    return null;
   };
 
   return (

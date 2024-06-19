@@ -7,22 +7,27 @@ import Loader from './Loader';
 import Navbar from './Navbar';
 import { baseUrl } from '../baseurl';
 import './AttendancePage.css';
-const AttendancePage = ({ netraID }) => {
+
+const AttendancePage = ({ token }) => {
   const [attendanceData, setAttendanceData] = useState(null);
   const [loading, setLoading] = useState(true); 
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (netraID) {
-      fetchAttendanceData(netraID);
+    if (token) {
+      fetchAttendanceData(token);
     }
-  }, [netraID]);
+  }, [token]);
 
-  const fetchAttendanceData = async (netraID) => {
+  const fetchAttendanceData = async (token) => {
     setLoading(true); 
     try {
       const response = await axios.post(`${baseUrl}/api/subject/attendance`, {
-        netraID: netraID
+        method: "314"
+      }, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
       });
       const data = response.data;
       setAttendanceData(data);
@@ -65,6 +70,7 @@ const AttendancePage = ({ netraID }) => {
       },
     },
   ];
+
   return (
     <>
       <Navbar /> 
@@ -86,6 +92,5 @@ const AttendancePage = ({ netraID }) => {
     </>
   );
 };
-
 
 export default AttendancePage;

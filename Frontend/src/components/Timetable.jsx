@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Parser } from 'html-to-react';
-import { Table, Card, Tabs } from 'antd';
+import { Table, Tabs } from 'antd';
 import './Timetable.css';
 import Loader from './Loader';
 import Navbar from './Navbar';
@@ -9,7 +9,7 @@ import { baseUrl } from '../baseurl';
 
 const { TabPane } = Tabs;
 
-const Timetable = ({ netraID }) => {
+const Timetable = ({  token }) => {
   const [loading, setLoading] = useState(false);
   const [timetableData, setTimetableData] = useState([]);
   const [selectedDay, setSelectedDay] = useState('Monday'); 
@@ -20,7 +20,11 @@ const Timetable = ({ netraID }) => {
       setLoading(true);
       try {
         const response = await axios.post(`${baseUrl}/api/timetable`, {
-          netraID: netraID,
+          method:"317"
+        }, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
         });
         let timetable = response.data.timetable;
 
@@ -45,7 +49,7 @@ const Timetable = ({ netraID }) => {
     };
 
     fetchData();
-  }, [netraID]);
+  }, [ token]);
 
   const renderTimetableForDay = (dayData) => {
     if (!dayData || !dayData.dayname) return null; 

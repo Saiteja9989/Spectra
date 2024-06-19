@@ -1,73 +1,76 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Layout, Row, Col, Avatar, Typography, Card } from 'antd';
-import { ClusterOutlined, ScheduleOutlined, SolutionOutlined, UserOutlined, LineChartOutlined, MessageOutlined,QrcodeOutlined } from '@ant-design/icons';
+import { ClusterOutlined, ScheduleOutlined, SolutionOutlined, UserOutlined, LineChartOutlined, MessageOutlined, QrcodeOutlined } from '@ant-design/icons';
 import './dashboard.css';
 import { Button } from 'antd';
 import axios from 'axios';
 import AttendanceTracker from '../components/AttendanceTracker';
 import Swal from 'sweetalert2';
-import Navbar from './Navbar'
+import Navbar from './Navbar';
+import Cookies from 'js-cookie'; // Import js-cookie for cookie management
 import { baseUrl } from '../baseurl';
 
 const { Header, Content } = Layout;
 const { Title, Text } = Typography;
 const { Meta } = Card;
 
-const ProfilePage = ({ netraID }) => {
+const ProfilePage = () => {
   const [profileDetails, setProfileDetails] = useState(null);
   const [attendanceData, setAttendanceData] = useState(null);
   const [attendancePer, setAttendancePer] = useState(0);
   const [twoWeekSessions, setTwoWeekSessions] = useState(0);
+  const [token, setToken] = useState(null); // State to manage token
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (netraID) {
-      fetchProfileData(netraID);
-      fetchAttendanceData(netraID);
+    // Retrieve the token from cookies
+    const storedToken = Cookies.get('token');
+    if (storedToken) {
+      setToken(storedToken);
+      fetchProfileData(storedToken);
+      fetchAttendanceData(storedToken);
+    } else {
+      navigate('/login'); // Redirect to login if no token is found
     }
-  }, [netraID]);
-  const handleRememberMe = () => {
-    localStorage.setItem('netraID2', netraID);
-    Swal.fire({
-      icon: 'success',
-      title: 'Remember Me',
-      text: 'You will be remembered next time!',
-    });
-  };
+  }, []);
 
   const handleClubsClick = () => {
     Swal.fire({
       icon: 'info',
       title: 'Club Details',
       text: 'Club details will be updated soon.',
-    })
+    });
   };
 
-  const fetchProfileData = async (netraID) => {
+  const fetchProfileData = async (token) => {
     try {
       const response = await axios.post(`${baseUrl}/api/profile`, {
-        method: '32',
-        rollno: netraID
+        method: "32",
+      }, {
+        headers: {
+          Authorization: `Bearer ${token}` // Set token as Authorization header
+        }
       });
+
       const data = response.data;
       setProfileDetails(data);
     } catch (error) {
-      console.error('Error fetching profile data:', error);
-      Swal.fire({
-        icon: 'warning',
-        title: 'KINDLY WAIT',
-        text: 'Under Maintenance',
-        confirmButtonText: 'OK'
-      });
+      console.error('Error fetching profile data:', error.response ? error.response.data : error.message);
     }
   };
 
-  const fetchAttendanceData = async (netraID) => {
+  const fetchAttendanceData = async (token) => {
     try {
-      const response = await axios.post(`${baseUrl}/api/attendance`, { netraID });
-      const { dayObjects, totalPercentage, twoWeekSessions } = response.data;
+      const response = await axios.post(`${baseUrl}/api/attendance`, {
+        method:"314"
+      }, {
+        headers: {
+          Authorization: `Bearer ${token}` // Set token as Authorization header
+        }
+      });
 
+      const { dayObjects, totalPercentage, twoWeekSessions } = response.data;
       setAttendanceData(dayObjects);
       setTwoWeekSessions(twoWeekSessions);
       setAttendancePer(totalPercentage);
@@ -116,15 +119,11 @@ const ProfilePage = ({ netraID }) => {
                             </tr>
                             <tr>
                               <td>Profile Views:</td>
-                              <td style={{ paddingLeft: '8px' ,color: 'red'}}>{profileDetails.psflag}</td>
+                              <td style={{ paddingLeft: '8px', color: 'red' }}>{profileDetails.psflag}</td>
                             </tr>
                           </tbody>
                         </table>
                       </div>
-                      {/* <div style={{marginTop:"10px"}}> */}
-                          {/* "Remember me" button */}
-                          {/* <Button type="primary" onClick={handleRememberMe}>Remember me</Button> */}
-                        {/* </div> */}
                     </div>
                   )}
                 </div>
@@ -134,7 +133,7 @@ const ProfilePage = ({ netraID }) => {
           <Col xs={24} sm={24} md={12} lg={16} xl={16}>
             <Card style={{ boxShadow: '0 1px 2px rgba(0, 0, 0, 0.1)' }}>
               <div style={{ minHeight: '400px', textAlign: 'center', marginTop: '20px' }}>
-                <div class="Atten1" style={{ display: 'inline-block', marginRight: '100px' }}>
+                <div className="Atten1" style={{ display: 'inline-block', marginRight: '100px' }}>
                   <AttendanceTracker attendancePer={attendancePer} />
                   <div style={{ marginTop: '30px' }}>
                     <p style={{ color: 'gray', fontStyle: 'italic' }}>Note: Attendance prediction will be coming soon</p>
@@ -160,7 +159,7 @@ const ProfilePage = ({ netraID }) => {
                           </tbody>
                         </table>
                       </Row>
-                      <div class="sessoins2w" style={{ textAlign: "center", marginLeft: "60px" }}>
+                      <div className="sessoins2w" style={{ textAlign: "center", marginLeft: "60px" }}>
                         <table>
                           <tr>
                             <td>Absent:</td>
@@ -225,7 +224,6 @@ const ProfilePage = ({ netraID }) => {
             </Card>
           </Col>
         </Row>
-        
       </Content>
     </Layout>
   );
