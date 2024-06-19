@@ -18,6 +18,7 @@ router.post('/profile', async (req, res) => {
     // console.log('Sending request to external API');
     const response = await axios.post('http://teleuniv.in/netra/netraapi.php', {
       method: method,
+      
     }, {
       headers: {
         'Authorization': `Bearer ${token}`,
