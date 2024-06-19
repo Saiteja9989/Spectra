@@ -64,14 +64,14 @@ app.get('/', (req, res) => {
 //   credentials: true,
 // }));
 // Enable CORS for all routes
-app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', '*'); // Update to match the domain you will make the request from
-  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
-  next();
-});
+// app.use((req, res, next) => {
+//   res.header('Access-Control-Allow-Origin', '*'); // Update to match the domain you will make the request from
+//   res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+//   next();
+// });
 
-// Bodyparser Middleware
-app.use(bodyParser.json());
+// // Bodyparser Middleware
+// app.use(bodyParser.json());
 
 app.use('/api', search)
 app.use('/api', netraid)
