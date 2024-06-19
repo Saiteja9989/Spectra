@@ -3,15 +3,17 @@ import axios from 'axios';
 import { Card } from 'antd';
 import { baseUrl } from '../baseurl'; // Ensure this is the correct base URL for your backend
 import Navbar from './Navbar';
+import Cookies from 'js-cookie';
 
 const { Meta } = Card;
 
-function Netraqr({ token }) {
+function Netraqr() {
   const [hallticketno, setHallticketno] = useState('');
   const [qrImageUrl, setQrImageUrl] = useState('');
   const [error, setError] = useState('');
 
   useEffect(() => {
+    const token = Cookies.get('token'); // Read the token from the cookies
     const processNetraid = async () => {
       try {
         if (!token) {
@@ -42,7 +44,7 @@ function Netraqr({ token }) {
     };
 
     processNetraid();
-  }, [token]);
+  }, []);
 
   const fetchQRImage = async (hallticketno) => {
     try {
