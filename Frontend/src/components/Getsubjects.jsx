@@ -8,7 +8,7 @@ const GetSubjects = ({ netraID }) => {
   useEffect(() => {
     const fetchSubjects = async () => {
       try {
-        const response = await axios.post('http://localhost:3000/api/getsubjects', { netraID });
+        const response = await axios.post(`${baseUrl}/api/getsubjects`, { netraID });
         setSubjects(response.data.uniqueSubjects);
         setLoading(false);
       } catch (error) {
