@@ -1,1 +1,1 @@
-export const baseUrl="https://spectraserver-indol.vercel.app";
+export const baseUrl="https://2f94-182-65-20-154.ngrok-free.app";
