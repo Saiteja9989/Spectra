@@ -22,6 +22,7 @@ router.post('/timetable', async (req, res) => {
     });
     
     const timetable = response.data.timetable;
+    // console.log(timetable);
     res.json({ timetable });
   } catch (error) {
     console.error('Error fetching timetable data from external API:', error);

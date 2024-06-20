@@ -6,8 +6,8 @@ const feedbackSchema = new mongoose.Schema({
     type: Number,
     required: true
   },
-  netraID: {
-    type: Number,
+  token: {
+    type: String,
     required:true
   },
   name: {

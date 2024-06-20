@@ -5,7 +5,7 @@ import Swal from 'sweetalert2';
 import Loader from './Loader';
 import Navbar from './Navbar';
 import { baseUrl } from '../baseurl';
-const FeedbackForm = ({ netraID }) => {
+const FeedbackForm = ({ token }) => {
   const [form] = Form.useForm();
   const [rating, setRating] = useState(0);
   const [loading, setLoading] = useState(false);
@@ -20,7 +20,7 @@ const FeedbackForm = ({ netraID }) => {
       const response = await axios.post(`${baseUrl}/api/submit/feedback`, {
         ...values,
         rating,
-        netraID
+        token
       });
 
       console.log('Feedback submitted successfully:', response.data);

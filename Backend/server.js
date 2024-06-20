@@ -14,7 +14,7 @@ const internalexam = require('./routes/internalres');
 const externalexam = require('./routes/externalres');
 const netraqr = require('./routes/gethallticketnumfromnetraid');
 const fetchqr = require('./routes/fetchqr');
-const getSubjects = require('./routes/getSemSubjects');
+// const getSubjects = require('./routes/getSemSubjects');
 
 const app = express();
 
@@ -43,7 +43,7 @@ app.use('/api', internalexam);
 app.use('/api', externalexam);
 app.use('/api', netraqr);
 app.use('/api', fetchqr);
-app.use('/api', getSubjects);
+// app.use('/api', getSubjects);
 
 const db = process.env.CONNECTION;
 mongoose.connect(db, { useNewUrlParser: true, useUnifiedTopology: true })
