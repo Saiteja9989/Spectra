@@ -23,7 +23,7 @@ const PORT = process.env.PORT || 5000;
 const corsOptions = {
   origin: '*', // Allow all origins or specify the allowed origin
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-  allowedHeaders: 'Origin, X-Requested-With, Content-Type, Accept',
+  // allowedHeaders: 'Origin, X-Requested-With, Content-Type, Accept',
   optionsSuccessStatus: 200,
   credentials: true, // Enable credentials (if required)
 };
