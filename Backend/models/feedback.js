@@ -6,7 +6,7 @@ const feedbackSchema = new mongoose.Schema({
     type: Number,
     required: true
   },
-  token: {
+  rollno: {
     type: String,
     required:true
   },

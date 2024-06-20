@@ -1,14 +1,25 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Form, Input, Button, Rate, Card } from 'antd';
 import axios from 'axios';
 import Swal from 'sweetalert2'; 
+import Cookies from 'js-cookie';  // Import Cookies library
 import Loader from './Loader';
 import Navbar from './Navbar';
 import { baseUrl } from '../baseurl';
-const FeedbackForm = ({ token }) => {
+
+const FeedbackForm = () => {
   const [form] = Form.useForm();
   const [rating, setRating] = useState(0);
   const [loading, setLoading] = useState(false);
+  const [rollno, setRollno] = useState(null);
+
+  useEffect(() => {
+    // Retrieve rollno from cookies
+    const storedRollno = Cookies.get('rollno');
+    if (storedRollno) {
+      setRollno(storedRollno);
+    }
+  }, []);
 
   const handleRatingChange = value => {
     setRating(value);
@@ -20,7 +31,7 @@ const FeedbackForm = ({ token }) => {
       const response = await axios.post(`${baseUrl}/api/submit/feedback`, {
         ...values,
         rating,
-        token
+        rollno
       });
 
       console.log('Feedback submitted successfully:', response.data);
@@ -47,7 +58,7 @@ const FeedbackForm = ({ token }) => {
 
   return (
     <>
-      <Navbar/>
+      <Navbar />
       <div style={{ display: 'flex', justifyContent: 'center' }}>
         <Card
           title="Feedback Form"
