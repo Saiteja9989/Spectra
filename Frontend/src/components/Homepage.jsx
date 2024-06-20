@@ -258,7 +258,7 @@ const UserInputPage = () => {
                                     <Card.Meta
                                         avatar={getAvatar(result)}
                                         title={<Text strong>{getResultText(result)}</Text>}
-                                        description={`Type: ${searchType}`}
+                                        description={`CURRENT YEAR: ${result.currentyear}`}
                                     />
                                 </Card>
                             ))}
