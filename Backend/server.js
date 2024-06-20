@@ -16,44 +16,26 @@ const timetable = require('./routes/timetable')
 const internalexam = require('./routes/internalres')
 const externalexam= require('./routes/externalres')
 
-const app = express();
-const PORT = process.env.PORT || 5000  ;
-app.use(cors({
-  origin: '*', // Change this to your React app's URL
-  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-  credentials: true, // Enable credentials (if required)
-}));
+app.use(express.json());
+let corspolicy = {
+    origin:'*'
+}
+app.use(cors(corspolicy));
 
-// Allow requests only from specific origins
-const corsOptions = {
-  origin: '*',
-  optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
-};
-
-app.use(cors(corsOptions));
-
-app.use(cors({
-  origin: '*'
-}));
-
-app.get('/', (req, res) => {
-  res.send("server uploaded..")
-})
-
-// app.use(cors({
-//   origin: 'http://localhost:5173',
-//   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-//   credentials: true,
-// }));
-// Enable CORS for all routes
-app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', '*'); // Update to match the domain you will make the request from
-  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
-  next();
+app.use((req,res,next) => {
+    
+    next();
 });
 
-// Bodyparser Middleware
-app.use(bodyParser.json());
+allroutes.get('/',(req,res) => {
+    console.log(" reached root");
+    res.send("Welcome to realgrande back end server");
+});
+
+
+const app = express();
+const PORT = process.env.PORT || 5000  ;
+
 
 app.use('/api', search)
 app.use('/api', netraid)
