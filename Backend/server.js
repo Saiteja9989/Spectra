@@ -21,22 +21,22 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 const corsOptions = {
-  origin: '*', // Allow all origins or specify the allowed origin
-  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-  // allowedHeaders: 'Origin, X-Requested-With, Content-Type, Accept',
-  optionsSuccessStatus: 200,
-  credentials: true, // Enable credentials (if required)
+  origin: '*'
 };
 
-// Enable CORS for all routes
 app.use(cors(corsOptions));
 
-// Bodyparser Middleware
-app.use(bodyParser.json());
+const validateOrigin = (req, res, next) => {
+  if (req.headers.origin !== '*') {
+      return res.status(403).json({ error: 'Unauthorized request' });
+  }
+  next();
+};
 
-// Route definitions
+app.use(validateOrigin);
+
 app.get('/', (req, res) => {
-  res.send('backend uploaded..');
+  console.log('requested');
 });
 
 app.use('/api', search);
