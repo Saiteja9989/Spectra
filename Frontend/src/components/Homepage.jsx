@@ -88,7 +88,7 @@ const UserInputPage = () => {
         }
         else{
             try {
-                // Send API request to get token
+                
                 const response = await axios.post(`${baseUrl}/api/get-token`, {
                     mobileNumber: result.phone,
                     password: result.lastname
@@ -258,7 +258,7 @@ const UserInputPage = () => {
                                     <Card.Meta
                                         avatar={getAvatar(result)}
                                         title={<Text strong>{getResultText(result)}</Text>}
-                                        description={`Type: ${searchType}`}
+                                        description={`CURRENT YEAR: ${result.currentyear}`}
                                     />
                                 </Card>
                             ))}
