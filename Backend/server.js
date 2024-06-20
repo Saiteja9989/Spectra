@@ -33,23 +33,34 @@ app.use(bodyParser.json());
 app.get('/', (req, res) => {
   res.send('Backend uploaded..');
 });
-app.get('/search', (req, res) => {
-  res.send('lavda uploaded..');
-});
+// app.get('/search', (req, res) => {
+//   res.send('lavda uploaded..');
+// });
 
 
-app.use('/api/search', search);
-app.use('/api/netraid', netraid);
-app.use('/api/feedback', feedback);
-app.use('/api/profile', profile);
-app.use('/api/subattendance', subattendance);
-app.use('/api/timetable', timetable);
-app.use('/api/internalexam', internalexam);
-app.use('/api/externalexam', externalexam);
-app.use('/api/netraqr', netraqr);
-app.use('/api/fetchqr', fetchqr);
-app.use('/api/getSubjects', getSubjects);
+// app.use('/api/search', search);
+// app.use('/api/netraid', netraid);
+// app.use('/api/feedback', feedback);
+// app.use('/api/profile', profile);
+// app.use('/api/subattendance', subattendance);
+// app.use('/api/timetable', timetable);
+// app.use('/api/internalexam', internalexam);
+// app.use('/api/externalexam', externalexam);
+// app.use('/api/netraqr', netraqr);
+// app.use('/api/fetchqr', fetchqr);
+// app.use('/api/getSubjects', getSubjects);
 
+app.use('/api', search);
+app.use('/api', netraid);
+app.use('/api', feedback);
+app.use('/api', profile);
+app.use('/api', subattendance);
+app.use('/api', timetable);
+app.use('/api', internalexam);
+app.use('/api', externalexam);
+app.use('/api', netraqr);
+app.use('/api', fetchqr);
+app.use('/api', getSubjects);
 
 const db = process.env.CONNECTION;
 mongoose.connect(db, { useNewUrlParser: true, useUnifiedTopology: true })
