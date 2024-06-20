@@ -3,7 +3,6 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 require('dotenv').config();
-
 // Import route handlers
 const search = require('./routes/livesearch');
 const netraid = require('./routes/netraid');
