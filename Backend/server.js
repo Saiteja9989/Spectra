@@ -19,22 +19,23 @@ const Fetchqr = require('./routes/fetchqr')
 const Getsubjects =require('./routes/getSemSubjects')
 const app = express();
 const PORT = process.env.PORT || 5000  ;
+app.use(express.json());
 app.use(cors({
-  origin: 'https://spectra-beta.vercel.app', // Change this to your React app's URL
+  origin: '*',
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-  credentials: true, // Enable credentials (if required)
+  
 }));
 
-// Allow requests only from specific origins
+
 const corsOptions = {
-  origin: 'https://spectra-beta.vercel.app',
+  origin: '*',
   optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
 };
 
 app.use(cors(corsOptions));
 
 app.use(cors({
-  origin: 'https://spectra-beta.vercel.app'
+  origin: '*'
 }));
 // const validateOrigin = (req, res, next) => {
 //   if (req.headers.origin !== 'https://spectra-beta.vercel.app') {
@@ -44,7 +45,6 @@ app.use(cors({
 // };
 
 // app.use(validateOrigin);
-app.use(express.json());
 
 app.get('/', (req, res) => {
   res.send('backend uploaded..');
