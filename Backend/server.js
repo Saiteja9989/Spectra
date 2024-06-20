@@ -20,11 +20,7 @@ const Getsubjects = require('./routes/getSemSubjects');
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-const corsOptions = {
-  origin: '*'
-};
-
-app.use(cors(corsOptions));
+app.use(cors());
 
 // const validateOrigin = (req, res, next) => {
 //   if (req.headers.origin !== '*') {
