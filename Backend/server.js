@@ -1,4 +1,3 @@
-
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
@@ -15,21 +14,57 @@ const subattendance = require('./routes/sub_attendance')
 const timetable = require('./routes/timetable')
 const internalexam = require('./routes/internalres')
 const externalexam= require('./routes/externalres')
-
-
+const Netraqr = require('./routes/gethallticketnumfromnetraid')
+const Fetchqr = require('./routes/fetchqr')
+const Getsubjects =require('./routes/getSemSubjects')
 const app = express();
 const PORT = process.env.PORT || 5000  ;
+app.use(cors({
+  origin: 'https://spectra-beta.vercel.app', // Change this to your React app's URL
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  credentials: true, // Enable credentials (if required)
+}));
 
+// Allow requests only from specific origins
+const corsOptions = {
+  origin: 'https://spectra-beta.vercel.app',
+  optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+};
+
+app.use(cors(corsOptions));
+
+app.use(cors({
+  origin: 'https://spectra-beta.vercel.app'
+}));
+const validateOrigin = (req, res, next) => {
+  if (req.headers.origin !== 'https://spectra-beta.vercel.app') {
+      return res.status(403).json({ error: 'Unauthorized request' });
+  }
+  next();
+};
+
+app.use(validateOrigin);
 app.use(express.json());
-let corspolicy = {
-    origin:'https://spectra-beta.vercel.app'
-}
-app.use(cors(corspolicy));
 
-app.use((req,res,next) => {
-    
-    next();
+app.get('/', (req, res) => {
+  res.send('backend uploaded..');
 });
+
+// app.use(cors({
+//   origin: 'http://localhost:5173',
+//   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+//   credentials: true,
+// }));
+// Enable CORS for all routes
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', 'https://spectra-beta.vercel.app'); // Update to match the domain you will make the request from
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+  next();
+});
+
+// Bodyparser Middleware
+app.use(bodyParser.json());
+
 app.use('/api', search)
 app.use('/api', netraid)
 app.use('/api', Feedback)
@@ -37,7 +72,13 @@ app.use('/api', profile)
 app.use('/api', subattendance)
 app.use('/api', timetable)
 app.use('/api', internalexam)
-app.use('/api',externalexam)
+app.use('/api', externalexam)
+app.use('/api', Netraqr)
+app.use('/api', Fetchqr)
+app.use('/api',Getsubjects)
+
+
+
 
 
 
