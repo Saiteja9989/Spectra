@@ -27,14 +27,17 @@ app.use(cors({
   allowedHeaders: 'Content-Type,Authorization'
 }));
 
-app.use(bodyParser.json()); // To parse JSON bodies
+app.use(bodyParser.json());
 
-// Test route
+
 app.get('/', (req, res) => {
   res.send('Backend uploaded..');
 });
+app.get('/search', (req, res) => {
+  res.send('lavda uploaded..');
+});
 
-// Use the imported routes
+
 app.use('/api/search', search);
 app.use('/api/netraid', netraid);
 app.use('/api/feedback', feedback);
@@ -47,11 +50,18 @@ app.use('/api/netraqr', netraqr);
 app.use('/api/fetchqr', fetchqr);
 app.use('/api/getSubjects', getSubjects);
 
-// Connect to MongoDB
+
 const db = process.env.CONNECTION;
 mongoose.connect(db, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log('MongoDB Connected...'))
   .catch(err => console.error('MongoDB connection error:', err));
 
-// Start the server
+
+
+
+
+
+
+
+
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
