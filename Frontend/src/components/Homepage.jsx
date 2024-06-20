@@ -158,7 +158,7 @@ const UserInputPage = () => {
 
     const fetchUserInfo = async (token) => {
        try {
-            const response = await axios.post(`${baseUrl}/api/`, {}, {
+            const response = await axios.post(`${baseUrl}/api/userinfo`, {}, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                     'Content-Type': 'application/json'
