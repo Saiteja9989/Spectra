@@ -16,6 +16,10 @@ const timetable = require('./routes/timetable')
 const internalexam = require('./routes/internalres')
 const externalexam= require('./routes/externalres')
 
+
+const app = express();
+const PORT = process.env.PORT || 5000  ;
+
 app.use(express.json());
 let corspolicy = {
     origin:'*'
@@ -26,17 +30,6 @@ app.use((req,res,next) => {
     
     next();
 });
-
-allroutes.get('/',(req,res) => {
-    console.log(" reached root");
-    res.send("Welcome to realgrande back end server");
-});
-
-
-const app = express();
-const PORT = process.env.PORT || 5000  ;
-
-
 app.use('/api', search)
 app.use('/api', netraid)
 app.use('/api', Feedback)
