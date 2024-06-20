@@ -22,7 +22,7 @@ const PORT = process.env.PORT || 5000  ;
 
 app.use(express.json());
 let corspolicy = {
-    origin:'*'
+    origin:'https://spectra-beta.vercel.app'
 }
 app.use(cors(corspolicy));
 
