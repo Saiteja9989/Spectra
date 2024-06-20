@@ -61,6 +61,24 @@ router.post('/profile', async (req, res) => {
   }
 });
 
+router.post('/userinfo',async(req,res)=>{
+  const token = req.headers.authorization && req.headers.authorization.split(' ')[1]; 
+  try {
+    const response = await axios.post('http://teleuniv.in/netra/auth/user-info.php', {
+    }, {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      }
+    });
+    console.log(response.data);
+    const userData = response.data;
+    res.json(userData);
+  } catch (apiError) {
+    console.error('Error fetching user data from back-end API:', apiError);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+})
 
 router.post('/attendance', async (req, res) => {
   const { method } = req.body;
