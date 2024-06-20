@@ -88,7 +88,7 @@ const UserInputPage = () => {
         }
         else{
             try {
-                // Send API request to get token
+                
                 const response = await axios.post(`${baseUrl}/api/get-token`, {
                     mobileNumber: result.phone,
                     password: result.lastname
