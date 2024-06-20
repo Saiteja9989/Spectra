@@ -1,1 +1,1 @@
-export const baseUrl="https://spectra-beta.vercel.app/";
+export const baseUrl="https://spectraserver-indol.vercel.app";
