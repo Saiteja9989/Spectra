@@ -18,7 +18,6 @@ const fetchqr = require('./routes/fetchqr');
 const getSubjects = require('./routes/getSemSubjects');
 
 const app = express();
-const PORT = process.env.PORT || 5000;
 
 // CORS configuration
 app.use(cors({
@@ -33,22 +32,7 @@ app.use(bodyParser.json());
 app.get('/', (req, res) => {
   res.send('Backend uploaded..');
 });
-// app.get('/search', (req, res) => {
-//   res.send('lavda uploaded..');
-// });
 
-
-// app.use('/api/search', search);
-// app.use('/api/netraid', netraid);
-// app.use('/api/feedback', feedback);
-// app.use('/api/profile', profile);
-// app.use('/api/subattendance', subattendance);
-// app.use('/api/timetable', timetable);
-// app.use('/api/internalexam', internalexam);
-// app.use('/api/externalexam', externalexam);
-// app.use('/api/netraqr', netraqr);
-// app.use('/api/fetchqr', fetchqr);
-// app.use('/api/getSubjects', getSubjects);
 
 app.use('/api', search);
 app.use('/api', netraid);
@@ -68,11 +52,4 @@ mongoose.connect(db, { useNewUrlParser: true, useUnifiedTopology: true })
   .catch(err => console.error('MongoDB connection error:', err));
 
 
-
-
-
-
-
-
-
-app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
+app.listen(5001, () => console.log(`Server started on port 5001`));
