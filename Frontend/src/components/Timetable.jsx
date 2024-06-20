@@ -6,53 +6,61 @@ import './Timetable.css';
 import Loader from './Loader';
 import Navbar from './Navbar';
 import { baseUrl } from '../baseurl';
+import Cookies from 'js-cookie'; // Import js-cookie for cookie management
 
 const { TabPane } = Tabs;
 
-const Timetable = ({  token }) => {
+const Timetable = () => {
   const [loading, setLoading] = useState(false);
   const [timetableData, setTimetableData] = useState([]);
-  const [selectedDay, setSelectedDay] = useState('Monday'); 
+  const [selectedDay, setSelectedDay] = useState('Monday');
+  const [token, setToken] = useState(null); // State to hold token
   const parser = new Parser();
 
   useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
-      try {
-        const response = await axios.post(`${baseUrl}/api/timetable`, {
-          method:"317"
-        }, {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        });
-        let timetable = response.data.timetable;
+    // Retrieve token from cookies
+    const storedToken = Cookies.get('token');
+    if (storedToken) {
+      setToken(storedToken);
+      fetchData(storedToken);
+    }
+  }, []);
 
-        const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-        const updatedTimetable = daysOfWeek.map((day) => {
-          const dayData = timetable.find((item) => item.dayname === day);
-          return dayData || { dayname: day, beforelunch: [], lunch: '', afterlunch: [] };
-        });
+  useEffect(() => {
+    // Fetch timetable data whenever token changes
+    if (token) {
+      fetchData(token);
+    }
+  }, [token]);
 
-        const sortedTimetable = updatedTimetable.sort((a, b) => {
-          if (a.dayname === 'Monday') return -1;
-          if (b.dayname === 'Monday') return 1;
-          return 0;
-        });
+  const fetchData = async (currentToken) => {
+    setLoading(true);
+    try {
+      const response = await axios.post(`${baseUrl}/api/timetable`, {
+        method: "317"
+      }, {
+        headers: {
+          Authorization: `Bearer ${currentToken}`
+        }
+      });
+      let timetable = response.data.timetable;
 
-        setTimetableData(sortedTimetable);
-      } catch (error) {
-        console.error('Error fetching timetable:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
+      const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+      const updatedTimetable = daysOfWeek.map((day) => {
+        const dayData = timetable.find((item) => item.dayname === day);
+        return dayData || { dayname: day, beforelunch: [], lunch: '', afterlunch: [] };
+      });
 
-    fetchData();
-  }, [ token]);
+      setTimetableData(updatedTimetable);
+    } catch (error) {
+      console.error('Error fetching timetable:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const renderTimetableForDay = (dayData) => {
-    if (!dayData || !dayData.dayname) return null; 
+    if (!dayData || !dayData.dayname) return null;
     const columns = [
       {
         title: 'Period',

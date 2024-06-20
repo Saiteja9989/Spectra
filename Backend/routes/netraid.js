@@ -21,7 +21,7 @@ router.post('/def-token', async (req, res) => {
         try {
             
             const student = await StudentDetail.findOne({ phone: mobileNumber });
-            console.log(student,);
+            // console.log(student);
             if (student) {
                 if(student.lastname!=="Kmit123$"){
                     student.lastname = "Kmit123$";
@@ -72,7 +72,9 @@ router.post('/get-token', async (req, res) => {
           }
 
         // Return the response from Netra API
+        console.log(response.data);
         res.json(response.data);
+        
     } catch (error) {
         console.error('Error fetching token:', error);
         res.status(500).json({ error: 'Failed to fetch token from Netra API' });
