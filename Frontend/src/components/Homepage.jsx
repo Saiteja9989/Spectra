@@ -157,10 +157,11 @@ const UserInputPage = () => {
     };
 
     const fetchUserInfo = async (token) => {
-        try {
-            const response = await axios.post('http://teleuniv.in/netra/auth/user-info.php', {
+       try {
+            const response = await axios.post(`${baseUrl}/api/`, {}, {
                 headers: {
-                    Authorization: `Bearer ${token}`
+                    Authorization: `Bearer ${token}`,
+                    'Content-Type': 'application/json'
                 }
             });
 
