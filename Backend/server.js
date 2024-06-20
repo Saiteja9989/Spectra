@@ -26,14 +26,14 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
-const validateOrigin = (req, res, next) => {
-  if (req.headers.origin !== '*') {
-      return res.status(403).json({ error: 'Unauthorized request' });
-  }
-  next();
-};
+// const validateOrigin = (req, res, next) => {
+//   if (req.headers.origin !== '*') {
+//       return res.status(403).json({ error: 'Unauthorized request' });
+//   }
+//   next();
+// };
 
-app.use(validateOrigin);
+// app.use(validateOrigin);
 
 app.get('/', (req, res) => {
   console.log('requested');
