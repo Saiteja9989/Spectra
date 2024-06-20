@@ -21,15 +21,12 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 // CORS configuration
-const corsOptions = {
+app.use(cors({
   origin: '*',
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-  allowedHeaders: 'Content-Type,Authorization',
-  preflightContinue: false,
-  optionsSuccessStatus: 204
-};
+  allowedHeaders: 'Content-Type,Authorization'
+}));
 
-app.use(cors(corsOptions));
 app.use(bodyParser.json()); // To parse JSON bodies
 
 // Test route
