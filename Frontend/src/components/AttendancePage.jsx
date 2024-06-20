@@ -3,15 +3,26 @@ import { Table, Progress, Button } from 'antd';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { LeftOutlined } from '@ant-design/icons';
+import Cookies from 'js-cookie';
 import Loader from './Loader'; 
 import Navbar from './Navbar';
 import { baseUrl } from '../baseurl';
 import './AttendancePage.css';
 
-const AttendancePage = ({ token }) => {
+const AttendancePage = () => {
   const [attendanceData, setAttendanceData] = useState(null);
   const [loading, setLoading] = useState(true); 
+  const [token, setToken] = useState(null);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    // Retrieve token from cookies
+    const storedToken = Cookies.get('token');
+    if (storedToken) {
+      setToken(storedToken);
+      fetchAttendanceData(storedToken);
+    }
+  }, []);
 
   useEffect(() => {
     if (token) {
@@ -75,6 +86,14 @@ const AttendancePage = ({ token }) => {
     <>
       <Navbar /> 
       <div style={{ padding: '20px', display: 'flex', flexDirection: 'column' }}>
+        <Button
+          type="link"
+          icon={<LeftOutlined />}
+          onClick={handleBackButtonClick}
+          style={{ marginBottom: '20px' }}
+        >
+          Back
+        </Button>
         <div style={{ flex: '1' }}>
           {loading ? (
             <Loader />
@@ -85,6 +104,7 @@ const AttendancePage = ({ token }) => {
               bordered
               size="small"
               pagination={false}
+              rowKey="subjectname"
             />
           )}
         </div>
