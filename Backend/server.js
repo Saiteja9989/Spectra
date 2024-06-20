@@ -36,14 +36,14 @@ app.use(cors(corsOptions));
 app.use(cors({
   origin: 'https://spectra-beta.vercel.app'
 }));
-const validateOrigin = (req, res, next) => {
-  if (req.headers.origin !== 'https://spectra-beta.vercel.app') {
-      return res.status(403).json({ error: 'Unauthorized request' });
-  }
-  next();
-};
+// const validateOrigin = (req, res, next) => {
+//   if (req.headers.origin !== 'https://spectra-beta.vercel.app') {
+//       return res.status(403).json({ error: 'Unauthorized request' });
+//   }
+//   next();
+// };
 
-app.use(validateOrigin);
+// app.use(validateOrigin);
 app.use(express.json());
 
 app.get('/', (req, res) => {
@@ -57,13 +57,13 @@ app.get('/', (req, res) => {
 // }));
 // Enable CORS for all routes
 app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', 'https://spectra-beta.vercel.app'); // Update to match the domain you will make the request from
-  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+  // res.header('Access-Control-Allow-Origin', 'https://spectra-beta.vercel.app'); // Update to match the domain you will make the request from
+  // res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
   next();
 });
 
-// Bodyparser Middleware
-app.use(bodyParser.json());
+// // Bodyparser Middleware
+// app.use(bodyParser.json());
 
 app.use('/api', search)
 app.use('/api', netraid)
