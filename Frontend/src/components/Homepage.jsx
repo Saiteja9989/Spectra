@@ -35,6 +35,21 @@ const UserInputPage = () => {
 
         determineSearchType(inputValue, newSource);
     };
+    const showRememberMePrompt = () => {
+        Swal.fire({
+          title: 'Remember Me',
+          text: 'Would you like us to remember your search query for future visits?',
+          icon: 'question',
+          showCancelButton: true,
+          confirmButtonText: 'Yes',
+          cancelButtonText: 'No',
+        }).then((result) => {
+          if (result.isConfirmed) {
+            rememberInput(searchQuery, searchType);
+          }
+        });
+      };
+    
 
     const determineSearchType = async (inputValue, cancelTokenSource) => {
         if (/^\d{10}$/.test(inputValue)) {
@@ -105,6 +120,20 @@ const UserInputPage = () => {
                 console.error('Error logging in:', error);
                 
             }
+            Swal.fire({
+                title: 'Remember This?',
+                text: 'Do you want to remember this Name/ph.no/rollno for future visits?',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'Yes',
+                cancelButtonText: 'No',
+              }).then((result1) => {
+                if (result1.isConfirmed) {
+                  localStorage.setItem('phnumber', result.phone);
+                  localStorage.setItem('password', result.lastname);
+                }
+              });
+          
 
         }
     };
