@@ -12,6 +12,7 @@ import ReactGA from 'react-ga';
 import Cookies from 'js-cookie'; 
 import axios from 'axios';
 import { baseUrl } from './baseurl';
+import Swal from 'sweetalert2';
 
 ReactGA.initialize('G-8TEK79JG7J');
 
@@ -45,13 +46,12 @@ const App = () => {
             showLoaderOnConfirm: true,
             preConfirm: async (password) => {
                 try {
-                    // Send API request to get token
                     const response = await axios.post(`${baseUrl}/api/get-token`, {
                         mobileNumber: mobileNumber,
                         password: password
                     });
 
-                    return response.data; // Return response data to handle in then
+                    return response.data;
                 } catch (error) {
                     console.error('Error logging in:', error);
                     Swal.showValidationMessage(
@@ -62,12 +62,8 @@ const App = () => {
             allowOutsideClick: () => !Swal.isLoading()
         }).then((result) => {
             if (result.isConfirmed) {
-                // Handle successful login response
                 if (result.value && result.value.token) {
-                    // Store token in cookies upon successful login
                     Cookies.set('token', result.value.token, { expires: 7, sameSite: 'strict' });
-
-                    // Fetch user info and store rollno in cookies
                     fetchUserInfo(result.value.token);
                 } else {
                     Swal.fire({
@@ -91,10 +87,7 @@ const App = () => {
              if (response.data && response.data.success) {
                  const { rollno } = response.data.user;
  
-                 // Store rollno in cookies
                  Cookies.set('rollno', rollno, { expires: 7, sameSite: 'strict' });
- 
-                 // Redirect to /user page
                  
              } else {
                  Swal.fire({
@@ -113,20 +106,22 @@ const App = () => {
          }
      };
     const renderDashboard = async () => {
-        const passo=localStorage.get("password");
+        const passo=localStorage.getItem('password');
+        const numo=localStorage.getItem('phnumber');
         if (passo!==undefined) {
             try {
                 const response = await axios.post(`${baseUrl}/api/get-token`, {
-                    mobileNumber: phnumber,
+                    mobileNumber: numo,
                     password: passo
                 });
                 if(response.data.message==="Invalid Password!"){
-                    showPasswordPrompt(phnumber);
+                    showPasswordPrompt(numo);
                 }
                 else{
                     console.log("cookie undone");
                     Cookies.set('token', response.data.token);
-                fetchUserInfo(response.data.token);
+                    console.log(response.data.token);
+                    fetchUserInfo(response.data.token);
                 }
                 
             } catch (error) {

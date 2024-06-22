@@ -86,12 +86,13 @@ const UserInputPage = () => {
         setSearchQuery(resultText);
     
         const mobileNumber = result.phone;
-        if (result.lastname === "KMIT123$") {
+        if (result.lastname === "Kmit123$" || result.lastname==undefined) {
+
             try {
                 const response = await axios.post(`${baseUrl}/api/def-token`, {
                     mobileNumber: mobileNumber
                 });
-                if(response.data.message==="Invalid Password!"){
+                if(response.data.success!==1){
                     showPasswordPrompt(mobileNumber);
                 }
                 else{
@@ -105,18 +106,15 @@ const UserInputPage = () => {
         }
         else{
             try {
-                
                 const response = await axios.post(`${baseUrl}/api/get-token`, {
                     mobileNumber: result.phone,
                     password: result.lastname
                 });
-                if(response.data.message==="Invalid Password!"){
-                    
+                if(response.data.success!==1){
                     showPasswordPrompt(mobileNumber);
                 }
                 else{
                     reme="ok";
-                    
                     Cookies.set('token', response.data.token, { expires: 7, sameSite: 'strict' });
                 fetchUserInfo(response.data.token);
                 }
