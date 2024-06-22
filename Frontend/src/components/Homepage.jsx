@@ -9,6 +9,7 @@ import { baseUrl } from '../baseurl'; // Assuming you have a baseUrl file
 const { Text } = Typography;
 
 const UserInputPage = () => {
+    const [reme,setreme]=useState("");
     const [searchQuery, setSearchQuery] = useState('');
     const [searchResults, setSearchResults] = useState([]);
     const [searchType, setSearchType] = useState(null);
@@ -85,7 +86,7 @@ const UserInputPage = () => {
         setSearchQuery(resultText);
     
         const mobileNumber = result.phone;
-        if (result.lastname === "KMIT") {
+        if (result.lastname === "KMIT123$") {
             try {
                 const response = await axios.post(`${baseUrl}/api/def-token`, {
                     mobileNumber: mobileNumber
@@ -94,6 +95,7 @@ const UserInputPage = () => {
                     showPasswordPrompt(mobileNumber);
                 }
                 else{
+                    setreme("ok");
                     Cookies.set('token', response.data.token, { expires: 7, sameSite: 'strict' });
                 fetchUserInfo(response.data.token);
                 }
@@ -109,6 +111,7 @@ const UserInputPage = () => {
                     password: result.lastname
                 });
                 if(response.data.message==="Invalid Password!"){
+                    console.log("puka",result.lastname);
                     showPasswordPrompt(mobileNumber);
                 }
                 else{
@@ -120,25 +123,29 @@ const UserInputPage = () => {
                 console.error('Error logging in:', error);
                 
             }
-            Swal.fire({
-                title: 'Remember This?',
-                text: 'Do you want to remember this Name/ph.no/rollno for future visits?',
-                icon: 'question',
-                showCancelButton: true,
-                confirmButtonText: 'Yes',
-                cancelButtonText: 'No',
-              }).then((result1) => {
-                if (result1.isConfirmed) {
-                  localStorage.setItem('phnumber', result.phone);
-                  localStorage.setItem('password', result.lastname);
-                }
-              });
           
 
         }
+        // if(reme==="ok"){
+        //     Swal.fire({
+        //         title: 'Remember This?',
+        //         text: 'Do you want to remember this Name/ph.no/rollno for future visits?',
+        //         icon: 'question',
+        //         showCancelButton: true,
+        //         confirmButtonText: 'Yes',
+        //         cancelButtonText: 'No',
+        //       }).then((result1) => {
+        //         if (result1.isConfirmed) {
+        //           localStorage.setItem('phnumber', result.phone);
+        //           localStorage.setItem('password', result.lastname);
+        //         }
+        //       });
+        // }
+        
     };
 
     const showPasswordPrompt = (mobileNumber) => {
+        console.log("puka2");
         Swal.fire({
             title: 'Enter KMIT Netra Password',
             input: 'password',
@@ -150,7 +157,7 @@ const UserInputPage = () => {
             showLoaderOnConfirm: true,
             preConfirm: async (password) => {
                 try {
-                    // Send API request to get token
+                    
                     const response = await axios.post(`${baseUrl}/api/get-token`, {
                         mobileNumber: mobileNumber,
                         password: password
@@ -171,7 +178,7 @@ const UserInputPage = () => {
                 if (result.value && result.value.token) {
                     // Store token in cookies upon successful login
                     Cookies.set('token', result.value.token, { expires: 7, sameSite: 'strict' });
-
+                    setreme("ok");
                     // Fetch user info and store rollno in cookies
                     fetchUserInfo(result.value.token);
                 } else {
