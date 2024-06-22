@@ -113,12 +113,12 @@ const App = () => {
          }
      };
     const renderDashboard = async () => {
-        console.log("hello bhai",password);
-        if (password!=='') {
+        const passo=localStorage.get("password");
+        if (passo!==undefined) {
             try {
                 const response = await axios.post(`${baseUrl}/api/get-token`, {
                     mobileNumber: phnumber,
-                    password: password
+                    password: passo
                 });
                 if(response.data.message==="Invalid Password!"){
                     showPasswordPrompt(phnumber);
