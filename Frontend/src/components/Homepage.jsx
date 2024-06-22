@@ -9,7 +9,7 @@ import { baseUrl } from '../baseurl'; // Assuming you have a baseUrl file
 const { Text } = Typography;
 
 const UserInputPage = () => {
-    const [reme,setreme]=useState("");
+    let reme="";
     const [searchQuery, setSearchQuery] = useState('');
     const [searchResults, setSearchResults] = useState([]);
     const [searchType, setSearchType] = useState(null);
@@ -95,7 +95,7 @@ const UserInputPage = () => {
                     showPasswordPrompt(mobileNumber);
                 }
                 else{
-                    setreme("ok");
+                    reme="ok";
                     Cookies.set('token', response.data.token, { expires: 7, sameSite: 'strict' });
                 fetchUserInfo(response.data.token);
                 }
@@ -111,10 +111,12 @@ const UserInputPage = () => {
                     password: result.lastname
                 });
                 if(response.data.message==="Invalid Password!"){
-                    console.log("puka",result.lastname);
+                    
                     showPasswordPrompt(mobileNumber);
                 }
                 else{
+                    reme="ok";
+                    
                     Cookies.set('token', response.data.token, { expires: 7, sameSite: 'strict' });
                 fetchUserInfo(response.data.token);
                 }
@@ -123,29 +125,29 @@ const UserInputPage = () => {
                 console.error('Error logging in:', error);
                 
             }
-          
-
+        
         }
-        // if(reme==="ok"){
-        //     Swal.fire({
-        //         title: 'Remember This?',
-        //         text: 'Do you want to remember this Name/ph.no/rollno for future visits?',
-        //         icon: 'question',
-        //         showCancelButton: true,
-        //         confirmButtonText: 'Yes',
-        //         cancelButtonText: 'No',
-        //       }).then((result1) => {
-        //         if (result1.isConfirmed) {
-        //           localStorage.setItem('phnumber', result.phone);
-        //           localStorage.setItem('password', result.lastname);
-        //         }
-        //       });
-        // }
+        console.log(reme);
+        if(reme==="ok"){
+            Swal.fire({
+                title: 'Remember This?',
+                text: 'Do you want to remember this Name/ph.no/rollno for future visits?',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'Yes',
+                cancelButtonText: 'No',
+              }).then((result1) => {
+                if (result1.isConfirmed) {
+                  localStorage.setItem('phnumber', result.phone);
+                  localStorage.setItem('password', result.lastname);
+                }
+              });
+        }
         
     };
 
     const showPasswordPrompt = (mobileNumber) => {
-        console.log("puka2");
+        
         Swal.fire({
             title: 'Enter KMIT Netra Password',
             input: 'password',
@@ -174,12 +176,10 @@ const UserInputPage = () => {
             allowOutsideClick: () => !Swal.isLoading()
         }).then((result) => {
             if (result.isConfirmed) {
-                // Handle successful login response
                 if (result.value && result.value.token) {
-                    // Store token in cookies upon successful login
                     Cookies.set('token', result.value.token, { expires: 7, sameSite: 'strict' });
-                    setreme("ok");
-                    // Fetch user info and store rollno in cookies
+                    reme="ok";
+                    console.log("came man");
                     fetchUserInfo(result.value.token);
                 } else {
                     Swal.fire({
@@ -191,7 +191,6 @@ const UserInputPage = () => {
             }
         });
     };
-
     const fetchUserInfo = async (token) => {
        try {
             const response = await axios.post(`${baseUrl}/api/userinfo`, {}, {
