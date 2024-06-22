@@ -120,6 +120,7 @@ const App = () => {
                 else{
                     console.log("cookie undone");
                     Cookies.set('token', response.data.token);
+                    setToken(response.data.token);
                     console.log(response.data.token);
                     fetchUserInfo(response.data.token);
                 }
@@ -131,7 +132,7 @@ const App = () => {
             return 1;
         } else {
             
-            return 2;
+            return null;
         }
       };
       const rendercomponent=()=>{

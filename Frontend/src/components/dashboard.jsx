@@ -31,7 +31,7 @@ const ProfilePage = () => {
       fetchProfileData(storedToken);
       fetchAttendanceData(storedToken);
     } else {
-      navigate('/search'); // Redirect to login if no token is found
+      navigate('/search'); 
     }
   }, []);
 
