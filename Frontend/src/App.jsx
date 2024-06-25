@@ -13,27 +13,30 @@ import Cookies from 'js-cookie';
 import axios from 'axios';
 import { baseUrl } from './baseurl';
 import Swal from 'sweetalert2';
+import Loader from './components/Loader';
 
 ReactGA.initialize('G-8TEK79JG7J');
 
 const App = () => {
     const [token, setToken] = useState(null); 
-    const [password, setPassword] = useState('');
-    const [phnumber, setphnumber] = useState('');
-    useEffect(() => {
-    const storedPassword = localStorage.getItem('password');
-    const storedphnumber = localStorage.getItem('phnumber');
-    if (storedPassword) {
-      setPassword(storedPassword);
-      setphnumber(storedphnumber);
-    }
-    }, []);
+    const [isLoading, setIsLoading] = useState(true);
+
     useEffect(() => {
         const storedToken = Cookies.get('token');
         if (storedToken) {
             setToken(storedToken);
+            setIsLoading(false);
+        } else {
+            const storedPassword = localStorage.getItem('password');
+            const storedphnumber = localStorage.getItem('phnumber');
+            if (storedPassword && storedphnumber) {
+                handleLogin(storedphnumber, storedPassword);
+            } else {
+                setIsLoading(false);
+            }
         }
     }, []);
+
     const showPasswordPrompt = (mobileNumber) => {
         Swal.fire({
             title: 'Enter KMIT Netra Password',
@@ -64,6 +67,7 @@ const App = () => {
             if (result.isConfirmed) {
                 if (result.value && result.value.token) {
                     Cookies.set('token', result.value.token, { expires: 7, sameSite: 'strict' });
+                    setToken(result.value.token);
                     fetchUserInfo(result.value.token);
                 } else {
                     Swal.fire({
@@ -75,79 +79,66 @@ const App = () => {
             }
         });
     };
+
+    const handleLogin = async (mobileNumber, password) => {
+        try {
+            const response = await axios.post(`${baseUrl}/api/get-token`, {
+                mobileNumber: mobileNumber,
+                password: password
+            });
+
+            if (response.data.token) {
+                Cookies.set('token', response.data.token, { expires: 7, sameSite: 'strict' });
+                setToken(response.data.token);
+                fetchUserInfo(response.data.token);
+            } else {
+                showPasswordPrompt(mobileNumber);
+            }
+        } catch (error) {
+            console.error('Error logging in:', error);
+            showPasswordPrompt(mobileNumber);
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
     const fetchUserInfo = async (token) => {
         try {
-             const response = await axios.post(`${baseUrl}/api/userinfo`, {}, {
-                 headers: {
-                     Authorization: `Bearer ${token}`,
-                     'Content-Type': 'application/json'
-                 }
-             });
- 
-             if (response.data && response.data.success) {
-                 const { rollno } = response.data.user;
- 
-                 Cookies.set('rollno', rollno, { expires: 7, sameSite: 'strict' });
-                 
-             } else {
-                 Swal.fire({
-                     icon: 'error',
-                     title: 'Failed to Retrieve User Info',
-                     text: 'Could not fetch user information from Netra API.',
-                 });
-             }
-         } catch (error) {
-             console.error('Error fetching user info:', error);
-             Swal.fire({
-                 icon: 'error',
-                 title: 'Error',
-                 text: 'Failed to fetch user information.',
-             });
-         }
-     };
-    const renderDashboard = async () => {
-        const passo=localStorage.getItem('password');
-        const numo=localStorage.getItem('phnumber');
-        if (passo!==undefined) {
-            try {
-                const response = await axios.post(`${baseUrl}/api/get-token`, {
-                    mobileNumber: numo,
-                    password: passo
+            const response = await axios.post(`${baseUrl}/api/userinfo`, {}, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (response.data && response.data.success) {
+                const { rollno } = response.data.user;
+                Cookies.set('rollno', rollno, { expires: 7, sameSite: 'strict' });
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Failed to Retrieve User Info',
+                    text: 'Could not fetch user information from Netra API.',
                 });
-                if(response.data.message==="Invalid Password!"){
-                    showPasswordPrompt(numo);
-                }
-                else{
-                    console.log("cookie undone");
-                    Cookies.set('token', response.data.token);
-                    setToken(response.data.token);
-                    console.log(response.data.token);
-                    fetchUserInfo(response.data.token);
-                }
-                
-            } catch (error) {
-                console.error('Error logging in:', error);
-                
             }
-            return 1;
-        } else {
-            
-            return null;
+        } catch (error) {
+            console.error('Error fetching user info:', error);
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Failed to fetch user information.',
+            });
         }
-      };
-      const rendercomponent=()=>{
-        const emo=renderDashboard();
-        if(emo!==1){
-            return <Dashboard token={token} />;
-        }
-        else{
-            return <SearchPage token={token}/>;
-        }
-      }
+    };
+
+    if (isLoading) {
+        return <Loader />;
+    }
+
     return (
         <Router>
             <Routes>
-                <Route path="/" element={rendercomponent()} />
+                <Route path="/" element={token ? <Dashboard token={token} /> : <SearchPage token={token} />} />
                 <Route path="/search" element={<SearchPage token={token} />} />
                 <Route path="/user" element={<Dashboard token={token} />} />
                 <Route path="/attendance" element={<AttendancePage token={token} />} />

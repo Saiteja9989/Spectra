@@ -1,18 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { Layout, Row, Col, Avatar, Typography, Card } from 'antd';
+import { useNavigate } from 'react-router-dom';
+import { Layout, Row, Col, Avatar, Typography, Card, Spin } from 'antd';
 import { ClusterOutlined, ScheduleOutlined, SolutionOutlined, UserOutlined, LineChartOutlined, MessageOutlined, QrcodeOutlined } from '@ant-design/icons';
 import './dashboard.css';
-import { Button } from 'antd';
 import axios from 'axios';
 import AttendanceTracker from '../components/AttendanceTracker';
 import Swal from 'sweetalert2';
 import Navbar from './Navbar';
-import Cookies from 'js-cookie'; // Import js-cookie for cookie management
+import Cookies from 'js-cookie'; 
 import { baseUrl } from '../baseurl';
+import Loader from './Loader';
 
-const { Header, Content } = Layout;
-const { Title, Text } = Typography;
+const { Content } = Layout;
+const { Title } = Typography;
 const { Meta } = Card;
 
 const ProfilePage = () => {
@@ -20,11 +20,11 @@ const ProfilePage = () => {
   const [attendanceData, setAttendanceData] = useState(null);
   const [attendancePer, setAttendancePer] = useState(0);
   const [twoWeekSessions, setTwoWeekSessions] = useState(0);
-  const [token, setToken] = useState(null); // State to manage token
+  const [token, setToken] = useState(null); 
+  const [isLoading, setIsLoading] = useState(true); // Add loading state
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Retrieve the token from cookies
     const storedToken = Cookies.get('token');
     if (storedToken) {
       setToken(storedToken);
@@ -49,24 +49,26 @@ const ProfilePage = () => {
         method: "32",
       }, {
         headers: {
-          Authorization: `Bearer ${token}` // Set token as Authorization header
+          Authorization: `Bearer ${token}`
         }
       });
 
       const data = response.data;
       setProfileDetails(data);
+      setIsLoading(false); // Stop loading after data is fetched
     } catch (error) {
       console.error('Error fetching profile data:', error.response ? error.response.data : error.message);
+      setIsLoading(false); // Stop loading on error
     }
   };
 
   const fetchAttendanceData = async (token) => {
     try {
       const response = await axios.post(`${baseUrl}/api/attendance`, {
-        method:"314"
+        method: "314"
       }, {
         headers: {
-          Authorization: `Bearer ${token}` // Set token as Authorization header
+          Authorization: `Bearer ${token}`
         }
       });
 
@@ -74,10 +76,16 @@ const ProfilePage = () => {
       setAttendanceData(dayObjects);
       setTwoWeekSessions(twoWeekSessions);
       setAttendancePer(totalPercentage);
+      setIsLoading(false); // Stop loading after data is fetched
     } catch (error) {
       console.error('Error fetching attendance data:', error);
+      setIsLoading(false); // Stop loading on error
     }
   };
+
+  if (isLoading) {
+    return <Spin size="large" style={{ display: 'block', margin: '100px auto' }} />; // Display loading spinner
+  }
 
   return (
     <Layout>
@@ -117,10 +125,6 @@ const ProfilePage = () => {
                               <td>Year of Admission:</td>
                               <td style={{ paddingLeft: '8px' }}>{profileDetails.yearofadmision}</td>
                             </tr>
-                            {/* <tr>
-                              <td>Profile Views:</td>
-                              <td style={{ paddingLeft: '8px', color: 'red' }}>{profileDetails.psflag}</td>
-                            </tr> */}
                           </tbody>
                         </table>
                       </div>
@@ -161,21 +165,23 @@ const ProfilePage = () => {
                       </Row>
                       <div className="sessoins2w" style={{ textAlign: "center", marginLeft: "60px" }}>
                         <table>
-                          <tr>
-                            <td>Absent:</td>
-                            <td style={{ paddingLeft: '8px' }}>{twoWeekSessions.absent}</td>
-                            <td style={{ paddingLeft: '8px' }}>❌</td>
-                          </tr>
-                          <tr>
-                            <td>Present:</td>
-                            <td style={{ paddingLeft: '8px' }}>{twoWeekSessions.present}</td>
-                            <td style={{ paddingLeft: '8px' }}> ✅ </td>
-                          </tr>
-                          <tr>
-                            <td>No Sessions:</td>
-                            <td style={{ paddingLeft: '8px' }}>{twoWeekSessions.nosessions}</td>
-                            <td style={{ paddingLeft: '8px' }}>⭕</td>
-                          </tr>
+                          <tbody>
+                            <tr>
+                              <td>Absent:</td>
+                              <td style={{ paddingLeft: '8px' }}>{twoWeekSessions.absent}</td>
+                              <td style={{ paddingLeft: '8px' }}>❌</td>
+                            </tr>
+                            <tr>
+                              <td>Present:</td>
+                              <td style={{ paddingLeft: '8px' }}>{twoWeekSessions.present}</td>
+                              <td style={{ paddingLeft: '8px' }}> ✅ </td>
+                            </tr>
+                            <tr>
+                              <td>No Sessions:</td>
+                              <td style={{ paddingLeft: '8px' }}>{twoWeekSessions.nosessions}</td>
+                              <td style={{ paddingLeft: '8px' }}>⭕</td>
+                            </tr>
+                          </tbody>
                         </table>
                       </div>
                     </div>
