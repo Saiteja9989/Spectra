@@ -25,7 +25,17 @@ const ProfilePage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const storedToken = Cookies.get('token');
+    let storedToken = Cookies.get('token');
+    if (storedToken) {
+      setToken(storedToken);
+      fetchProfileData(storedToken);
+      fetchAttendanceData(storedToken);
+    } else {
+      navigate('/search'); 
+    }
+  }, []);
+  useEffect(() => {
+    let storedToken = Cookies.get('token');
     if (storedToken) {
       setToken(storedToken);
       fetchProfileData(storedToken);
