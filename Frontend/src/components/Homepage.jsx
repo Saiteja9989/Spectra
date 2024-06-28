@@ -5,6 +5,7 @@ import Swal from 'sweetalert2';
 import Cookies from 'js-cookie'; // Import js-cookie for cookie management
 import { useNavigate } from 'react-router-dom'; // Import useHistory for navigation
 import { baseUrl } from '../baseurl'; // Assuming you have a baseUrl file
+import Loader from './Loader';
 
 const { Text } = Typography;
 

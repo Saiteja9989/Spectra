@@ -21,7 +21,7 @@ const ProfilePage = () => {
   const [attendancePer, setAttendancePer] = useState(0);
   const [twoWeekSessions, setTwoWeekSessions] = useState(0);
   const [token, setToken] = useState(null); 
-  const [isLoading, setIsLoading] = useState(true); // Add loading state
+  const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
