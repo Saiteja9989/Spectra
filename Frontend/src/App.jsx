@@ -12,6 +12,7 @@ import ReactGA from 'react-ga';
 import Cookies from 'js-cookie'; 
 import axios from 'axios';
 import { baseUrl } from './baseurl';
+import Swal from 'sweetalert2';
 
 ReactGA.initialize('G-8TEK79JG7J');
 
@@ -113,9 +114,12 @@ const App = () => {
          }
      };
     const renderDashboard = async () => {
-        console.log("hello bhai",password);
-        if (password!=='') {
+       const pas2=localStorage.getItem("password");
+        if (pas2===undefined) {
+            return false;
+        } else {
             try {
+                console.log("wejfnew");
                 const response = await axios.post(`${baseUrl}/api/get-token`, {
                     mobileNumber: phnumber,
                     password: password
@@ -135,20 +139,19 @@ const App = () => {
                 console.error('Error logging in:', error);
                 
             }
-            return 1;
-        } else {
+            console.log("sdf");
+            return true;
             
-            return 2;
         }
       };
       const rendercomponent=()=>{
-        const emo=renderDashboard();
-        if(emo!==1){
-            const token1=localStorage.getItem("cookie");
-            return <Dashboard token={token1}  />;
+        const gh=renderDashboard();
+        if(!gh){
+            return <SearchPage token={token}/>;
         }
         else{
-            return <SearchPage token={token}/>;
+            const token1=localStorage.getItem("cookie");
+            return <Dashboard token={token1} />
         }
       }
     return (

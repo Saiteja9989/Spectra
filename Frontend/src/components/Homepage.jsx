@@ -201,11 +201,7 @@ const UserInputPage = () => {
 
             if (response.data && response.data.success) {
                 const { rollno } = response.data.user;
-
-                // Store rollno in cookies
                 Cookies.set('rollno', rollno, { expires: 7, sameSite: 'strict' });
-
-                // Redirect to /user page
                 navigate('/user');
             } else {
                 Swal.fire({
