@@ -10,7 +10,6 @@ import Loader from './Loader';
 const { Text } = Typography;
 
 const UserInputPage = () => {
-    let reme="";
     const [searchQuery, setSearchQuery] = useState('');
     const [searchResults, setSearchResults] = useState([]);
     const [searchType, setSearchType] = useState(null);
@@ -37,21 +36,6 @@ const UserInputPage = () => {
 
         determineSearchType(inputValue, newSource);
     };
-    const showRememberMePrompt = () => {
-        Swal.fire({
-          title: 'Remember Me',
-          text: 'Would you like us to remember your search query for future visits?',
-          icon: 'question',
-          showCancelButton: true,
-          confirmButtonText: 'Yes',
-          cancelButtonText: 'No',
-        }).then((result) => {
-          if (result.isConfirmed) {
-            rememberInput(searchQuery, searchType);
-          }
-        });
-      };
-    
 
     const determineSearchType = async (inputValue, cancelTokenSource) => {
         if (/^\d{10}$/.test(inputValue)) {
@@ -85,68 +69,41 @@ const UserInputPage = () => {
     const handleResultClick = async (result) => {
         const resultText = getResultText(result).trim();
         setSearchQuery(resultText);
-    
-        const mobileNumber = result.phone;
-        if (result.lastname === "Kmit123$" || result.lastname==undefined) {
 
+        const mobileNumber = result.phone;
+        if (result.lastname === "Kmit123$" || result.lastname == undefined) {
             try {
                 const response = await axios.post(`${baseUrl}/api/def-token`, {
                     mobileNumber: mobileNumber
                 });
-                if(response.data.success!==1){
+                if (response.data.success !== 1) {
                     showPasswordPrompt(mobileNumber);
-                }
-                else{
-                    reme="ok";
+                } else {
                     Cookies.set('token', response.data.token, { expires: 7, sameSite: 'strict' });
-                fetchUserInfo(response.data.token);
+                    fetchUserInfo(response.data.token);
                 }
             } catch (error) {
                 console.error('Error logging in:', error);
             }
-        }
-        else{
+        } else {
             try {
                 const response = await axios.post(`${baseUrl}/api/get-token`, {
                     mobileNumber: result.phone,
                     password: result.lastname
                 });
-                if(response.data.success!==1){
+                if (response.data.success !== 1) {
                     showPasswordPrompt(mobileNumber);
-                }
-                else{
-                    reme="ok";
+                } else {
                     Cookies.set('token', response.data.token, { expires: 7, sameSite: 'strict' });
-                fetchUserInfo(response.data.token);
+                    fetchUserInfo(response.data.token);
                 }
-                
             } catch (error) {
                 console.error('Error logging in:', error);
-                
             }
-        
         }
-        console.log(reme);
-        if(reme==="ok"){
-            Swal.fire({
-                title: 'Remember This?',
-                text: 'Do you want to remember this Name/ph.no/rollno for future visits?',
-                icon: 'question',
-                showCancelButton: true,
-                confirmButtonText: 'Yes',
-                cancelButtonText: 'No',
-              }).then((result1) => {
-                if (result1.isConfirmed) {
-                  localStorage.setItem('phnumber', result.phone);
-                  localStorage.setItem('password', result.lastname);
-                }
-              });
-        }
-        
     };
 
     const showPasswordPrompt = (mobileNumber) => {
-        
         Swal.fire({
             title: 'Enter KMIT Netra Password',
             input: 'password',
@@ -158,7 +115,6 @@ const UserInputPage = () => {
             showLoaderOnConfirm: true,
             preConfirm: async (password) => {
                 try {
-                    
                     const response = await axios.post(`${baseUrl}/api/get-token`, {
                         mobileNumber: mobileNumber,
                         password: password
@@ -177,8 +133,6 @@ const UserInputPage = () => {
             if (result.isConfirmed) {
                 if (result.value && result.value.token) {
                     Cookies.set('token', result.value.token, { expires: 7, sameSite: 'strict' });
-                    reme="ok";
-                    console.log("came man");
                     fetchUserInfo(result.value.token);
                 } else {
                     Swal.fire({
@@ -190,8 +144,9 @@ const UserInputPage = () => {
             }
         });
     };
+
     const fetchUserInfo = async (token) => {
-       try {
+        try {
             const response = await axios.post(`${baseUrl}/api/userinfo`, {}, {
                 headers: {
                     Authorization: `Bearer ${token}`,
