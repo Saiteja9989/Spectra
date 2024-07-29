@@ -146,6 +146,7 @@ const UserInputPage = () => {
     };
 
     const fetchUserInfo = async (token) => {
+        console.log("fetching response:");
         try {
             const response = await axios.post(`${baseUrl}/api/userinfo`, {}, {
                 headers: {
@@ -154,11 +155,13 @@ const UserInputPage = () => {
                 }
             });
 
-            if (response.data && response.data.success) {
-                const { rollno } = response.data.user;
+            if (response.data) {
+                const { rollno } = response.data.rollno;
+                localStorage.setItem('rollno',rollno);
                 Cookies.set('rollno', rollno, { expires: 7, sameSite: 'strict' });
                 navigate('/user');
-            } else {
+             }
+              else {
                 Swal.fire({
                     icon: 'error',
                     title: 'Failed to Retrieve User Info',
