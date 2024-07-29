@@ -13,7 +13,6 @@ router.post('/internalResultData', async (req, res) => {
       const response = await axios.get('http://teleuniv.in/trinetra/pages/lib/student_ajaxfile.php', {
         params: { mid, rollno }
       });
-      
       res.send(response.data);
     } catch (error) {
       console.error('Error fetching internal result data:', error);
