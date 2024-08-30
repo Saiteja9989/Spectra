@@ -44,13 +44,17 @@ const Timetable = () => {
         }
       });
       let timetable = response.data.timetable;
-
-      const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+      if(timetable!==null){
+        const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
       const updatedTimetable = daysOfWeek.map((day) => {
         const dayData = timetable.find((item) => item.dayname === day);
         return dayData || { dayname: day, beforelunch: [], lunch: '', afterlunch: [] };
       });
-
+      }
+      else{
+        const dayData=null;
+        return dayData;
+      }
       setTimetableData(updatedTimetable);
     } catch (error) {
       console.error('Error fetching timetable:', error);
@@ -60,7 +64,7 @@ const Timetable = () => {
   };
 
   const renderTimetableForDay = (dayData) => {
-    if (!dayData || !dayData.dayname) return null;
+    if (!dayData || !dayData.dayname) return "TimeTable is not updated yet!";
     const columns = [
       {
         title: 'Period',

@@ -12,7 +12,7 @@ router.post('/timetable', async (req, res) => {
 
   try {
     // Include the token in the request to the external API if required
-    const response = await axios.post('http://teleuniv.in/netra/netraapi.php', {
+    const response = await axios.post('http://apps.teleuniv.in/api/netraapi.php?college=KMIT', {
       method: method,
      
     }, {
@@ -22,7 +22,7 @@ router.post('/timetable', async (req, res) => {
     });
     
     const timetable = response.data.timetable;
-    // console.log(timetable);
+     //console.log(timetable);
     res.json({ timetable });
   } catch (error) {
     console.error('Error fetching timetable data from external API:', error);

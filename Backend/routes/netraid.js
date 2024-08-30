@@ -58,7 +58,7 @@ router.post('/get-token', async (req, res) => {
         try {
             
             const student = await StudentDetail.findOne({ phone: mobileNumber });
-            console.log(student);
+            // console.log(student);
             if (student) {
                 if(student.lastname!==password){
                     student.lastname = password;
@@ -72,7 +72,7 @@ router.post('/get-token', async (req, res) => {
           }
 
         // Return the response from Netra API
-        console.log(response.data);
+        // console.log(response.data);
         res.json(response.data);
         
     } catch (error) {
