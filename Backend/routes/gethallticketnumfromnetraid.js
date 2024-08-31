@@ -16,7 +16,7 @@ router.post('/netraqr', async (req, res) => {
   try {
     // Make a request to the external API with the provided method and token
     const response = await axios.post(
-      'http://teleuniv.in/netra/netraapi.php',
+      'http://apps.teleuniv.in/api/netraapi.php?college=KMIT',
       { method },
       {
         headers: {

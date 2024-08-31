@@ -10,7 +10,7 @@ router.post('/def-token', async (req, res) => {
 
     try {
         // Send API request to Netra login.php
-        const response = await axios.post('http://teleuniv.in/netra/auth/login.php', {
+        const response = await axios.post('http://apps.teleuniv.in/api/auth/netralogin.php?college=KMIT', {
             mobilenumber: mobileNumber,
             password: "Kmit123$"
         }, {
@@ -33,7 +33,7 @@ router.post('/def-token', async (req, res) => {
             return res.status(500).json({ error: 'Error fetching profile views from database' });
           }
         
-        
+        // console.log(response.data)
         res.json(response.data);
         
     } catch (error) {
@@ -47,7 +47,7 @@ router.post('/get-token', async (req, res) => {
 
     try {
         // Send API request to Netra login.php
-        const response = await axios.post('http://teleuniv.in/netra/auth/login.php', {
+        const response = await axios.post('http://apps.teleuniv.in/api/auth/netralogin.php?college=KMIT', {
             mobilenumber: mobileNumber,
             password: password
         }, {

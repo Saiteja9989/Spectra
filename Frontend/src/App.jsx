@@ -9,7 +9,6 @@ import FeedbackForm from './components/Feedback';
 import AboutUs from './AboutUs';
 import Netraqr from './components/Netraqr';
 import ReactGA from 'react-ga';
-import Cookies from 'js-cookie'; 
 import axios from 'axios';
 import { baseUrl } from './baseurl';
 import Swal from 'sweetalert2';
@@ -20,20 +19,23 @@ const App = () => {
     const [token, setToken] = useState(null); 
     const [password, setPassword] = useState('');
     const [phnumber, setphnumber] = useState('');
+
     useEffect(() => {
-    const storedPassword = localStorage.getItem('password');
-    const storedphnumber = localStorage.getItem('phnumber');
-    if (storedPassword) {
-      setPassword(storedPassword);
-      setphnumber(storedphnumber);
-    }
+        const storedPassword = localStorage.getItem('password');
+        const storedphnumber = localStorage.getItem('phnumber');
+        if (storedPassword) {
+            setPassword(storedPassword);
+            setphnumber(storedphnumber);
+        }
     }, []);
+
     useEffect(() => {
-        const storedToken = Cookies.get('token');
+        const storedToken = localStorage.getItem('token');
         if (storedToken) {
             setToken(storedToken);
         }
     }, []);
+
     const showPasswordPrompt = (mobileNumber) => {
         Swal.fire({
             title: 'Enter KMIT Netra Password',
@@ -46,28 +48,22 @@ const App = () => {
             showLoaderOnConfirm: true,
             preConfirm: async (password) => {
                 try {
-                    // Send API request to get token
                     const response = await axios.post(`${baseUrl}/api/get-token`, {
                         mobileNumber: mobileNumber,
                         password: password
                     });
 
-                    return response.data; // Return response data to handle in then
+                    return response.data;
                 } catch (error) {
                     console.error('Error logging in:', error);
-                    Swal.showValidationMessage(
-                        `Login failed: ${error}`
-                    );
+                    Swal.showValidationMessage(`Login failed: ${error}`);
                 }
             },
             allowOutsideClick: () => !Swal.isLoading()
         }).then((result) => {
             if (result.isConfirmed) {
-               
                 if (result.value && result.value.token) {
-                    Cookies.set('token', result.value.token, { expires: 7, sameSite: 'strict' });
-                    localStorage.setItem('cookie', result.value.token);
-                    // Fetch user info and store rollno in cookies
+                    localStorage.setItem('token', result.value.token);
                     fetchUserInfo(result.value.token);
                 } else {
                     Swal.fire({
@@ -79,85 +75,74 @@ const App = () => {
             }
         });
     };
+
     const fetchUserInfo = async (token) => {
         try {
-             const response = await axios.post(`${baseUrl}/api/userinfo`, {}, {
-                 headers: {
-                     Authorization: `Bearer ${token}`,
-                     'Content-Type': 'application/json'
-                 }
-             });
- 
-             if (response.data && response.data.success) {
-                 const { rollno } = response.data.user;
- 
-                 // Store rollno in cookies
-                 Cookies.set('rollno', rollno, { expires: 7, sameSite: 'strict' });
+            const response = await axios.post(`${baseUrl}/api/userinfo`, {}, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
 
- 
-                 // Redirect to /user page
-                 
-             } else {
-                 Swal.fire({
-                     icon: 'error',
-                     title: 'Failed to Retrieve User Info',
-                     text: 'Could not fetch user information from Netra API.',
-                 });
-             }
-         } catch (error) {
-             console.error('Error fetching user info:', error);
-             Swal.fire({
-                 icon: 'error',
-                 title: 'Error',
-                 text: 'Failed to fetch user information.',
-             });
-         }
-     };
+            if (response.data && response.data.success) {
+                const { rollno } = response.data.user;
+                localStorage.setItem('rollno', rollno);
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Failed to Retrieve User Info',
+                    text: 'Could not fetch user information from Netra API.',
+                });
+            }
+        } catch (error) {
+            console.error('Error fetching user info:', error);
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Failed to fetch user information.',
+            });
+        }
+    };
+
     const renderDashboard = async () => {
-       const pas2=localStorage.getItem("password");
-        if (pas2===undefined) {
+        const storedPassword = localStorage.getItem('password');
+        if (!storedPassword) {
             return false;
         } else {
             try {
-                console.log("wejfnew");
                 const response = await axios.post(`${baseUrl}/api/get-token`, {
                     mobileNumber: phnumber,
-                    password: password
+                    password: storedPassword
                 });
-                if(response.data.message==="Invalid Password!"){
-                    showPasswordPrompt(phnumber);
-                }
-                else{
-                    console.log("cookie undone");
-                    Cookies.set('token', response.data.token);
-                    localStorage.setItem('cookie',response.data.token);
 
-                fetchUserInfo(response.data.token);
+                if (response.data.message === "Invalid Password!") {
+                    showPasswordPrompt(phnumber);
+                } else {
+                    localStorage.setItem('token', response.data.token);
+                    fetchUserInfo(response.data.token);
                 }
-                
             } catch (error) {
                 console.error('Error logging in:', error);
-                
             }
-            console.log("sdf");
             return true;
-            
         }
-      };
-      const rendercomponent=()=>{
-        const gh=renderDashboard();
-        if(!gh){
-            return <SearchPage token={token}/>;
+    };
+
+    const renderComponent = async () => {
+        const isDashboard = await renderDashboard();
+        if (!isDashboard) {
+            return <SearchPage token={token} />;
+        } else {
+            const storedToken = localStorage.getItem('token');
+            return <Dashboard token={storedToken} />;
         }
-        else{
-            const token1=localStorage.getItem("cookie");
-            return <Dashboard token={token1} />
-        }
-      }
+    };
+
     return (
         <Router>
             <Routes>
-                <Route path="/" element={rendercomponent()} />
+                <Route path="/" element={renderComponent()} />
                 <Route path="/search" element={<SearchPage token={token} />} />
                 <Route path="/user" element={<Dashboard token={token} />} />
                 <Route path="/attendance" element={<AttendancePage token={token} />} />

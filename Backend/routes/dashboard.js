@@ -63,22 +63,22 @@ router.post('/profile', async (req, res) => {
 
 router.post('/userinfo',async(req,res)=>{
   const token = req.headers.authorization && req.headers.authorization.split(' ')[1]; 
+  // console.log(token)
   try {
-    const response = await axios.post('http://apps.teleuniv.in/api/auth/user-info.php', {
-    }, {
-      headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json'
-      }
+    const response = await axios.post('http://apps.teleuniv.in/api/auth/user-info.php', {}, {
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+        }
     });
-    console.log(response.data);
+    console.log("API Response:", response.data);
     const userData = response.data;
     res.json(userData);
-    console.log(userData);
-  } catch (apiError) {
+} catch (apiError) {
     console.error('Error fetching user data from back-end API:', apiError);
     res.status(500).json({ error: 'Internal Server Error' });
-  }
+}
+
 })
 
 router.post('/attendance', async (req, res) => {

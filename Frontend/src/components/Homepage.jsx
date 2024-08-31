@@ -79,6 +79,7 @@ const UserInputPage = () => {
                 if (response.data.success !== 1) {
                     showPasswordPrompt(mobileNumber);
                 } else {
+                    
                     Cookies.set('token', response.data.token, { expires: 7, sameSite: 'strict' });
                     fetchUserInfo(response.data.token);
                 }
@@ -147,6 +148,7 @@ const UserInputPage = () => {
 
     const fetchUserInfo = async (token) => {
         console.log("fetching response:");
+        // console.log(token)
         try {
             const response = await axios.post(`${baseUrl}/api/userinfo`, {}, {
                 headers: {
@@ -156,7 +158,9 @@ const UserInputPage = () => {
             });
 
             if (response.data) {
-                const { rollno } = response.data.rollno;
+                console.log(response.data)
+                const { rollno } = response.data;
+                console.log(rollno);
                 localStorage.setItem('rollno',rollno);
                 Cookies.set('rollno', rollno, { expires: 7, sameSite: 'strict' });
                 navigate('/user');
