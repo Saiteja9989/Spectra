@@ -13,13 +13,13 @@ router.post('/internalResultData', async (req, res) => {
   try {
     const response = await axios.get('http://teleuniv.in/trinetra/pages/lib/student_ajaxfile.php', {
       params: { mid, rollno },
-      headers: {
-        'Cookie': '_ga=GA1.2.128655953.1713779717; _ga_1XGBKWGPY0=GS1.1.1713779717.1.0.1713779718.0.0.0',
-        'Referer': `http://teleuniv.in/trinetra/pages/templates/wrapper/studentmanagement/internalmarks_app.php?sid=${rollno}`
-      },
+      // headers: {
+      //   'Cookie': '_ga=GA1.2.128655953.1713779717; _ga_1XGBKWGPY0=GS1.1.1713779717.1.0.1713779718.0.0.0',
+      //   'Referer': `http://teleuniv.in/trinetra/pages/templates/wrapper/studentmanagement/internalmarks_app.php?sid=${rollno}`
+      // },
     });
 
-    console.log(response.data); // Log the response data
+    // console.log(response.data); // Log the response data
     res.send(response.data);
   } catch (error) {
     console.error('Error fetching internal result data:', error);

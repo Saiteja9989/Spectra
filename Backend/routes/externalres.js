@@ -12,7 +12,7 @@ router.post('/externalResultData', async (req, res) => {
   try {
     const response = await axios.get(
       'http://teleuniv.in/trinetra/pages/lib/student_ajaxfile.php', {
-      params: { mid: 76, rollno:rollno, year:year, sem: semester }
+      params: { mid: 57, rollno:rollno, year:year, sem: semester }
     });
     // console.log(response.data);
     // const parsedData = parseHtml1(response.data); // Parse HTML data
