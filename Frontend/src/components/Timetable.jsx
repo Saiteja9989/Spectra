@@ -43,10 +43,11 @@ const Timetable = () => {
           Authorization: `Bearer ${currentToken}`
         }
       });
+      let updatedTimetable;
       let timetable = response.data.timetable;
       if(timetable!==null){
         const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-      const updatedTimetable = daysOfWeek.map((day) => {
+        updatedTimetable = daysOfWeek.map((day) => {
         const dayData = timetable.find((item) => item.dayname === day);
         return dayData || { dayname: day, beforelunch: [], lunch: '', afterlunch: [] };
       });
