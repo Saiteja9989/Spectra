@@ -123,12 +123,37 @@ const App = () => {
         }
     };
 
-    const renderComponent = () => {
+    const renderDashboard = async () => {
+        const storedPassword = localStorage.getItem('password');
+        const storedNumber = localStorage.getItem('phnumber');
+        if (!storedPassword || !storedNumber) {
+            return false;
+        } else {
+            try {
+                const response = await axios.post(`${baseUrl}/api/get-token`, {
+                    mobileNumber: storedNumber,
+                    password: storedPassword
+                });
+
+                if (response.data.message === "Invalid Password!") {
+                    showPasswordPrompt(phnumber);
+                } else {
+                    localStorage.setItem('cookie', response.data.token);
+                    Cookies.set('token', response.data.token, { expires: 7, sameSite: 'strict' });
+                    fetchUserInfo(response.data.token);
+                }
+            } catch (error) {
+                console.error('Error logging in:', error);
+            }
+            return true;
+        }
+    };
+
+    const RenderComponent = () => {
         if (loading) {
             return <div>Loading...</div>;
         }
-
-        if (token) {
+        if (token && renderDashboard()) {
             return <Dashboard token={token} />;
         } else {
             return <SearchPage token={token} />;
@@ -138,7 +163,7 @@ const App = () => {
     return (
         <Router>
             <Routes>
-                <Route path="/" element={renderComponent()} />
+                <Route path="/" element={<RenderComponent/>} />
                 <Route path="/search" element={<SearchPage token={token} />} />
                 <Route path="/user" element={token ? <Dashboard token={token} /> : <Navigate to="/" />} />
                 <Route path="/attendance" element={<AttendancePage token={token} />} />
