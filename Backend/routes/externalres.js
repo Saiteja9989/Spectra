@@ -14,7 +14,7 @@ router.post('/externalResultData', async (req, res) => {
       'http://teleuniv.in/trinetra/pages/lib/student_ajaxfile.php', {
       params: { mid: 76, rollno:rollno, year:year, sem: semester }
     });
-    console.log(response.data);
+    // console.log(response.data);
     // const parsedData = parseHtml1(response.data); // Parse HTML data
     res.json(response.data);
   } catch (error) {

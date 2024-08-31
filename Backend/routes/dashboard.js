@@ -71,10 +71,11 @@ router.post('/userinfo',async(req,res)=>{
             'Content-Type': 'application/json'
         }
     });
-    console.log("API Response:", response.data);
+    // console.log(response.data);
     const userData = response.data;
     res.json(userData);
-} catch (apiError) {
+    // console.log(userData);
+  } catch (apiError) {
     console.error('Error fetching user data from back-end API:', apiError);
     res.status(500).json({ error: 'Internal Server Error' });
 }
@@ -96,7 +97,7 @@ router.post('/attendance', async (req, res) => {
         }
       });
   
-      console.log(response.data);
+      // console.log(response.data);
       const { attandance, overallattperformance } = response.data;
       const data = attandance.dayobjects;
       const data1 = overallattperformance.totalpercentage;

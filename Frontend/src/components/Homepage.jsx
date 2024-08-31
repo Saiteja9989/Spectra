@@ -166,11 +166,11 @@ const UserInputPage = () => {
                 navigate('/user');
              }
               else {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Failed to Retrieve User Info',
-                    text: 'Could not fetch user information from Netra API.',
-                });
+                // Swal.fire({
+                //     icon: 'error',
+                //     title: 'Failed to Retrieve User Info',
+                //     text: 'Could not fetch user information from Netra API.',
+                // });
             }
         } catch (error) {
             console.error('Error fetching user info:', error);
