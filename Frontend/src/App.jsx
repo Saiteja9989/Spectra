@@ -13,9 +13,7 @@ import Cookies from 'js-cookie';
 import axios from 'axios';
 import { baseUrl } from './baseurl';
 import Swal from 'sweetalert2';
-
 ReactGA.initialize('G-8TEK79JG7J');
-
 const App = () => {
     const [token, setToken] = useState(Cookies.get('token') || null);
     const [loading, setLoading] = useState(true);
@@ -156,7 +154,7 @@ const App = () => {
         if (token && renderDashboard()) {
             return <Dashboard token={token} />;
         } else {
-            return <SearchPage token={token} />;
+            return <Navigate to="/search" />
         }
     };
 
