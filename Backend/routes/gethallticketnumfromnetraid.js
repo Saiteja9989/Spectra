@@ -6,15 +6,14 @@ const router = express.Router();
 router.use(bodyParser.json());
 
 router.post('/netraqr', async (req, res) => {
-  const { method } = req.body; // Assuming method is passed in the request body
-  const token = req.headers.authorization && req.headers.authorization.split(' ')[1]; // Extract token from Authorization header
+  const { method } = req.body; 
+  const token = req.headers.authorization && req.headers.authorization.split(' ')[1]; 
 
   if (!token) {
     return res.status(400).json({ error: 'Token is missing' });
   }
 
   try {
-    // Make a request to the external API with the provided method and token
     const response = await axios.post(
       'http://apps.teleuniv.in/api/netraapi.php?college=KMIT',
       { method },
@@ -26,9 +25,8 @@ router.post('/netraqr', async (req, res) => {
       }
     );
 
-    const hallticketno = response.data.hallticketno; // Extract hall ticket number from the response
+    const hallticketno = response.data.hallticketno; 
 
-    // Send the hall ticket number back to the client
     res.json({ hallticketno });
   } catch (error) {
     console.error('Error fetching hall ticket number:', error.message);
