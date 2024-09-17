@@ -27,7 +27,6 @@ const Timetable = () => {
   }, []);
 
   useEffect(() => {
-    // Fetch timetable data whenever token changes
     if (token) {
       fetchData(token);
     }

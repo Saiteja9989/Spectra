@@ -65,10 +65,10 @@ const ProfilePage = () => {
 
       const data = response.data;
       setProfileDetails(data);
-      setIsLoading(false); // Stop loading after data is fetched
+      setIsLoading(false); 
     } catch (error) {
       console.error('Error fetching profile data:', error.response ? error.response.data : error.message);
-      setIsLoading(false); // Stop loading on error
+      setIsLoading(false); 
     }
   };
 
@@ -86,15 +86,15 @@ const ProfilePage = () => {
       setAttendanceData(dayObjects);
       setTwoWeekSessions(twoWeekSessions);
       setAttendancePer(totalPercentage);
-      setIsLoading(false); // Stop loading after data is fetched
+      setIsLoading(false); 
     } catch (error) {
       console.error('Error fetching attendance data:', error);
-      setIsLoading(false); // Stop loading on error
+      setIsLoading(false); 
     }
   };
 
   if (isLoading) {
-    return <Spin size="large" style={{ display: 'block', margin: '100px auto' }} />; // Display loading spinner
+    return <Spin size="large" style={{ display: 'block', margin: '100px auto' }} />; 
   }
 
   return (
