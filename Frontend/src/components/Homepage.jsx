@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import { Input, Card, Row, Avatar, Col, Space, Typography, Spin } from 'antd';
 import axios from 'axios';
 import Swal from 'sweetalert2';
-import Cookies from 'js-cookie'; // Import js-cookie for cookie management
-import { useNavigate } from 'react-router-dom'; // Import useHistory for navigation
-import { baseUrl } from '../baseurl'; // Assuming you have a baseUrl file
+import Cookies from 'js-cookie'; 
+import { useNavigate } from 'react-router-dom'; 
+import { baseUrl } from '../baseurl'; 
 import Loader from './Loader';
 
 const { Text } = Typography;
@@ -15,7 +15,7 @@ const UserInputPage = () => {
     const [searchType, setSearchType] = useState(null);
     const [loading, setLoading] = useState(false);
     const [source, setSource] = useState(null);
-    const navigate = useNavigate(); // Initialize useHistory for navigation
+    const navigate = useNavigate(); 
 
     const handleInputChange = async (e) => {
         const inputValue = e.target.value.toUpperCase();
@@ -121,7 +121,7 @@ const UserInputPage = () => {
                         password: password
                     });
 
-                    return response.data; // Return response data to handle in then
+                    return response.data; 
                 } catch (error) {
                     console.error('Error logging in:', error);
                     Swal.showValidationMessage(

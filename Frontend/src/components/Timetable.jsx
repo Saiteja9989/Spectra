@@ -6,7 +6,7 @@ import './Timetable.css';
 import Loader from './Loader';
 import Navbar from './Navbar';
 import { baseUrl } from '../baseurl';
-import Cookies from 'js-cookie'; // Import js-cookie for cookie management
+import Cookies from 'js-cookie'; 
 
 const { TabPane } = Tabs;
 
@@ -14,11 +14,11 @@ const Timetable = () => {
   const [loading, setLoading] = useState(false);
   const [timetableData, setTimetableData] = useState([]);
   const [selectedDay, setSelectedDay] = useState('Monday');
-  const [token, setToken] = useState(null); // State to hold token
+  const [token, setToken] = useState(null); 
   const parser = new Parser();
 
   useEffect(() => {
-    // Retrieve token from cookies
+    
     const storedToken = Cookies.get('token');
     if (storedToken) {
       setToken(storedToken);
