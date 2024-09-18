@@ -8,14 +8,14 @@ const router = express.Router();
 router.use(bodyParser.json());
 router.post('/profile', async (req, res) => {
   const { method } = req.body;
-  const token = req.headers.authorization && req.headers.authorization.split(' ')[1]; // Extract token from Authorization header
+  const token = req.headers.authorization && req.headers.authorization.split(' ')[1]; 
 
   if (!token) {
     return res.status(400).json({ error: 'Token is missing' });
   }
 
   try {
-    // console.log('Sending request to external API');
+   
     const response = await axios.post('http://apps.teleuniv.in/api/netraapi.php?college=KMIT', {
       method: method,
       
@@ -34,7 +34,7 @@ router.post('/profile', async (req, res) => {
     }
 
     try {
-      // Assuming profileData.hallticketno is the unique identifier for StudentDetail
+      
       const student = await StudentDetail.findOne({ hallticketno: profileData.hallticketno });
       if (student) {
         profileData.psflag = student.psflag;

@@ -1,15 +1,15 @@
-// routes/netraRoutes.js
+
 const express = require('express');
 const axios = require('axios');
 const  StudentDetail=require('../models/studentDetails');
 const router = express.Router();
 
-// Route to get token from Netra API
+
 router.post('/def-token', async (req, res) => {
     const { mobileNumber} = req.body;
 
     try {
-        // Send API request to Netra login.php
+        
         const response = await axios.post('http://apps.teleuniv.in/api/auth/netralogin.php?college=KMIT', {
             mobilenumber: mobileNumber,
             password: "Kmit123$"
@@ -46,7 +46,7 @@ router.post('/get-token', async (req, res) => {
     const { mobileNumber, password } = req.body;
 
     try {
-        // Send API request to Netra login.php
+     
         const response = await axios.post('http://apps.teleuniv.in/api/auth/netralogin.php?college=KMIT', {
             mobilenumber: mobileNumber,
             password: password
@@ -71,7 +71,6 @@ router.post('/get-token', async (req, res) => {
             return res.status(500).json({ error: 'Error fetching profile views from database' });
           }
 
-        // Return the response from Netra API
         // console.log(response.data);
         res.json(response.data);
         
