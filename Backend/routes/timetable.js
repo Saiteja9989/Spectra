@@ -8,10 +8,10 @@ router.use(bodyParser.json());
 
 router.post('/timetable', async (req, res) => {
   const { method } = req.body;
-  const token = req.headers.authorization.split(' ')[1]; // Extract the token from the Authorization header
+  const token = req.headers.authorization.split(' ')[1]; 
 
   try {
-    // Include the token in the request to the external API if required
+    
     const response = await axios.post('http://apps.teleuniv.in/api/netraapi.php?college=KMIT', {
       method: method,
      

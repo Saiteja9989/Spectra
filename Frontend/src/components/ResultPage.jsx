@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import Cookies from 'js-cookie'; // Import js-cookie for cookie management
+import Cookies from 'js-cookie'; 
 import { Row, Col, Tabs } from 'antd';
 import InternalResultComponent from './InternalResultComponent';
 import ExternalResultComponent from './ExternalResultComponent';
@@ -15,7 +15,7 @@ const ResultPage = () => {
   const [totalBacklogs, setTotalBacklogs] = useState(null);
 
   useEffect(() => {
-    const rollno = Cookies.get('rollno'); // Get rollno from cookie
+    const rollno = Cookies.get('rollno'); 
     if (rollno) {
       fetchInternalResultData(rollno);
       fetchExternalResultData(rollno);

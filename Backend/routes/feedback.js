@@ -6,7 +6,7 @@ router.post('/submit/feedback', async (req, res) => {
   const feedbackData = req.body;
   
   try {
-    // Save feedback data to MongoDB
+    
     const feedback = new Feedback(feedbackData);
     await feedback.save();
     
