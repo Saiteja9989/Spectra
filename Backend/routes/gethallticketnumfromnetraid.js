@@ -19,8 +19,10 @@ router.post('/netraqr', async (req, res) => {
       { method },
       {
         headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json'
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+          'Origin': 'http://kmit-netra.teleuniv.in',
+          'Referer': 'http://kmit-netra.teleuniv.in/'
         }
       }
     );

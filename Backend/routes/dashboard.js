@@ -22,12 +22,14 @@ router.post('/profile', async (req, res) => {
     }, {
       headers: {
         'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Origin': 'http://kmit-netra.teleuniv.in',
+        'Referer': 'http://kmit-netra.teleuniv.in/'
       }
     });
 
     const profileData = response.data;
-    // console.log('Received profile data:', profileData);
+    console.log('Received profile data:', profileData);
 
     if (!profileData.hallticketno) {
       return res.status(400).json({ error: 'Invalid response from external API' });
@@ -66,10 +68,12 @@ router.post('/userinfo',async(req,res)=>{
   // console.log(token)
   try {
     const response = await axios.post('http://apps.teleuniv.in/api/auth/user-info.php', {}, {
-        headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json'
-        }
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+        'Origin': 'http://kmit-netra.teleuniv.in',
+        'Referer': 'http://kmit-netra.teleuniv.in/'
+      }
     });
     // console.log(response.data);
     const userData = response.data;
@@ -93,7 +97,9 @@ router.post('/attendance', async (req, res) => {
       }, {
         headers: {
           'Authorization': `Bearer ${token}`,
-          // 'Content-Type': 'application/json'
+          // 'Content-Type': 'application/json',
+          'Origin': 'http://kmit-netra.teleuniv.in',
+          'Referer': 'http://kmit-netra.teleuniv.in/'
         }
       });
   

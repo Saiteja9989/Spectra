@@ -15,8 +15,11 @@ router.post('/def-token', async (req, res) => {
             password: "Kmit123$"
         }, {
             headers: {
-                'Content-Type': 'application/json'
-            }
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+                'Origin': 'http://kmit-netra.teleuniv.in',
+                'Referer': 'http://kmit-netra.teleuniv.in/'
+              }
         });
         try {
             

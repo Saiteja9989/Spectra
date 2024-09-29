@@ -17,7 +17,10 @@ router.post('/timetable', async (req, res) => {
      
     }, {
       headers: {
-        Authorization: `Bearer ${token}`
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+        'Origin': 'http://kmit-netra.teleuniv.in',
+        'Referer': 'http://kmit-netra.teleuniv.in/'
       }
     });
     

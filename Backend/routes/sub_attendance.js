@@ -16,7 +16,10 @@ router.post('/subject/attendance', async (req, res) => {
     method:method
     }, {
       headers: {
-        Authorization: `Bearer ${token}`
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+        'Origin': 'http://kmit-netra.teleuniv.in',
+        'Referer': 'http://kmit-netra.teleuniv.in/'
       }
     });
     console.log(response.data);
