@@ -8,6 +8,7 @@ const router = express.Router();
 router.post('/def-token', async (req, res) => {
     const { mobileNumber} = req.body;
 
+    
     try {
         
         const response = await axios.post('http://apps.teleuniv.in/api/auth/netralogin.php?college=KMIT', {

@@ -15,6 +15,7 @@ router.post('/subject/attendance', async (req, res) => {
     const response = await axios.post('http://apps.teleuniv.in/api/netraapi.php?college=KMIT', {
     method:method
     }, {
+      
       headers: {
         'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json',
