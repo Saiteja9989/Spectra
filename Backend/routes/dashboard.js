@@ -47,7 +47,7 @@ router.post('/profile', async (req, res) => {
     }
 
     try {
-      // Fetch image from profileData.picture URL and convert to base64
+      
       const imageResponse = await axios.get(profileData.picture, { responseType: 'arraybuffer' });
       const imageBuffer = Buffer.from(imageResponse.data, 'binary');
       profileData.picture = imageBuffer.toString('base64');
