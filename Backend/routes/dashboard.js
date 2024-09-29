@@ -16,6 +16,7 @@ router.post('/profile', async (req, res) => {
 
   try {
    
+    
     const response = await axios.post('http://apps.teleuniv.in/api/netraapi.php?college=KMIT', {
       method: method,
       
