@@ -8,7 +8,7 @@ const router = express.Router();
 router.post('/def-token', async (req, res) => {
     const { mobileNumber} = req.body;
 
-    
+
     try {
         
         const response = await axios.post('http://apps.teleuniv.in/api/auth/netralogin.php?college=KMIT', {
@@ -16,12 +16,10 @@ router.post('/def-token', async (req, res) => {
             password: "Kmit123$"
         }, {
             headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json',
-                'Origin': 'http://kmit-netra.teleuniv.in',
-                'Referer': 'http://kmit-netra.teleuniv.in/'
-              }
+                'Content-Type': 'application/json'
+            }
         });
+        console.log("adasdasda:"+response)
         try {
             
             const student = await StudentDetail.findOne({ phone: mobileNumber });
