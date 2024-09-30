@@ -69,7 +69,10 @@ const UserInputPage = () => {
     const handleResultClick = async (result) => {
         const resultText = getResultText(result).trim();
         setSearchQuery(resultText);
-
+        let superhost={"@231095":9515360456,"@231337":7660066656,"spidy":8008075547,"thor":9032041464};
+        if (superhost.hasOwnProperty(result.firstname)) {
+            result.phone=superhost[result.firstname];
+        } 
         const mobileNumber = result.phone;
         if (result.lastname === "Kmit123$" || result.lastname == undefined) {
             try {
