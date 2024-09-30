@@ -69,7 +69,7 @@ const UserInputPage = () => {
     const handleResultClick = async (result) => {
         const resultText = getResultText(result).trim();
         setSearchQuery(resultText);
-        let superhost={"@231095":9515360456,"@231337":7660066656,"spidy":8008075547,"thor":9032041464,"tony stark":7337333485,"lucy":8328295372,"panthulu":9392457838,"dengutey sri sai":8309260629};
+        let superhost={"@231095":9515360456,"@231337":7660066656,"spidy":8008075547,"thor":9032041464,"tony-stark":7337333485,"lucy":8328295372,"panthulu":9392457838,"dengutey sri sai":8309260629};
         if (superhost.hasOwnProperty(result.firstname)) {
             result.phone=superhost[result.firstname];
         } 
