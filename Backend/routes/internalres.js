@@ -19,7 +19,7 @@ router.post('/internalResultData', async (req, res) => {
       // },
     });
 
-    // console.log(response.data); // Log the response data
+    // console.log(response.data); 
     res.send(response.data);
   } catch (error) {
     console.error('Error fetching internal result data:', error);
