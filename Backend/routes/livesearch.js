@@ -22,7 +22,7 @@ router.post('/search', async (req, res) => {
       searchCriteria = {
         $or: [
           { firstname: { $regex: searchInput, $options: 'i' } },
-          { lastname: { $regex: searchInput, $options: 'i' } }
+          
         ]
       };
     }
