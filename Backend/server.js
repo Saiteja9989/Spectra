@@ -19,6 +19,13 @@ const fetchqr = require('./routes/fetchqr');
 const app = express();
 
 // CORS configuration
+
+app.use(cors({
+  origin: 'https://spectra-ewa1.vercel.app', // Allow specific origin
+  methods: ['GET', 'POST'],                  // Allow specific HTTP methods
+  credentials: true                          // Allow credentials if needed
+}));
+
 app.use(cors({
   origin: '*',
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
