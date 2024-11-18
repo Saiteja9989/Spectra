@@ -20,14 +20,13 @@ const app = express();
 
 // CORS configuration
 
-app.use(cors({
-  origin: 'https://spectra-ewa1.vercel.app',  // Allow requests from this domain
-  methods: 'GET, POST, PUT, DELETE',           // Allow specific HTTP methods
-  allowedHeaders: 'Content-Type,Authorization', // Allow specific headers
-  credentials: true                           // Allow credentials if needed
-}));
+const corsOptions = {
+  origin: 'https://spectra-ewa1.vercel.app', // Allow only this specific domain
+  methods: ['GET', 'POST'],
+  credentials: true,
+};
 
-app.use((req, res, next) => { res.header('Access-Control-Allow-Origin', 'https://spectra-ewa1-o3jozn74j-kasoju-saitejas-projects.vercel.app'); res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS'); res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization'); next(); });
+app.use(cors(corsOptions)); // Apply the CORS middleware
 
 app.use(cors({
   origin: '*',
