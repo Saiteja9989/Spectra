@@ -21,11 +21,11 @@ const app = express();
 // CORS configuration
 
 const corsOptions = {
-  origin: 'https://spectra-ewa1.vercel.app', // Allow only this specific domain
+  origin: 'https://spectra-ewa1.vercel.app', // Allow only this frontend domain
   methods: ['GET', 'POST'],
-  credentials: true,
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true, // Include credentials (cookies, auth headers, etc.)
 };
-
 app.use(cors(corsOptions)); // Apply the CORS middleware
 
 app.use(cors({
