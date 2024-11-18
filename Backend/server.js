@@ -21,9 +21,10 @@ const app = express();
 // CORS configuration
 
 app.use(cors({
-  origin: 'https://spectra-ewa1.vercel.app', // Allow specific origin
-  methods: ['GET', 'POST'],                  // Allow specific HTTP methods
-  credentials: true                          // Allow credentials if needed
+  origin: 'https://spectra-ewa1.vercel.app',  // Allow requests from this domain
+  methods: 'GET, POST, PUT, DELETE',           // Allow specific HTTP methods
+  allowedHeaders: 'Content-Type,Authorization', // Allow specific headers
+  credentials: true                           // Allow credentials if needed
 }));
 
 app.use(cors({
