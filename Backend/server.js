@@ -27,6 +27,8 @@ app.use(cors({
   credentials: true                           // Allow credentials if needed
 }));
 
+app.use((req, res, next) => { res.header('Access-Control-Allow-Origin', 'https://spectra-ewa1-o3jozn74j-kasoju-saitejas-projects.vercel.app'); res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS'); res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization'); next(); });
+
 app.use(cors({
   origin: '*',
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
