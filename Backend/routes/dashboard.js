@@ -29,12 +29,16 @@ router.post('/profile', async (req, res) => {
       }
     });
 
+    
+
     const profileData = response.data;
     console.log('Received profile data:', profileData);
 
     if (!profileData.hallticketno) {
       return res.status(400).json({ error: 'Invalid response from external API' });
     }
+
+
 
     try {
       
@@ -63,6 +67,8 @@ router.post('/profile', async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
+
+
 
 router.post('/userinfo',async(req,res)=>{
   const token = req.headers.authorization && req.headers.authorization.split(' ')[1]; 
@@ -98,7 +104,6 @@ router.post('/attendance', async (req, res) => {
       }, {
         headers: {
           'Authorization': `Bearer ${token}`,
-          // 'Content-Type': 'application/json',
           'Origin': 'http://kmit-netra.teleuniv.in',
           'Referer': 'http://kmit-netra.teleuniv.in/'
         }

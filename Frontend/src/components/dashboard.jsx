@@ -149,9 +149,6 @@ const ProfilePage = () => {
               <div style={{ minHeight: '400px', textAlign: 'center', marginTop: '20px' }}>
                 <div className="Atten1" style={{ display: 'inline-block', marginRight: '100px' }}>
                   <AttendanceTracker attendancePer={attendancePer} />
-                  <div style={{ marginTop: '30px' }}>
-                    <p style={{ color: 'gray', fontStyle: 'italic' }}>Note: Attendance prediction will be coming soon</p>
-                  </div>
                 </div>
                 <div className="session1" style={{ textAlign: 'center', display: 'inline-block', verticalAlign: 'top', marginLeft: '20px' }}>
                   <Title level={4}>Latest Attendance</Title>
