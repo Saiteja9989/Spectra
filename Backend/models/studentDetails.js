@@ -42,7 +42,7 @@ const studentSchema = new mongoose.Schema({
     required: true
   },
   parentphone: {
-    type: Number,
+    type: String,
     required: true
   },
   currentyear: {

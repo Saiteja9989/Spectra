@@ -32,7 +32,7 @@ router.post('/profile', async (req, res) => {
     
 
     const profileData = response.data;
-    console.log('Received profile data:', profileData);
+    // console.log('Received profile data:', profileData);
 
     if (!profileData.hallticketno) {
       return res.status(400).json({ error: 'Invalid response from external API' });

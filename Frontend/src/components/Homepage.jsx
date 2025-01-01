@@ -69,45 +69,23 @@ const UserInputPage = () => {
     const handleResultClick = async (result) => {
         const resultText = getResultText(result).trim();
         setSearchQuery(resultText);
-        let superhost={"@231095":9515360456,"😁":7660066656,"spidy":8008075547,"thor":9032041464,"tony-stark":7337333485,"venom":8328295372,"RDJ-panthulu":9392457838,"@231454":8309260629,"Ant-man":9391332588,"@Thala_son":9381150341,"@HelloSai":6303895820};
-        if (superhost.hasOwnProperty(result.firstname)) {
-            result.phone=superhost[result.firstname];
-        } 
-        const mobileNumber = result.phone;
-        if (result.lastname === "Kmit123$" || result.lastname == undefined) {
-            try {
-                const response = await axios.post(`${baseUrl}/api/def-token`, {
-                    mobileNumber: mobileNumber
-                });
-                if (response.data.success !== 1) {
-                    showPasswordPrompt(mobileNumber);
-                } else {
-                    
-                    Cookies.set('token', response.data.token, { expires: 7, sameSite: 'strict' });
-                    fetchUserInfo(response.data.token);
-                }
-            } catch (error) {
-                console.error('Error logging in:', error);
+        try {
+            const response = await axios.post(`${baseUrl}/api/def-token`, {
+                id:result._id
+            });
+            if (response.data.success !== 1) {
+                showPasswordPrompt(result);
+            } else {
+                
+                Cookies.set('token', response.data.token, { expires: 7, sameSite: 'strict' });
+                fetchUserInfo(response.data.token,result._id);
             }
-        } else {
-            try {
-                const response = await axios.post(`${baseUrl}/api/get-token`, {
-                    mobileNumber: result.phone,
-                    password: result.lastname
-                });
-                if (response.data.success !== 1) {
-                    showPasswordPrompt(mobileNumber);
-                } else {
-                    Cookies.set('token', response.data.token, { expires: 7, sameSite: 'strict' });
-                    fetchUserInfo(response.data.token);
-                }
-            } catch (error) {
-                console.error('Error logging in:', error);
-            }
+        } catch (error) {
+            console.error('Error logging in:', error);
         }
     };
 
-    const showPasswordPrompt = (mobileNumber) => {
+    const showPasswordPrompt = (result) => {
         Swal.fire({
             title: 'Enter KMIT Netra Password',
             input: 'password',
@@ -120,7 +98,7 @@ const UserInputPage = () => {
             preConfirm: async (password) => {
                 try {
                     const response = await axios.post(`${baseUrl}/api/get-token`, {
-                        mobileNumber: mobileNumber,
+                        id:result._id,
                         password: password
                     });
 
@@ -135,9 +113,11 @@ const UserInputPage = () => {
             allowOutsideClick: () => !Swal.isLoading()
         }).then((result) => {
             if (result.isConfirmed) {
+                console.log(result);
                 if (result.value && result.value.token) {
+                    localStorage.setItem('cookie',result.value.token);
                     Cookies.set('token', result.value.token, { expires: 7, sameSite: 'strict' });
-                    fetchUserInfo(result.value.token);
+                    fetchUserInfo(result.value.token,result._id);
                 } else {
                     Swal.fire({
                         icon: 'error',
@@ -149,7 +129,7 @@ const UserInputPage = () => {
         });
     };
 
-    const fetchUserInfo = async (token) => {
+    const fetchUserInfo = async (token,id) => {
         console.log("fetching response:");
         // console.log(token)
         try {
@@ -166,9 +146,23 @@ const UserInputPage = () => {
                 console.log(rollno);
                 localStorage.setItem('rollno',rollno);
                 Cookies.set('rollno', rollno, { expires: 7, sameSite: 'strict' });
+                console.log("nooooo");
+                Swal.fire({
+                    title: 'Remember This?',
+                    text: 'Do you want to remember this Name/ph.no/rollno for future visits?',
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonText: 'Yes',
+                    cancelButtonText: 'No',
+                  }).then((result1) => {
+                    if (result1.isConfirmed) {
+                      localStorage.setItem('_id', id);
+                    }
+                  });
                 navigate('/user');
              }
               else {
+                console.log("emo");
                 // Swal.fire({
                 //     icon: 'error',
                 //     title: 'Failed to Retrieve User Info',
