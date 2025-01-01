@@ -147,19 +147,21 @@ const UserInputPage = () => {
                 localStorage.setItem('rollno',rollno);
                 Cookies.set('rollno', rollno, { expires: 7, sameSite: 'strict' });
                 console.log("nooooo");
-                Swal.fire({
-                    title: 'Remember This?',
-                    text: 'Do you want to remember this Name/ph.no/rollno for future visits?',
-                    icon: 'question',
-                    showCancelButton: true,
-                    confirmButtonText: 'Yes',
-                    cancelButtonText: 'No',
-                  }).then((result1) => {
-                    if (result1.isConfirmed) {
-                      localStorage.setItem('_id', id);
-                    }
-                  });
-                navigate('/user');
+                navigate('/user'); // Navigate immediately to /user
+                setTimeout(() => {
+                    Swal.fire({
+                        title: 'Remember This?',
+                        text: 'Do you want to remember this Name/ph.no/rollno for future visits?',
+                        icon: 'question',
+                        showCancelButton: true,
+                        confirmButtonText: 'Yes',
+                        cancelButtonText: 'No',
+                    }).then((result1) => {
+                        if (result1.isConfirmed) {
+                            localStorage.setItem('_id', id);
+                        }
+                    });
+                }, 200);
              }
               else {
                 console.log("emo");
