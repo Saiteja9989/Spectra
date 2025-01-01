@@ -25,7 +25,8 @@ const App = () => {
             const storedPassword = localStorage.getItem('_id');
 
             if (storedPassword) {
-                if (!token) {
+                if (true) {
+                    console.log("hello");
                     try {
                         const response = await axios.post(`${baseUrl}/api/def-token`, {
                             id: storedPassword
@@ -52,7 +53,7 @@ const App = () => {
         };
 
         fetchToken();
-    }, [token]);
+    }, []);
 
     const RenderComponent = () => {
         const storedPassword = localStorage.getItem('_id');
