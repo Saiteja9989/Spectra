@@ -218,7 +218,7 @@ const UserInputPage = () => {
                     <Text type="secondary" style={{ fontSize: '1.1rem' }}>Access Your Academic Profile, Attendance, Results....!</Text>
                 </Col>
                 
-                <BirthdayPhotoFrame/>
+                {/* <BirthdayPhotoFrame/> */}
             </Row>
             <Row justify="center">
                 <Col span={24}>
