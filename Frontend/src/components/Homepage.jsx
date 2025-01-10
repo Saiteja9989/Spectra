@@ -6,6 +6,7 @@ import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom'; 
 import { baseUrl } from '../baseurl'; 
 import Loader from './Loader';
+import BirthdayPhotoFrame from './BirthdayPhotoFrame';
 
 const { Text } = Typography;
 
@@ -216,6 +217,8 @@ const UserInputPage = () => {
                 <Col span={24} style={{ textAlign: 'center' }}>
                     <Text type="secondary" style={{ fontSize: '1.1rem' }}>Access Your Academic Profile, Attendance, Results....!</Text>
                 </Col>
+                
+                <BirthdayPhotoFrame/>
             </Row>
             <Row justify="center">
                 <Col span={24}>
