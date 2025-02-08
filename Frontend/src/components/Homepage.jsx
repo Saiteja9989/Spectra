@@ -1,57 +1,53 @@
 import React, { useState } from 'react';
-import { Input,Button, Card, Row, Avatar, Col, Space, Typography, Spin } from 'antd';
+import { Input, Button, Card, Row, Avatar, Col, Space, Typography, Spin } from 'antd';
 import axios from 'axios';
 import Swal from 'sweetalert2';
-import Cookies from 'js-cookie'; 
-import { useNavigate } from 'react-router-dom'; 
-import { baseUrl } from '../baseurl'; 
-import Loader from './Loader';
-import BirthdayPhotoFrame from './BirthdayPhotoFrame';
-// import { Row, Col, Typography, Input, Spin, Space, Card } from 'antd';
-
+import Cookies from 'js-cookie';
+import { useNavigate } from 'react-router-dom';
+import { baseUrl } from '../baseurl';
+import ScrollingText from './ScrollingText';
 const { Text } = Typography;
 
-const ScrollingText = () => {
-    return (
-        <div style={{ 
-            overflow: 'hidden', 
-            whiteSpace: 'nowrap', 
-            background: '#001529', 
-            color: 'white', 
-            padding: '10px 0', 
-            fontFamily: '"Poppins", sans-serif',
-            width: '100vw'
-        }}>
-            <div style={{ 
-                display: 'inline-block', 
-                animation: 'scrollText 15s linear infinite',
-                fontSize: '1rem', // Default font size
-                fontWeight: 'bold',
-                letterSpacing: '0.5px',
-                minWidth: '100%',
-            }}>
-                If your profile or name is not found in the search, we recommend registering on Spectra (especially for first-year students).
-            </div>
-            <style>
-                {`
-                    @keyframes scrollText {
-                        from { transform: translateX(100%); }
-                        to { transform: translateX(-100%); }
-                    }
+// const ScrollingText = () => {
+//     return (
+//         <div style={{
+//             overflow: 'hidden',
+//             whiteSpace: 'nowrap',
+//             background: 'linear-gradient(90deg, #001529, #00284d, #001529)',
+//             color: 'white',
+//             padding: '10px 0',
+//             fontFamily: '"Poppins", sans-serif',
+//             width: '100vw',
+//             boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)'
+//         }}>
+//             <div style={{
+//                 display: 'inline-block',
+//                 animation: 'scrollText 15s linear infinite',
+//                 fontSize: '1rem',
+//                 fontWeight: 'bold',
+//                 letterSpacing: '0.5px',
+//                 minWidth: '100%',
+//             }}>
+//                 If your profile or name is not found in the search, we recommend registering on Spectra (especially for first-year students).
+//             </div>
+//             <style>
+//                 {`
+//                     @keyframes scrollText {
+//                         from { transform: translateX(100%); }
+//                         to { transform: translateX(-100%); }
+//                     }
 
-                    @media screen and (max-width: 768px) {
-                        div {
-                            font-size: 0.9rem; /* Smaller font for mobile */
-                            animation-duration: 15s; /* Slower scrolling on mobile */
-                        }
-                    }
-                `}
-            </style>
-        </div>
-    );
-};
-
-
+//                     @media screen and (max-width: 768px) {
+//                         div {
+//                             font-size: 0.9rem;
+//                             animation-duration: 20s;
+//                         }
+//                     }
+//                 `}
+//             </style>
+//         </div>
+//     );
+// };
 
 const UserInputPage = () => {
     const [searchQuery, setSearchQuery] = useState('');
@@ -59,7 +55,7 @@ const UserInputPage = () => {
     const [searchType, setSearchType] = useState(null);
     const [loading, setLoading] = useState(false);
     const [source, setSource] = useState(null);
-    const navigate = useNavigate(); 
+    const navigate = useNavigate();
 
     const handleInputChange = async (e) => {
         const inputValue = e.target.value.toUpperCase();
@@ -115,14 +111,13 @@ const UserInputPage = () => {
         setSearchQuery(resultText);
         try {
             const response = await axios.post(`${baseUrl}/api/def-token`, {
-                id:result._id
+                id: result._id
             });
             if (response.data.success !== 1) {
                 showPasswordPrompt(result);
             } else {
-                
                 Cookies.set('token', response.data.token, { expires: 7, sameSite: 'strict' });
-                fetchUserInfo(response.data.token,result._id);
+                fetchUserInfo(response.data.token, result._id);
             }
         } catch (error) {
             console.error('Error logging in:', error);
@@ -142,11 +137,11 @@ const UserInputPage = () => {
             preConfirm: async (password) => {
                 try {
                     const response = await axios.post(`${baseUrl}/api/get-token`, {
-                        id:result._id,
+                        id: result._id,
                         password: password
                     });
 
-                    return response.data; 
+                    return response.data;
                 } catch (error) {
                     console.error('Error logging in:', error);
                     Swal.showValidationMessage(
@@ -159,9 +154,9 @@ const UserInputPage = () => {
             if (result.isConfirmed) {
                 console.log(result);
                 if (result.value && result.value.token) {
-                    localStorage.setItem('cookie',result.value.token);
+                    localStorage.setItem('cookie', result.value.token);
                     Cookies.set('token', result.value.token, { expires: 7, sameSite: 'strict' });
-                    fetchUserInfo(result.value.token,result._id);
+                    fetchUserInfo(result.value.token, result._id);
                 } else {
                     Swal.fire({
                         icon: 'error',
@@ -173,9 +168,8 @@ const UserInputPage = () => {
         });
     };
 
-    const fetchUserInfo = async (token,id) => {
+    const fetchUserInfo = async (token, id) => {
         console.log("fetching response:");
-        // console.log(token)
         try {
             const response = await axios.post(`${baseUrl}/api/userinfo`, {}, {
                 headers: {
@@ -188,7 +182,7 @@ const UserInputPage = () => {
                 console.log(response.data)
                 const { rollno } = response.data;
                 console.log(rollno);
-                localStorage.setItem('rollno',rollno);
+                localStorage.setItem('rollno', rollno);
                 Cookies.set('rollno', rollno, { expires: 7, sameSite: 'strict' });
                 console.log("nooooo");
                 navigate('/user'); // Navigate immediately to /user
@@ -206,14 +200,8 @@ const UserInputPage = () => {
                         }
                     });
                 }, 200);
-             }
-              else {
+            } else {
                 console.log("emo");
-                // Swal.fire({
-                //     icon: 'error',
-                //     title: 'Failed to Retrieve User Info',
-                //     text: 'Could not fetch user information from Netra API.',
-                // });
             }
         } catch (error) {
             console.error('Error fetching user info:', error);
@@ -228,8 +216,8 @@ const UserInputPage = () => {
     const getAvatar = (result) => {
         return (
             <Avatar
-                style={{ backgroundColor: 'grey', verticalAlign: 'middle' }}
-                icon={<Avatar />}
+                style={{ backgroundColor: '#1890ff', verticalAlign: 'middle' }}
+                size="small" // Smaller avatar
             >
                 {getResultText(result).charAt(0)}
             </Avatar>
@@ -253,67 +241,106 @@ const UserInputPage = () => {
 //change the colors
     return (
         <div>
-            <ScrollingText /> {/* Added the text scroller at the top */}
+            <ScrollingText />
             <div style={{ padding: '2rem', maxWidth: '800px', margin: '0 auto' }}>
-         <Row justify="center" style={{ marginBottom: '2rem' }}>
-             <Col span={24} style={{ textAlign: 'center' }}>
-                 <Text strong style={{ fontSize: '2rem' }}>Welcome to KMIT SPECTRA 2.0</Text>
-             </Col>
-             <Col span={24} style={{ textAlign: 'center' }}>
-                 <Text type="secondary" style={{ fontSize: '1.1rem' }}>Access Your Academic Profile, Attendance, Results....!</Text>
-             </Col>
-             
-             {/* <BirthdayPhotoFrame/> */}
-         </Row>
-         <Row justify="center">
-             <Col span={24}>
-                 <Input.Search
-                     value={searchQuery}
-                     onChange={handleInputChange}
-                     placeholder="Enter Name, HallTicket No, or Phone No."
-                     enterButton
-                     size="large"
-                     style={{ width: '100%' }}
-                 />
-             </Col>
-             <div style={{ display: 'flex', justifyContent: 'center', marginTop: '10px', gap: '10px' }}>
-                            <Text style={{ color: '#fb4f3e', fontSize: '1rem', fontWeight: '350' }}>Name not found?</Text>
-                            <Button type="default" style={{ borderColor: '#1677ff', color: '#1677ff' }} onClick={() => navigate('/register')}>
-                                Register Now
-                            </Button>
-                        </div>
-         </Row>
-         {loading && (
-             <Row justify="center" style={{ marginTop: '2rem' }}>
-                 <Col span={24} style={{ textAlign: 'center' }}>
-                     <Spin size="large" />
-                 </Col>
-             </Row>
-         )}
-         {!loading && searchQuery && (
-             <Row justify="center" style={{ marginTop: '2rem' }}>
-                 <Col span={24}>
-                     <Space direction="vertical" style={{ width: '100%' }}>
-                         {searchResults.map((result, index) => (
-                             <Card
-                                 key={index}
-                                 style={{ boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', marginBottom: '1rem' }}
-                                 onClick={() => handleResultClick(result)}
-                             >
-                                 <Card.Meta
-                                     avatar={getAvatar(result)}
-                                     title={<Text strong>{getResultText(result)}</Text>}
-                                     description={`CURRENT YEAR: ${result.currentyear}`}
-                                 />
-                             </Card>
-                         ))}
-                     </Space>
-                 </Col>
-             </Row>
-         )}
-     </div>
+                <Row justify="center" style={{ marginBottom: '2rem' }}>
+                    <Col span={24} style={{ textAlign: 'center' }}>
+                        <Text strong style={{ fontSize: '2.5rem', fontFamily: '"Poppins", sans-serif', color: '#001529' }}>Welcome to Kmit SPECTRA</Text>
+                    </Col>
+                    <Col span={24} style={{ textAlign: 'center' }}>
+                        <Text type="secondary" style={{ fontSize: '1.2rem', fontFamily: '"Poppins", sans-serif', color: '#595959' }}>Access Your Academic Profile, Attendance, Results....!</Text>
+                    </Col>
+                </Row>
+<Row justify="center" style={{ marginTop: '20px' }}>
+    <Col span={24} style={{ textAlign: 'center' }}>
+        <Input.Search
+            value={searchQuery}
+            onChange={handleInputChange}
+            placeholder="Enter Name, HallTicket No, or Phone No."
+            enterButton
+            size="large"
+            style={{
+                width: '100%',
+                borderRadius: '10px',
+                boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
+                border: '1px solid #d9d9d9',
+                transition: 'all 0.3s ease-in-out',
+            }}
+        />
+    </Col>
+    <Col span={24} style={{ display: 'flex', justifyContent: 'center', marginTop: '15px' }}>
+        <Text style={{ color: '#ff4d4f', fontSize: '1rem', fontWeight: '400' }}>Name not found?</Text>
+        <Button
+            type="primary"
+            style={{
+                borderRadius: '10px',
+                backgroundColor: '#1677ff',
+                borderColor: '#1677ff',
+                color: 'white',
+                fontWeight: '500',
+                marginLeft: '10px',
+                padding: '6px 15px',
+                transition: 'all 0.3s ease',
+            }}
+            onClick={() => navigate('/register')}
+        >
+            Register Now
+        </Button>
+    </Col>
+</Row>
+
+                {loading && (
+                    <Row justify="center" style={{ marginTop: '2rem' }}>
+                        <Col span={24} style={{ textAlign: 'center' }}>
+                            <Spin size="large" />
+                        </Col>
+                    </Row>
+                )}
+                {!loading && searchQuery && (
+                    <Row justify="center" style={{ marginTop: '2rem' }}>
+                        <Col span={24}>
+                            <Space direction="vertical" style={{ width: '100%' }}>
+                                {searchResults.slice(0, 5).map((result, index) => (
+                                    <Card
+                                        key={index}
+                                        style={{ 
+                                            boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)', 
+                                            marginBottom: '0.5rem', 
+                                            borderRadius: '8px', 
+                                            cursor: 'pointer', 
+                                            transition: 'transform 0.2s, box-shadow 0.2s',
+                                            padding: '2px 8px', // Compact padding
+                                            width: '100%',
+                                        }}
+                                        onClick={() => handleResultClick(result)}
+                                        hoverable
+                                    >
+                                        <Card.Meta
+                                            avatar={getAvatar(result)}
+                                            title={
+                                                <Text strong style={{ fontSize: '0.7rem' }}> {/* Smaller font size */}
+                                                    {getResultText(result)}
+                                                </Text>
+                                            }
+                                            description={
+                                                <Text type="secondary" style={{ fontSize: '0.8rem' }}> {/* Smaller font size */}
+                                                    CURRENT YEAR: {result.currentyear}
+                                                </Text>
+                                            }
+                                        />
+                                    </Card>
+                                ))}
+                                {searchResults.length > 5 && (
+                                    <Text type="secondary" style={{ textAlign: 'center', marginTop: '1rem', fontSize: '0.9rem' }}>
+                                        Showing top 5 results. Refine your search to see more.
+                                    </Text>
+                                )}
+                            </Space>
+                        </Col>
+                    </Row>
+                )}
+            </div>
         </div>
-         
     );
 };
 
