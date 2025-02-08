@@ -1,0 +1,35 @@
+/* Container for the scrolling text */
+.scrolling-container {
+  overflow: hidden;
+  white-space: nowrap;
+  background: linear-gradient(90deg, #001529, #00284d, #001529);
+  color: white;
+  padding: 10px 0;
+  font-family: 'Poppins', sans-serif;
+  width: 100vw;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Scrolling text animation */
+.scrolling-text {
+  display: inline-block;
+  animation: scrollText 20s linear infinite; /* Adjust duration as needed */
+  font-size: 1rem;
+  font-weight: bold;
+  letter-spacing: 0.5px;
+  padding-left: 100%; /* Start the text off-screen */
+}
+
+/* Keyframes for scrolling animation */
+@keyframes scrollText {
+  from { transform: translateX(0); }
+  to { transform: translateX(-100%); }
+}
+
+/* Responsive design for smaller screens */
+@media screen and (max-width: 768px) {
+  .scrolling-text {
+    font-size: 0.9rem;
+    animation-duration: 25s; /* Slower speed for smaller screens */
+  }
+}
