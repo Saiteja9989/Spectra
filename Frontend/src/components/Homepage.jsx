@@ -250,7 +250,7 @@ const UserInputPage = () => {
                 return '';
         }
     };
-
+//change the colors
     return (
         <div>
             <ScrollingText /> {/* Added the text scroller at the top */}
