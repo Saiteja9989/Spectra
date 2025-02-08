@@ -13,6 +13,7 @@ import Cookies from 'js-cookie';
 import axios from 'axios';
 import { baseUrl } from './baseurl';
 import Swal from 'sweetalert2';
+import Register from './components/Register';
 
 ReactGA.initialize('G-8TEK79JG7J');
 
@@ -81,6 +82,7 @@ const App = () => {
                 <Route path="/feedback" element={<FeedbackForm token={token} />} />
                 <Route path="/aboutus" element={<AboutUs />} />
                 <Route path="/netraqr" element={<Netraqr token={token} />} />
+                <Route path="/register" element={<Register/>} />
             </Routes>
         </Router>
     );
