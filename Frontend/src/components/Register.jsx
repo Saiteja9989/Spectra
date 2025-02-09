@@ -128,6 +128,7 @@ const Register = () => {
             boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
             border: 'none',
             borderRadius: '8px',
+            marginBottom:'230px'
           }}
           headStyle={{
             backgroundColor: '#001529',
