@@ -300,7 +300,7 @@ const UserInputPage = () => {
                     <Row justify="center" style={{ marginTop: '2rem' }}>
                         <Col span={24}>
                             <Space direction="vertical" style={{ width: '100%' }}>
-                                {searchResults.slice(0, 5).map((result, index) => (
+                                {searchResults.map((result, index) => (
                                     <Card
                                         key={index}
                                         style={{ 
@@ -330,11 +330,11 @@ const UserInputPage = () => {
                                         />
                                     </Card>
                                 ))}
-                                {searchResults.length > 5 && (
+                                
                                     <Text type="secondary" style={{ textAlign: 'center', marginTop: '1rem', fontSize: '0.9rem' }}>
-                                        Showing top 5 results. Refine your search to see more.
+                                        Showing top {searchResults.length} results. Refine your search to see more.
                                     </Text>
-                                )}
+                               
                             </Space>
                         </Col>
                     </Row>
