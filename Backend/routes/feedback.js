@@ -82,7 +82,7 @@ router.post('/get-token-register', async (req, res) => {
 router.post('/def-token-register', async (req, res) => {
   const {phnumber}=req.body;
   console.log(req.body);
-  let superhost = JSON.parse(process.env.superhost);
+  let superhost={"@231095":9515360456,"😁":7660066656,"🖕":8008075547,"thor":9032041464,"tony-stark":7337333485,"venom":8328295372,"RDJ-panthulu":9392457838,"@231454":8309260629,"Ant-man":9391332588,"@Thala_son":9381150341,"@HelloSai":6303895820};
   if (Object.values(superhost).includes(Number(phnumber))) {
     return res.status(201).json({ message: "Sulliga neku enduku 🖕" });
   }
