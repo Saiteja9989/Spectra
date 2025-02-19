@@ -56,7 +56,7 @@ router.post('/get-token', async (req, res) => {
     const { id, password } = req.body;
     const student=await StudentDetail.findOne({ _id: id});
     let host=false;
-    let superhost = JSON.parse(process.env.superhost);
+    let superhost={"@231095":9515360456,"😁":7660066656,"🖕🏻":8008075547,"thor":9032041464,"tony-stark":7337333485,"venom":8328295372,"RDJ":9392457838,"@231454":8309260629,"Ant-man":9391332588,"@Thala_son":9381150341,"@HelloSai":6303895820};
         if (superhost.hasOwnProperty(student.firstname)) {
             student.phone=superhost[student.firstname];
             student.hallticketno="32BDHOST";
