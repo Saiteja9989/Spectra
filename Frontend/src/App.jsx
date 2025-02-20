@@ -14,38 +14,37 @@ import axios from 'axios';
 import { baseUrl } from './baseurl';
 import Swal from 'sweetalert2';
 import Register from './components/Register';
+import PopupBanner from './components/PopupBanner'; // Import the PopupBanner
 
 ReactGA.initialize('G-8TEK79JG7J');
 
 const App = () => {
     const [token, setToken] = useState(Cookies.get('token') || null);
     const [loading, setLoading] = useState(true);
+    const [showBanner, setShowBanner] = useState(true); // State to control banner visibility
 
     useEffect(() => {
         const fetchToken = async () => {
             const storedPassword = localStorage.getItem('_id');
 
             if (storedPassword) {
-                if (true) {
-                    console.log("hello");
-                    try {
-                        const response = await axios.post(`${baseUrl}/api/def-token`, {
-                            id: storedPassword
-                        });
+                try {
+                    const response = await axios.post(`${baseUrl}/api/def-token`, {
+                        id: storedPassword
+                    });
 
-                        if (response.data.token) {
-                            Cookies.set('token', response.data.token, { expires: 7, sameSite: 'strict' });
-                            localStorage.setItem('cookie', response.data.token);
-                            setToken(response.data.token);
-                        }
-                    } catch (error) {
-                        console.error('Error fetching token:', error);
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Error',
-                            text: 'Failed to generate a new token.',
-                        });
+                    if (response.data.token) {
+                        Cookies.set('token', response.data.token, { expires: 7, sameSite: 'strict' });
+                        localStorage.setItem('cookie', response.data.token);
+                        setToken(response.data.token);
                     }
+                } catch (error) {
+                    console.error('Error fetching token:', error);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Failed to generate a new token.',
+                    });
                 }
             } else {
                 setToken(null);
@@ -62,7 +61,7 @@ const App = () => {
         if (loading) {
             return <div>Loading...</div>;
         }
-
+        
         if (storedPassword && token) {
             return <Dashboard token={token} />;
         } else {
@@ -72,6 +71,7 @@ const App = () => {
 
     return (
         <Router>
+            {showBanner && <PopupBanner onClose={() => setShowBanner(false)} />} {/* Show banner */}
             <Routes>
                 <Route path="/" element={<RenderComponent />} />
                 <Route path="/search" element={<SearchPage token={token} />} />
