@@ -14,7 +14,7 @@ import axios from 'axios';
 import { baseUrl } from './baseurl';
 import Swal from 'sweetalert2';
 import Register from './components/Register';
-import PopupBanner from './components/PopupBanner'; // Import the PopupBanner
+import PopupBanner from './components/PopupBanner'; // Import the PopupBanne
 
 ReactGA.initialize('G-8TEK79JG7J');
 

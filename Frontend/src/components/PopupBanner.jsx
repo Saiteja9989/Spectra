@@ -1,5 +1,5 @@
 import React from 'react';
-import './PopupBanner.css'; // Import CSS for styling
+import './PopupBanner.css'; // Import CSS for stylin
 
 const PopupBanner = ({ onClose }) => {
     return (
