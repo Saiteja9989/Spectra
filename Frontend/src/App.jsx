@@ -71,7 +71,7 @@ const App = () => {
 
     return (
         <Router>
-            {showBanner && <PopupBanner onClose={() => setShowBanner(false)} />} {/* Show banner */}
+            {/* {showBanner && <PopupBanner onClose={() => setShowBanner(false)} />} */}
             <Routes>
                 <Route path="/" element={<RenderComponent />} />
                 <Route path="/search" element={<SearchPage token={token} />} />
