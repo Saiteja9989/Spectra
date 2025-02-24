@@ -67,7 +67,7 @@ const App = () => {
     <Routes>
       <Route path="/" element={<RenderComponent />} />
       <Route path="/search" element={<SearchPage token={token} />} />
-      <Route path="/user" element={token ? <Dashboard token={token} /> : <Navigate to="/search" />} />
+      <Route path="/user" element={ <Dashboard token={token} />} />
       <Route path="/attendance" element={<AttendancePage token={token} />} />
       <Route path="/result" element={<ResultPage token={token} />} />
       <Route path="/timetable" element={<Timetable token={token} />} />
