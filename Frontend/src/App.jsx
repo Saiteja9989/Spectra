@@ -14,7 +14,7 @@ import axios from 'axios';
 import { baseUrl } from './baseurl';
 import Swal from 'sweetalert2';
 import Register from './components/Register';
-import PopupBanner from './components/PopupBanner'; // Import the PopupBanne
+// import PopupBanner from './components/PopupBanner'; // Import the PopupBanne
 
 ReactGA.initialize('G-8TEK79JG7J');
 
@@ -71,7 +71,7 @@ const App = () => {
 
     return (
         <Router>
-            {showBanner && <PopupBanner onClose={() => setShowBanner(false)} />} {/* Show banner */}
+            {/* {showBanner && <PopupBanner onClose={() => setShowBanner(false)} />} Show banner */}
             <Routes>
                 <Route path="/" element={<RenderComponent />} />
                 <Route path="/search" element={<SearchPage token={token} />} />
