@@ -170,6 +170,7 @@ const ResultPage = () => {
             </TabPane>
             <TabPane tab="External" key="external">
               <Row gutter={[16, 16]}>
+                
                 <ExternalResultComponent resultData={externalResultData} totalBacklogs={totalBacklogs} />
               </Row>
             </TabPane>
