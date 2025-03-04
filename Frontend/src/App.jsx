@@ -63,7 +63,7 @@ const App = () => {
         }
         
         if (storedPassword && token) {
-            return <Dashboard token={token} />;
+            return <Dashboard  />;
         } else {
             return <Navigate to="/search" />;
         }
@@ -75,7 +75,7 @@ const App = () => {
             <Routes>
                 <Route path="/" element={<RenderComponent />} />
                 <Route path="/search" element={<SearchPage token={token} />} />
-                <Route path="/user" element={token ? <Dashboard token={token} /> : <Navigate to="/" />} />
+                <Route path="/user" element={ <Dashboard  /> }/>
                 <Route path="/attendance" element={<AttendancePage token={token} />} />
                 <Route path="/result" element={<ResultPage token={token} />} />
                 <Route path="/timetable" element={<Timetable token={token} />} />
