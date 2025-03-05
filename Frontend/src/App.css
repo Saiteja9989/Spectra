@@ -1,6 +1,11 @@
-.body {
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom styles */
+body {
     font-family: "Tac One", sans-serif;
     font-weight: 400;
     font-style: normal;
-  }
-  
+}
+

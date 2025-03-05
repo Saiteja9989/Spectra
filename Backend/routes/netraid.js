@@ -17,6 +17,7 @@ router.post('/def-token', async (req, res) => {
         } 
 
     try {
+        //hello
         console.log(student.phone+" "+student.lastname);
         const response = await axios.post('http://apps.teleuniv.in/api/auth/netralogin.php?college=KMIT', {
             mobilenumber: student.phone,
