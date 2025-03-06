@@ -12,7 +12,7 @@
 //           <Row gutter={[16, 16]}>
 //             <Col span={12}>
 //               <Text strong>Percentage:</Text>
-//               <Progress percent={subject.percentage} />
+//               <Progress p ercent={subject.percentage} />
 //             </Col>
 //             <Col span={12}>
 //               <Text strong>Practical:</Text>

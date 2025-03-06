@@ -1,91 +1,90 @@
-import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import SearchPage from './components/Homepage';
-import Dashboard from './components/dashboard';
-import AttendancePage from './components/AttendancePage';
-import ResultPage from './components/ResultPage';
-import Timetable from './components/Timetable';
-import FeedbackForm from './components/Feedback';
-import AboutUs from './AboutUs';
-import Netraqr from './components/Netraqr';
-import ReactGA from 'react-ga';
-import Cookies from 'js-cookie'; 
-import axios from 'axios';
-import { baseUrl } from './baseurl';
-import Swal from 'sweetalert2';
-import Register from './components/Register';
-// import PopupBanner from './components/PopupBanner'; // Import the PopupBanne
+import React, { useState, useEffect } from "react";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+  useLocation,
+} from "react-router-dom";
+import ReactGA from "react-ga4";
+import SearchPage from "./components/Homepage";
+import Dashboard from "./components/dashboard";
+import AttendancePage from "./components/AttendancePage";
+import ResultPage from "./components/ResultPage";
+import Timetable from "./components/Timetable";
+import FeedbackForm from "./components/Feedback";
+import AboutUs from "./AboutUs";
+import Netraqr from "./components/Netraqr";
+import Cookies from "js-cookie";
+import Register from "./components/Register";
 
-ReactGA.initialize('G-8TEK79JG7J');
+// Initialize Google Analytics
+ReactGA.initialize("G-8C7K643WQB");
 
 const App = () => {
-    const [token, setToken] = useState(Cookies.get('token') || null);
-    const [loading, setLoading] = useState(true);
-    const [showBanner, setShowBanner] = useState(true); // State to control banner visibility
+  const [token, setToken] = useState(Cookies.get("token") || null);
+  const [loading, setLoading] = useState(true);
+  const location = useLocation();
 
-    useEffect(() => {
-        const fetchToken = async () => {
-            const storedPassword = localStorage.getItem('_id');
+  // Track page views on route change
+  useEffect(() => {
+    ReactGA.send({ hitType: "pageview", page: location.pathname });
+  }, [location]);
 
-            if (storedPassword) {
-                try {
-                    const response = await axios.post(`${baseUrl}/api/def-token`, {
-                        id: storedPassword
-                    });
+  // Track custom events
+  useEffect(() => {
+    ReactGA.event({
+      category: "User",
+      action: "Loaded App",
+      label: "App Loaded",
+    });
+  }, []);
 
-                    if (response.data.token) {
-                        Cookies.set('token', response.data.token, { expires: 7, sameSite: 'strict' });
-                        localStorage.setItem('cookie', response.data.token);
-                        setToken(response.data.token);
-                    }
-                } catch (error) {
-                    console.error('Error fetching token:', error);
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error',
-                        text: 'Failed to generate a new token.',
-                    });
-                }
-            } else {
-                setToken(null);
-            }
-            setLoading(false);
-        };
-
-        fetchToken();
-    }, []);
-
-    const RenderComponent = () => {
-        const storedPassword = localStorage.getItem('_id');
-
-        if (loading) {
-            return <div>Loading...</div>;
-        }
-        
-        if (storedPassword && token) {
-            return <Dashboard  />;
-        } else {
-            return <Navigate to="/search" />;
-        }
+  // Fetch token when the app loads and when cookies change
+  useEffect(() => {
+    const fetchToken = () => {
+      const storedToken = Cookies.get("token");
+      setToken(storedToken || null);
+      setLoading(false);
     };
 
-    return (
-        <Router>
-            {/* {showBanner && <PopupBanner onClose={() => setShowBanner(false)} />} Show banner */}
-            <Routes>
-                <Route path="/" element={<RenderComponent />} />
-                <Route path="/search" element={<SearchPage token={token} />} />
-                <Route path="/user" element={ <Dashboard  /> }/>
-                <Route path="/attendance" element={<AttendancePage token={token} />} />
-                <Route path="/result" element={<ResultPage token={token} />} />
-                <Route path="/timetable" element={<Timetable token={token} />} />
-                <Route path="/feedback" element={<FeedbackForm token={token} />} />
-                <Route path="/aboutus" element={<AboutUs />} />
-                <Route path="/netraqr" element={<Netraqr token={token} />} />
-                <Route path="/register" element={<Register/>} />
-            </Routes>
-        </Router>
-    );
+    fetchToken();
+  }, []); // Runs once when the component mounts
+
+  // Watch for token updates in cookies
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const storedToken = Cookies.get("token");
+      if (storedToken !== token) {
+        setToken(storedToken);
+      }
+    }, 500); // Check every 500ms
+
+    return () => clearInterval(interval);
+  }, [token]);
+
+  return (
+    <Routes>
+      <Route path="/" element={token ? <Dashboard token={token} /> : <Navigate to="/search" />} />
+      <Route path="/search" element={<SearchPage setToken={setToken} />} />
+      <Route path="/user" element={token ? <Dashboard token={token} /> : <Navigate to="/search" />} />
+      <Route path="/attendance" element={<AttendancePage token={token} />} />
+      <Route path="/result" element={<ResultPage token={token} />} />
+      <Route path="/timetable" element={<Timetable token={token} />} />
+      <Route path="/feedback" element={<FeedbackForm token={token} />} />
+      <Route path="/aboutus" element={<AboutUs />} />
+      <Route path="/netraqr" element={<Netraqr token={token} />} />
+      <Route path="/register" element={<Register />} />
+    </Routes>
+  );
 };
 
-export default App;
+const AppWrapper = () => {
+  return (
+    <Router>
+      <App />
+    </Router>
+  );
+};
+
+export default AppWrapper;
