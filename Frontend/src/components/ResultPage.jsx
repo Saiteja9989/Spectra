@@ -167,25 +167,6 @@ const ResultPage = () => {
   return (
     <div className={`min-h-screen ${darkMode ? 'bg-gray-900 text-white' : 'bg-gradient-to-br from-blue-50 to-indigo-50 text-gray-900'}`}>
       <Navbar />
-      <Row justify="center">
-        <Col xs={24} sm={20}>
-          <h1 style={{ textAlign: 'center', marginBottom: '20px' }}>Result Page</h1>
-          <Tabs activeKey={selectedTab} onChange={handleTabChange}>
-            <TabPane tab="Internal" key="internal">
-              <Row gutter={[16, 16]}>
-                <InternalResultComponent resultData={internalResultData} />
-              </Row>
-            </TabPane>
-            <TabPane tab="External" key="external">
-              <Row gutter={[16, 16]}>
-                
-                <ExternalResultComponent resultData={externalResultData} totalBacklogs={totalBacklogs} />
-              </Row>
-            </TabPane>
-          </Tabs>
-        </Col>
-      </Row>
-    </>
 
       {/* Header */}
       <header className={`${darkMode ? 'bg-gray-800' : 'bg-white'} shadow-sm pt-14 sm:pt-4`}>
