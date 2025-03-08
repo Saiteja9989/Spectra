@@ -103,22 +103,30 @@ const UserInputPage = () => {
       setLoading(false);
     }
   };
-
   const handleResultClick = async (result) => {
     const resultText = getResultText(result).trim();
     setSearchQuery(resultText);
+  
     try {
       const response = await axios.post(`${baseUrl}/api/def-token`, {
         id: result._id,
       });
+  
       if (response.data.success !== 1) {
+        // If the token is not generated, show the password prompt
         showPasswordPrompt(result);
       } else {
+        // Set the token in cookies
         Cookies.set("token", response.data.token, {
           expires: 7,
           sameSite: "strict",
         });
-        fetchUserInfo(response.data.token, result._id);
+        console.log("Token set in cookies:", Cookies.get("token")); // Debugging
+  
+        // Fetch user info and wait for it to complete
+        await fetchUserInfo(response.data.token, result._id);
+  
+        console.log("User info fetched, navigating to /user"); // Debugging
       }
     } catch (error) {
       console.error("Error logging in:", error);
@@ -129,7 +137,6 @@ const UserInputPage = () => {
       );
     }
   };
-
   const showPasswordPrompt = (result) => {
     openModal(
       "Enter KMIT Netra Password",
@@ -178,7 +185,6 @@ const UserInputPage = () => {
       }
     );
   };
-
   const fetchUserInfo = async (token, id) => {
     try {
       const response = await axios.post(
@@ -194,17 +200,20 @@ const UserInputPage = () => {
   
       if (response.data) {
         const { rollno } = response.data;
-        localStorage.setItem("rollno", rollno);
+        // Set rollno in cookies only (localStorage removed)
         Cookies.set("rollno", rollno, { expires: 7, sameSite: "strict" });
+        console.log("Rollno set in cookies:", Cookies.get("rollno")); // Debugging
   
+        // Navigate to the user dashboard after successful fetch
         navigate("/user");
+        console.log("Navigated to /user"); // Debugging
       }
     } catch (error) {
       console.error("Error fetching user info:", error);
       openModal("Error", "error", <p>Failed to fetch user information.</p>);
+      throw error; // Re-throw the error to handle it in the calling function
     }
   };
-
   const getAvatar = (result) => {
     let icon;
     switch (searchType) {

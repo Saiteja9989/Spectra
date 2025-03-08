@@ -1,11 +1,24 @@
 import React from 'react';
 import { useNavigate, Link } from 'react-router-dom'; // Importing hooks and components for navigation
 import { ArrowLeft, Moon, Search, Sun } from 'lucide-react'; // Importing icons from lucide-react
-import { useDarkMode } from './DarkModeContext' // Importing custom hook for dark mode
+import { useDarkMode } from './DarkModeContext'; // Importing custom hook for dark mode
+import Cookies from 'js-cookie'; // Importing js-cookie to manage cookies
 
-export default function Navbar() {
+export default function Navbar({ setToken }) { // Accept setToken as a prop
   const navigate = useNavigate(); // Hook for programmatic navigation
   const { darkMode, toggleDarkMode } = useDarkMode(); // Destructuring dark mode state and toggle function
+
+  // Function to handle search icon click
+  const handleSearchClick = () => {
+    // Clear the token from cookies
+    Cookies.remove('token');
+    // Update the token state (if setToken is provided as a prop)
+    if (setToken) {
+      setToken(null);
+    }
+    // Navigate to the search page
+    navigate('/search');
+  };
 
   return (
     // Navbar container with fixed positioning and dynamic styling based on dark mode
@@ -41,15 +54,15 @@ export default function Navbar() {
           {/* Right Section */}
           <div className="flex items-center space-x-6">
             {/* Search link with hover and active effects */}
-            <Link
-              to="/search"
+            <button
+              onClick={handleSearchClick} // Call handleSearchClick when clicked
               className={`p-3 rounded-full hover:bg-${darkMode ? 'gray-800' : 'gray-100'} 
                 transform transition-all duration-200 hover:scale-110 active:scale-95
                 hover:text-blue-500`}
               aria-label="Search"
             >
               <Search className="h-5 w-5" /> {/* Search icon */}
-            </Link>
+            </button>
             
             {/* Dark mode toggle button with hover and active effects */}
             <button

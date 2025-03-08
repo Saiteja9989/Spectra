@@ -18,7 +18,7 @@ import AboutUs from "./AboutUs";
 import Netraqr from "./components/Netraqr";
 import Cookies from "js-cookie";
 import Register from "./components/Register";
-import {jwtDecode} from "jwt-decode"; // For decoding JWT tokens
+import { jwtDecode } from "jwt-decode"; // For decoding JWT tokens
 
 // Initialize Google Analytics
 ReactGA.initialize("G-8C7K643WQB");
@@ -60,12 +60,13 @@ const App = () => {
     const storedToken = Cookies.get("token");
     if (storedToken) {
       if (isTokenExpired(storedToken)) {
-        console.log("Token expired, clearing token and redirecting to login");
+        // console.log("Token expired, clearing token and redirecting to login");
         Cookies.remove("token");
         setToken(null);
-        navigate("/search"); // Redirect to login/search page
+        navigate("/search"); 
       } else {
         setToken(storedToken);
+        // console.log("Token set in state:", storedToken); 
       }
     } else {
       setToken(null);
@@ -78,7 +79,7 @@ const App = () => {
     const interval = setInterval(() => {
       const storedToken = Cookies.get("token");
       if (storedToken && isTokenExpired(storedToken)) {
-        console.log("Token expired, clearing token and redirecting to login");
+        // console.log("Token expired, clearing token and redirecting to login");
         Cookies.remove("token");
         setToken(null);
         navigate("/search"); // Redirect to login/search page
@@ -87,6 +88,19 @@ const App = () => {
 
     return () => clearInterval(interval);
   }, [navigate]);
+
+  // Watch for token updates in cookies
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const storedToken = Cookies.get("token");
+      if (storedToken !== token) {
+        setToken(storedToken);
+        // console.log("Token state updated:", storedToken);
+      }
+    }, 500); // Check every 500ms
+
+    return () => clearInterval(interval);
+  }, [token]);
 
   return (
     <Routes>
