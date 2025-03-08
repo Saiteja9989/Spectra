@@ -5,6 +5,7 @@ import {
   Route,
   Navigate,
   useLocation,
+  useNavigate,
 } from "react-router-dom";
 import ReactGA from "react-ga4";
 import SearchPage from "./components/Homepage";
@@ -17,6 +18,7 @@ import AboutUs from "./AboutUs";
 import Netraqr from "./components/Netraqr";
 import Cookies from "js-cookie";
 import Register from "./components/Register";
+import {jwtDecode} from "jwt-decode"; // For decoding JWT tokens
 
 // Initialize Google Analytics
 ReactGA.initialize("G-8C7K643WQB");
@@ -25,6 +27,7 @@ const App = () => {
   const [token, setToken] = useState(Cookies.get("token") || null);
   const [loading, setLoading] = useState(true);
   const location = useLocation();
+  const navigate = useNavigate();
 
   // Track page views on route change
   useEffect(() => {
@@ -40,34 +43,62 @@ const App = () => {
     });
   }, []);
 
-  // Fetch token when the app loads and when cookies change
+  // Function to check if the token is expired
+  const isTokenExpired = (token) => {
+    try {
+      const decodedToken = jwtDecode(token);
+      const currentTime = Date.now() / 1000; // Convert to seconds
+      return decodedToken.exp < currentTime; // Check if token is expired
+    } catch (error) {
+      console.error("Error decoding token:", error);
+      return true; // Assume token is invalid if decoding fails
+    }
+  };
+
+  // Fetch token when the app loads and check its validity
   useEffect(() => {
-    const fetchToken = () => {
-      const storedToken = Cookies.get("token");
-      setToken(storedToken || null);
-      setLoading(false);
-    };
+    const storedToken = Cookies.get("token");
+    if (storedToken) {
+      if (isTokenExpired(storedToken)) {
+        console.log("Token expired, clearing token and redirecting to login");
+        Cookies.remove("token");
+        setToken(null);
+        navigate("/search"); // Redirect to login/search page
+      } else {
+        setToken(storedToken);
+      }
+    } else {
+      setToken(null);
+    }
+    setLoading(false);
+  }, [navigate]);
 
-    fetchToken();
-  }, []); // Runs once when the component mounts
-
-  // Watch for token updates in cookies
+  // Periodically check token expiry while the app is running
   useEffect(() => {
     const interval = setInterval(() => {
       const storedToken = Cookies.get("token");
-      if (storedToken !== token) {
-        setToken(storedToken);
+      if (storedToken && isTokenExpired(storedToken)) {
+        console.log("Token expired, clearing token and redirecting to login");
+        Cookies.remove("token");
+        setToken(null);
+        navigate("/search"); // Redirect to login/search page
       }
-    }, 500); // Check every 500ms
+    }, 60000); // Check every 1 minute
 
     return () => clearInterval(interval);
-  }, [token]);
+  }, [navigate]);
 
   return (
     <Routes>
-      <Route path="/" element={token ? <Dashboard token={token} /> : <Navigate to="/search" />} />
+      <Route
+        path="/"
+        element={token ? <Dashboard token={token} /> : <Navigate to="/search" />}
+      />
       <Route path="/search" element={<SearchPage setToken={setToken} />} />
-      <Route path="/user" element={token ? <Dashboard token={token} /> : <Navigate to="/search" />} />
+      <Route
+        path="/user"
+        element={token ? <Dashboard token={token} /> : <Navigate to="/search" />}
+      />
       <Route path="/attendance" element={<AttendancePage token={token} />} />
       <Route path="/result" element={<ResultPage token={token} />} />
       <Route path="/timetable" element={<Timetable token={token} />} />
