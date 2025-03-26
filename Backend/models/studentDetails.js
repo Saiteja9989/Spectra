@@ -6,8 +6,7 @@ const studentSchema = new mongoose.Schema({
     required: true
   },
   psflag: {
-    type: Number,
-    required: true
+    type: Number
   },
   firstname: {
     type: String,
