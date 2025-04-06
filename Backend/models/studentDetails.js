@@ -62,8 +62,7 @@ const studentSchema = new mongoose.Schema({
   },
   email: {
     type: Array,
-    required: true,
-    of: Number
+    required: true
   },
   password: {
     type: String,
