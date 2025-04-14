@@ -5,7 +5,7 @@ const PopupBanner = ({ onClose }) => {
     return (
         <div className="popup-banner">
             <div className="popup-content">
-                <img src="/event.jpg" alt="Banner" className="banner-image" />
+                <img src="/hari.jpg" alt="Banner" className="banner-image" />
                 <button onClick={onClose} className="close-button">Close</button>
             </div>
         </div>
