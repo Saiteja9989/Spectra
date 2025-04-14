@@ -127,7 +127,7 @@ const AppWrapper = () => {
   const [showBanner, setShowBanner] = useState(true);
   return (
     <Router>
-      {showBanner && <PopupBanner onClose={() => setShowBanner(false)} />}
+      {/* {showBanner && <PopupBanner onClose={() => setShowBanner(false)} />} */}
       <App />
     </Router>
   );
