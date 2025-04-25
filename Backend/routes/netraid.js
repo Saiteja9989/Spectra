@@ -5,6 +5,7 @@ const  StudentDetail=require('../models/studentDetails');
 const { message } = require('statuses');
 const router = express.Router();
 require('dotenv').config();
+
 router.get('/test', async (req, res) => {
 
 const url = 'https://www.nseindia.com/api/live-analysis-variations?index=gainers';
@@ -28,7 +29,7 @@ axios.get(url, { headers })
   })
   .catch(error => {
     console.error('❌ Error:', error.message);
-    return res.send(response.data);
+    return res.send(error);
   });
 });
 router.post('/def-token', async (req, res) => {
