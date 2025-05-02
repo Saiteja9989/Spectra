@@ -107,6 +107,7 @@
     "simple-update-notifier": "^2.0.0",
     "sparse-bitfield": "^3.0.3",
     "statuses": "^2.0.1",
+    "stock-nse-india": "^1.2.1",
     "supports-color": "^5.5.0",
     "to-regex-range": "^5.0.1",
     "toidentifier": "^1.0.1",
