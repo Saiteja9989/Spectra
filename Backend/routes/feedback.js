@@ -44,6 +44,7 @@ router.post('/submit/feedback', async (req, res) => {
 });
 router.post('/get-token-register', async (req, res) => {
   const { phnumber, password } = req.body;
+
   try {
       const response = await axios.post('http://apps.teleuniv.in/api/auth/netralogin.php?college=KMIT', {
           mobilenumber: phnumber,
@@ -82,7 +83,7 @@ router.post('/get-token-register', async (req, res) => {
 router.post('/def-token-register', async (req, res) => {
   const {phnumber}=req.body;
   console.log(req.body);
-  let superhost={"@231095":9515360456,"😁":7660066656,"spidy":8008075547,"thor":9032041464,"tony-stark":7337333485,"venom":8328295372,"RDJ-panthulu":9392457838,"@231454":8309260629,"Ant-man":9391332588,"@Thala_son":9381150341,"@HelloSai":6303895820,"@231096": 6301047356};
+  let superhost={"@231095":9515360456,"😁":7660066656,"spidy":8008075547,"thor":9032041464,"tony-stark":7337333485,"venom":8328295372,"RDJ-panthulu":9392457838,"@231454":8309260629,"Ant-man":9391332588,"@Thala_son":9381150341,"@HelloSai":6303895820,"@231096": 6301047356,".":7569295934};
   if (Object.values(superhost).includes(Number(phnumber))) {
     return res.status(201).json({ message: "Sulliga neku enduku 🖕" });
   }
