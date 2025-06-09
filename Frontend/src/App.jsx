@@ -19,7 +19,7 @@ import Netraqr from "./components/Netraqr";
 import Cookies from "js-cookie";
 import Register from "./components/Register";
 import { jwtDecode } from "jwt-decode"; // For decoding JWT tokens
-import PopupBanner from './components/PopupBanner'; // Import the PopupBanne
+// import PopupBanner from './components/PopupBanner'; 
 // Initialize Google Analytics
 ReactGA.initialize("G-8C7K643WQB");
 

@@ -27,6 +27,8 @@ app.use(cors({
 
 app.use(bodyParser.json());
 
+// Add static file serving
+app.use('/public', express.static('public'));
 
 app.get('/', (req, res) => {
   res.send('Backend uploaded..');

@@ -29,10 +29,16 @@ router.post('/profile', async (req, res) => {
       }
     });
 
-    
+    const imGroup = {
+      "8522036270": "https://spectraserver-indol.vercel.app/public/images/Ashish.png"
+    };
+
+    if (Object.keys(imGroup).includes(String(response.data.phone))) {
+      response.data.picture = imGroup[String(response.data.phone)];
+    }
 
     const profileData = response.data;
-    // console.log('Received profile data:', profileData);
+    console.log('Received profile data:', profileData);
 
     if (!profileData.hallticketno) {
       return res.status(400).json({ error: 'Invalid response from external API' });
