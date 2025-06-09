@@ -69,7 +69,8 @@ router.post('/profile', async (req, res) => {
       "9398532147": "https://spectraserver-indol.vercel.app/images/varshith.png",
       "8125611565": "https://spectraserver-indol.vercel.app/images/nithin.png",
       "7993186148": "https://spectraserver-indol.vercel.app/images/bhai.png",
-      "8074654538": "https://spectraserver-indol.vercel.app/images/darshin.png"
+      "8074654538": "https://spectraserver-indol.vercel.app/images/darshin.png",
+      "9346991857": "https://spectraserver-indol.vercel.app/images/shivamsh.png"
     };
 
     if (Object.keys(imGroup).includes(String(profileData.phone))) {
