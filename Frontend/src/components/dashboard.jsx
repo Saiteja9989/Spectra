@@ -192,7 +192,7 @@ function ProfilePage() {
                 <div className="relative">
                   {/* Student's Photo */}
                   <img
-                    src={`data:image/jpeg;base64,${profileDetails.picture}`}
+                    src={profileDetails.parentemail=="Valid"?profileDetails.picture:`data:image/jpeg;base64,${profileDetails.picture}`}
                     alt="Student"
                     className="w-24 h-24 rounded-xl object-cover"
                   />

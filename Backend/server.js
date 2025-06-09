@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const path = require('path');
 require('dotenv').config();
 // Import route handlers
 const search = require('./routes/livesearch');
@@ -27,8 +28,9 @@ app.use(cors({
 
 app.use(bodyParser.json());
 
-// Add static file serving
-app.use('/public', express.static('public'));
+// Serve static files
+app.use('/public', express.static(path.join(__dirname, 'public')));
+app.use('/images', express.static(path.join(__dirname, 'public/images')));
 
 app.get('/', (req, res) => {
   res.send('Backend uploaded..');
