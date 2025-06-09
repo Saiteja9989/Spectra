@@ -1,9 +1,8 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const axios = require('axios');
-const  StudentDetail=require('../models/studentDetails');
+const StudentDetail = require('../models/studentDetails');
 const router = express.Router();
-
 
 router.use(bodyParser.json());
 router.post('/profile', async (req, res) => {
@@ -15,11 +14,8 @@ router.post('/profile', async (req, res) => {
   }
 
   try {
-   
-    
     const response = await axios.post('http://apps.teleuniv.in/api/netraapi.php?college=KMIT', {
       method: method,
-      
     }, {
       headers: {
         'Authorization': `Bearer ${token}`,
@@ -44,10 +40,7 @@ router.post('/profile', async (req, res) => {
       return res.status(400).json({ error: 'Invalid response from external API' });
     }
 
-
-
     try {
-      
       const student = await StudentDetail.findOne({ hallticketno: profileData.hallticketno });
       if (student) {
         profileData.psflag = student.psflag;
@@ -58,13 +51,27 @@ router.post('/profile', async (req, res) => {
     }
 
     try {
-      
-      const imageResponse = await axios.get(profileData.picture, { responseType: 'arraybuffer' });
-      const imageBuffer = Buffer.from(imageResponse.data, 'binary');
-      profileData.picture = imageBuffer.toString('base64');
+      // Only convert to base64 if it's a teleuniv.in URL
+      if (profileData.picture && profileData.picture.includes('teleuniv.in')) {
+        const imageResponse = await axios.get(profileData.picture, { 
+          responseType: 'arraybuffer',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+            'Origin': 'http://kmit-netra.teleuniv.in',
+            'Referer': 'http://kmit-netra.teleuniv.in/'
+          }
+        });
+        const imageBuffer = Buffer.from(imageResponse.data, 'binary');
+        profileData.picture = `data:image/jpeg;base64,${imageBuffer.toString('base64')}`;
+      }
+      // For other URLs (like our deployed server), keep them as is
     } catch (imageError) {
       console.error('Error fetching or converting profile picture:', imageError);
-      return res.status(500).json({ error: 'Error fetching or converting profile picture' });
+      // Only return error if it's a teleuniv.in URL
+      if (profileData.picture && profileData.picture.includes('teleuniv.in')) {
+        return res.status(500).json({ error: 'Error fetching or converting profile picture' });
+      }
     }
 
     res.json(profileData);
@@ -73,8 +80,6 @@ router.post('/profile', async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
-
-
 
 router.post('/userinfo',async(req,res)=>{
   const token = req.headers.authorization && req.headers.authorization.split(' ')[1]; 
