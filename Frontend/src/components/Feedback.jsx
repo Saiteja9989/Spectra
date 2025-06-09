@@ -1,14 +1,19 @@
 // src/components/FeedbackForm.js
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
 import Cookies from "js-cookie"; // Import Cookies library
 import Loader from "./Loader";
 import { baseUrl } from "../baseurl";
 import { Star } from "lucide-react"; // Import Star icon
-import { useNavigate } from "react-router-dom"; // Import useNavigate for routing
+// import { useNavigate } from "react-router-dom"; // Import useNavigate for routing
 import Navbar from "./Navbar"; // Import the Navbar component
 import { useDarkMode } from "./DarkModeContext"; // Import the dark mode hook
+import emailjs from "@emailjs/browser";
+const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID;
+const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
+const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_ID;
+
 
 const FeedbackForm = () => {
   const { darkMode } = useDarkMode(); // Access dark mode state
@@ -18,7 +23,7 @@ const FeedbackForm = () => {
   const [comments, setComments] = useState("");
   const [loading, setLoading] = useState(false);
   const [rollno, setRollno] = useState(null);
-  const navigate = useNavigate(); // Initialize useNavigate
+  // const navigate = useNavigate(); // Initialize useNavigate
 
   useEffect(() => {
     // Retrieve rollno from cookies
@@ -37,32 +42,42 @@ const FeedbackForm = () => {
     setLoading(true);
 
     try {
-      const response = await axios.post(`${baseUrl}/api/submit/feedback`, {
+      // 1. Send to backend
+      await axios.post(`${baseUrl}/api/submit/feedback`, {
         rating,
         name,
         comments,
         rollno,
-      });
+      }); // 2. Send email via EmailJS
 
-      console.log("Feedback submitted successfully:", response.data);
+      await emailjs.send(
+        serviceId,
+        templateId,
+        {
+          user_name: name,
+          user_comments: comments,
+          user_rating: rating,
+          user_rollno: rollno,
+        },
+        publicKey
+      );
 
       Swal.fire({
         icon: "success",
         title: "Success!",
-        text: "Feedback submitted successfully",
+        text: "Feedback submitted and email sent!",
         confirmButtonText: "OK",
       });
 
-      // Reset form
       setRating(0);
       setName("");
       setComments("");
     } catch (error) {
-      console.error("Error submitting feedback:", error);
+      console.error("Error submitting feedback or sending email:", error);
       Swal.fire({
         icon: "error",
         title: "Error!",
-        text: "Failed to submit feedback. Please try again.",
+        text: "Something went wrong. Try again.",
         confirmButtonText: "OK",
       });
     } finally {
@@ -76,25 +91,37 @@ const FeedbackForm = () => {
       <Navbar />
 
       {/* Feedback Form */}
-      <div className={`min-h-screen ${
-        darkMode ? "bg-gray-900" : "bg-gradient-to-br from-blue-50 via-indigo-50 to-white"
-      } py-12 px-4 sm:px-6 lg:px-8 pt-20`}>
+      <div
+        className={`min-h-screen ${
+          darkMode
+            ? "bg-gray-900"
+            : "bg-gradient-to-br from-blue-50 via-indigo-50 to-white"
+        } py-12 px-4 sm:px-6 lg:px-8 pt-20`}
+      >
         <div className="max-w-md mx-auto">
-          <div className={`${
-            darkMode ? "bg-gray-800/80" : "bg-white/80"
-          } backdrop-blur-sm rounded-2xl shadow-xl overflow-hidden ${
-            darkMode ? "border-gray-700" : "border-indigo-50"
-          } border`}>
+          <div
+            className={`${
+              darkMode ? "bg-gray-800/80" : "bg-white/80"
+            } backdrop-blur-sm rounded-2xl shadow-xl overflow-hidden ${
+              darkMode ? "border-gray-700" : "border-indigo-50"
+            } border`}
+          >
             <div className="px-6 py-8 sm:p-10">
               <div className="text-center mb-8">
-                <h2 className={`text-3xl font-bold bg-gradient-to-r ${
-                  darkMode ? "from-blue-400 to-indigo-400" : "from-blue-600 to-indigo-600"
-                } bg-clip-text text-transparent`}>
+                <h2
+                  className={`text-3xl font-bold bg-gradient-to-r ${
+                    darkMode
+                      ? "from-blue-400 to-indigo-400"
+                      : "from-blue-600 to-indigo-600"
+                  } bg-clip-text text-transparent`}
+                >
                   Your Feedback Matters
                 </h2>
-                <p className={`mt-2 text-sm ${
-                  darkMode ? "text-gray-300" : "text-gray-600"
-                }`}>
+                <p
+                  className={`mt-2 text-sm ${
+                    darkMode ? "text-gray-300" : "text-gray-600"
+                  }`}
+                >
                   Help us improve your college experience
                 </p>
               </div>
@@ -105,9 +132,11 @@ const FeedbackForm = () => {
                 <form onSubmit={handleSubmit} className="space-y-6">
                   {/* Rating Stars */}
                   <div className="flex flex-col items-center gap-2">
-                    <label className={`text-sm font-medium ${
-                      darkMode ? "text-gray-300" : "text-gray-700"
-                    }`}>
+                    <label
+                      className={`text-sm font-medium ${
+                        darkMode ? "text-gray-300" : "text-gray-700"
+                      }`}
+                    >
                       How would you rate your experience?
                     </label>
                     <div className="flex gap-2">
@@ -150,7 +179,9 @@ const FeedbackForm = () => {
                       value={name}
                       onChange={(e) => setName(e.target.value)}
                       className={`block w-full rounded-lg ${
-                        darkMode ? "bg-gray-700/50 border-gray-600" : "bg-white/50 border-gray-200"
+                        darkMode
+                          ? "bg-gray-700/50 border-gray-600"
+                          : "bg-white/50 border-gray-200"
                       } px-4 py-3 ${
                         darkMode ? "text-gray-200" : "text-gray-700"
                       } focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:ring-opacity-20 transition-shadow duration-200`}
@@ -175,7 +206,9 @@ const FeedbackForm = () => {
                       onChange={(e) => setComments(e.target.value)}
                       rows={4}
                       className={`block w-full rounded-lg ${
-                        darkMode ? "bg-gray-700/50 border-gray-600" : "bg-white/50 border-gray-200"
+                        darkMode
+                          ? "bg-gray-700/50 border-gray-600"
+                          : "bg-white/50 border-gray-200"
                       } px-4 py-3 ${
                         darkMode ? "text-gray-200" : "text-gray-700"
                       } focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:ring-opacity-20 transition-shadow duration-200 resize-none`}
@@ -191,19 +224,25 @@ const FeedbackForm = () => {
                     className={`w-full flex justify-center py-3 px-4 border border-transparent rounded-lg text-sm font-medium ${
                       darkMode ? "text-white" : "text-white"
                     } bg-gradient-to-r ${
-                      darkMode ? "from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600" 
-                      : "from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700"
+                      darkMode
+                        ? "from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600"
+                        : "from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700"
                     } focus:outline-none focus:ring-2 focus:ring-offset-2 ${
                       darkMode ? "focus:ring-blue-400" : "focus:ring-blue-500"
                     } disabled:opacity-50 disabled:cursor-not-allowed ${
-                      darkMode ? "disabled:hover:from-blue-500 disabled:hover:to-indigo-500" 
-                      : "disabled:hover:from-blue-600 disabled:hover:to-indigo-600"
+                      darkMode
+                        ? "disabled:hover:from-blue-500 disabled:hover:to-indigo-500"
+                        : "disabled:hover:from-blue-600 disabled:hover:to-indigo-600"
                     } transition-all duration-200 shadow-lg hover:shadow-xl`}
                   >
                     {loading ? (
-                      <div className={`animate-spin rounded-full h-5 w-5 border-2 ${
-                        darkMode ? "border-white border-t-transparent" : "border-white border-t-transparent"
-                      }`} />
+                      <div
+                        className={`animate-spin rounded-full h-5 w-5 border-2 ${
+                          darkMode
+                            ? "border-white border-t-transparent"
+                            : "border-white border-t-transparent"
+                        }`}
+                      />
                     ) : (
                       "Submit Feedback"
                     )}

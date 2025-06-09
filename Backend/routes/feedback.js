@@ -44,6 +44,7 @@ router.post('/submit/feedback', async (req, res) => {
 });
 router.post('/get-token-register', async (req, res) => {
   const { phnumber, password } = req.body;
+
   try {
       const response = await axios.post('http://apps.teleuniv.in/api/auth/netralogin.php?college=KMIT', {
           mobilenumber: phnumber,

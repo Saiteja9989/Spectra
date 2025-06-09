@@ -19,7 +19,7 @@ import Netraqr from "./components/Netraqr";
 import Cookies from "js-cookie";
 import Register from "./components/Register";
 import { jwtDecode } from "jwt-decode"; // For decoding JWT tokens
-// import PopupBanner from './components/PopupBanner'; 
+import PopupBanner from './components/PopupBanner'; // Import the PopupBanne
 // Initialize Google Analytics
 ReactGA.initialize("G-8C7K643WQB");
 
@@ -124,7 +124,7 @@ const App = () => {
 };
 
 const AppWrapper = () => {
-  const [showBanner, setShowBanner] = useState(true);
+  // const [showBanner, setShowBanner] = useState(true);
   return (
     <Router>
       {/* {showBanner && <PopupBanner onClose={() => setShowBanner(false)} />} */}
