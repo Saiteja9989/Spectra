@@ -61,7 +61,7 @@ router.post('/profile', async (req, res) => {
       "7731997021": "https://spectraserver-indol.vercel.app/images/vatte.png",
       "8919596424": "https://spectraserver-indol.vercel.app/images/ajay.png",
       "9381704183": "https://spectraserver-indol.vercel.app/images/bba.png",
-      "9392457838": "https://spectraserver-indol.vercel.app/images/chaaru.png",
+      "9392457838": "https://spectraserver-indol.vercel.app/images/abhiram.png",
       "7989922788": "https://spectraserver-indol.vercel.app/images/gokul.png",
       "9652685002": "https://spectraserver-indol.vercel.app/images/shashank.png",
       "9177756036": "https://spectraserver-indol.vercel.app/images/madav.png",
@@ -80,7 +80,10 @@ router.post('/profile', async (req, res) => {
       "9030560126":"https://spectraserver-indol.vercel.app/images/sampath.png",
       "8074647069": "https://spectraserver-indol.vercel.app/images/eshaan.png",
       "9666003311": "https://spectraserver-indol.vercel.app/images/aroosh.png",
-      "9182479367": "https://spectraserver-indol.vercel.app/images/koushik.png",
+      "9182479367": "https://spectraserver-indol.vercel.app/images/dubbaka.png",
+      "6305842689": "https://spectraserver-indol.vercel.app/images/Dabbula.png",
+      "9494944844": "https://spectraserver-indol.vercel.app/images/laddo.png",
+      "9010909741": "https://spectraserver-indol.vercel.app/images/hariteja.png",
     };
 
     if (Object.keys(imGroup).includes(String(profileData.phone))) {
