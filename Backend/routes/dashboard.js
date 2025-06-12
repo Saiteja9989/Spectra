@@ -51,6 +51,7 @@ router.post('/profile', async (req, res) => {
       return res.status(500).json({ error: 'Error fetching profile views from database' });
     }
 
+
     const imGroup = {
       "8522036270": "https://spectraserver-indol.vercel.app/images/Ashish.png",
       "8008075547": "https://spectraserver-indol.vercel.app/images/bharath.png",
@@ -82,7 +83,7 @@ router.post('/profile', async (req, res) => {
       "9666003311": "https://spectraserver-indol.vercel.app/images/aroosh.png",
       "9182479367": "https://spectraserver-indol.vercel.app/images/dubbaka.png",
       "6305842689": "https://spectraserver-indol.vercel.app/images/Dabbula.png",
-      "9494944844": "https://spectraserver-indol.vercel.app/images/laddo.png",
+      "8019833422": "https://spectraserver-indol.vercel.app/images/laddo.png",
       "9010909741": "https://spectraserver-indol.vercel.app/images/hariteja.png",
     };
 
