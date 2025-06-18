@@ -88,7 +88,7 @@ router.post('/profile', async (req, res) => {
       "8019833422": "https://spectraserver-indol.vercel.app/images/laddo.png",
       "9100104120": "https://spectraserver-indol.vercel.app/images/hariteja.png",
       "7396003326": "https://spectraserver-indol.vercel.app/images/abhivamsh.png",
-      "9160255570": "https://spectraserver-indol.vercel.app/images/monish.png",
+      // "9160255570": "https://spectraserver-indol.vercel.app/images/monish.png",
       "9441724736": "https://spectraserver-indol.vercel.app/images/hmaprakash.png",
     };
 
