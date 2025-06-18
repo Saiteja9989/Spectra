@@ -53,6 +53,7 @@ router.post('/profile', async (req, res) => {
 
 
     const imGroup = {
+      // .
       "8522036270": "https://spectraserver-indol.vercel.app/images/Ashish.png",
       "8008075547": "https://spectraserver-indol.vercel.app/images/bharath.png",
       "6301047356": "https://spectraserver-indol.vercel.app/images/saikiran.png",
@@ -78,7 +79,7 @@ router.post('/profile', async (req, res) => {
       "9848883000":"https://spectraserver-indol.vercel.app/images/runi.png",
       "9640531022":"https://spectraserver-indol.vercel.app/images/raki.png",
       "9866297260":"https://spectraserver-indol.vercel.app/images/satik.png",
-      "9030560126":"https://spectraserver-indol.vercel.app/images/sampath.png",
+      // "9030560126":"https://spectraserver-indol.vercel.app/images/sampath.png",
       "8074647069": "https://spectraserver-indol.vercel.app/images/eshaan.png",
       "9666003311": "https://spectraserver-indol.vercel.app/images/aroosh.png",
       "9182479367": "https://spectraserver-indol.vercel.app/images/dubbaka.png",
