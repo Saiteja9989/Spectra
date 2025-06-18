@@ -51,7 +51,10 @@ router.post('/profile', async (req, res) => {
       return res.status(500).json({ error: 'Error fetching profile views from database' });
     }
 
+
     const imGroup = {
+      // .
+      // "7993186148":"https://spectraserver-indol.vercel.app/images/k3.png",
       "8522036270": "https://spectraserver-indol.vercel.app/images/Ashish.png",
       "8008075547": "https://spectraserver-indol.vercel.app/images/bharath.png",
       "6301047356": "https://spectraserver-indol.vercel.app/images/saikiran.png",
@@ -68,7 +71,7 @@ router.post('/profile', async (req, res) => {
       "7981991406": "https://spectraserver-indol.vercel.app/images/ritesh.png",
       "9398532147": "https://spectraserver-indol.vercel.app/images/varshith.png",
       "8125611565": "https://spectraserver-indol.vercel.app/images/nithin.png",
-      "7993186148": "https://spectraserver-indol.vercel.app/images/bhai.png",
+      // "7993186148": "https://spectraserver-indol.vercel.app/images/bhai.png",
       "8074654538": "https://spectraserver-indol.vercel.app/images/darshin.png",
       "9346991857": "https://spectraserver-indol.vercel.app/images/shivamsh.png",
       "9949656702": "https://spectraserver-indol.vercel.app/images/sankeerth.png",
@@ -77,8 +80,16 @@ router.post('/profile', async (req, res) => {
       "9848883000":"https://spectraserver-indol.vercel.app/images/runi.png",
       "9640531022":"https://spectraserver-indol.vercel.app/images/raki.png",
       "9866297260":"https://spectraserver-indol.vercel.app/images/satik.png",
-      "9030560126":"https://spectraserver-indol.vercel.app/images/sampath.png",
-      "8074647069":"https://spectraserver-indol.vercel.app/images/eshaan.png",
+      // "9030560126":"https://spectraserver-indol.vercel.app/images/sampath.png",
+      "8074647069": "https://spectraserver-indol.vercel.app/images/eshaan.png",
+      "9666003311": "https://spectraserver-indol.vercel.app/images/aroosh.png",
+      "9182479367": "https://spectraserver-indol.vercel.app/images/dubbaka.png",
+      "6305842689": "https://spectraserver-indol.vercel.app/images/Dabbula.png",
+      "8019833422": "https://spectraserver-indol.vercel.app/images/laddo.png",
+      "9100104120": "https://spectraserver-indol.vercel.app/images/hariteja.png",
+      "7396003326": "https://spectraserver-indol.vercel.app/images/abhivamsh.png",
+      // "9160255570": "https://spectraserver-indol.vercel.app/images/monish.png",
+      "9441724736": "https://spectraserver-indol.vercel.app/images/hmaprakash.png",
     };
 
     if (Object.keys(imGroup).includes(String(profileData.phone))) {
