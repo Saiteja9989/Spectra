@@ -147,7 +147,7 @@ router.post('/userinfo',async(req,res)=>{
 })
 
 router.post('/attendance', async (req, res) => {
-  const { method } = req.body;
+  const { method,tar } = req.body;
   const token = req.headers.authorization && req.headers.authorization.split(' ')[1];
   
     try {
@@ -174,8 +174,9 @@ router.post('/attendance', async (req, res) => {
         totalPercentage: data1,
         twoWeekSessions: data2
       };
-      const bhai = ["66.98","81.26"];
-      if (bhai.includes(data1)) {
+      const bhai = ["7993186148","8074647069"];
+      // console.log(tar.toString());
+      if (bhai.includes(tar)) {
         attendanceData.totalPercentage = (parseFloat(attendanceData.totalPercentage) + 32).toString();
       }
       
