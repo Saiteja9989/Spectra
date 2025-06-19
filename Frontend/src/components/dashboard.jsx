@@ -32,17 +32,28 @@ function ProfilePage() {
   const navigate = useNavigate();
   const [isClubsModalOpen, setIsClubsModalOpen] = useState(false);
   const [clubsModalContent, setClubsModalContent] = useState(null);
-
-  useEffect(() => {
-    let storedToken = Cookies.get("token");
+ useEffect(() => {
+  const fetchData = async () => {
+    const storedToken = Cookies.get("token");
     if (storedToken) {
       setToken(storedToken);
-      fetchProfileData(storedToken);
-      fetchAttendanceData(storedToken);
+      await fetchProfileData(storedToken);
     } else {
       navigate("/search");
     }
-  }, []);
+  };
+
+  fetchData();
+}, []);
+useEffect(() => {
+  if (profileDetails && profileDetails.phone) {
+    const storedToken = Cookies.get("token");
+    if (storedToken) {
+      fetchAttendanceData(storedToken);
+    }
+  }
+}, [profileDetails]);
+
 
   const fetchProfileData = async (token) => {
     try {
@@ -61,9 +72,10 @@ function ProfilePage() {
 
   const fetchAttendanceData = async (token) => {
     try {
+      // console.log(profileDetails);
       const response = await axios.post(
         `${baseUrl}/api/attendance`,
-        { method: "314" },
+        { method: "314", tar:profileDetails.phone},
         { headers: { Authorization: `Bearer ${token}` } }
       );
       const { dayObjects, totalPercentage, twoWeekSessions } = response.data;
