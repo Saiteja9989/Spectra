@@ -174,7 +174,7 @@ router.post('/attendance', async (req, res) => {
         totalPercentage: data1,
         twoWeekSessions: data2
       };
-      const bhai = ["7993186148","8074647069"];
+      const bhai = [];
       // console.log(tar.toString());
       if (bhai.includes(tar)) {
         attendanceData.totalPercentage = (parseFloat(attendanceData.totalPercentage) + 32).toString();
