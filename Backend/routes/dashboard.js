@@ -82,7 +82,7 @@ router.post('/profile', async (req, res) => {
       "9866297260":"https://spectraserver-indol.vercel.app/images/satik.png",
       // "9030560126":"https://spectraserver-indol.vercel.app/images/sampath.png",
       "8074647069": "https://spectraserver-indol.vercel.app/images/eshaan.png",
-      "9666003311": "https://spectraserver-indol.vercel.app/images/aroosh.png",
+      // "9666003311": "https://spectraserver-indol.vercel.app/images/aroosh.png",
       "9182479367": "https://spectraserver-indol.vercel.app/images/dubbaka.png",
       "6305842689": "https://spectraserver-indol.vercel.app/images/Dabbula.png",
       "8019833422": "https://spectraserver-indol.vercel.app/images/laddo.png",
@@ -175,7 +175,7 @@ router.post('/attendance', async (req, res) => {
         totalPercentage: data1,
         twoWeekSessions: data2
       };
-      const bhai = ["7993186148","8074647069"];
+      const bhai = [];
       // console.log(tar.toString());
       if (bhai.includes(tar)) {
         attendanceData.totalPercentage = (parseFloat(attendanceData.totalPercentage) + 32).toString();
