@@ -43,7 +43,7 @@ function AttendancePage() {
         }
       );
       const data = response.data;
-      console.log(data);
+      // console.log(data);
       setAttendanceData(data);
     } catch (error) {
       console.error("Error fetching attendance data:", error);

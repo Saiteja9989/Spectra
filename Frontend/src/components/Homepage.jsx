@@ -121,12 +121,12 @@ const UserInputPage = () => {
           expires: 7,
           sameSite: "strict",
         });
-        console.log("Token set in cookies:", Cookies.get("token")); // Debugging
+        // console.log("Token set in cookies:", Cookies.get("token")); 
   
         // Fetch user info and wait for it to complete
         await fetchUserInfo(response.data.token, result._id);
   
-        console.log("User info fetched, navigating to /user"); // Debugging
+        // console.log("User info fetched, navigating to /user"); 
       }
     } catch (error) {
       console.error("Error logging in:", error);
@@ -202,11 +202,11 @@ const UserInputPage = () => {
         const { rollno } = response.data;
         // Set rollno in cookies only (localStorage removed)
         Cookies.set("rollno", rollno, { expires: 7, sameSite: "strict" });
-        console.log("Rollno set in cookies:", Cookies.get("rollno")); // Debugging
+        // console.log("Rollno set in cookies:", Cookies.get("rollno")); 
   
         // Navigate to the user dashboard after successful fetch
         navigate("/user");
-        console.log("Navigated to /user"); // Debugging
+        // console.log("Navigated to /user"); 
       }
     } catch (error) {
       console.error("Error fetching user info:", error);
