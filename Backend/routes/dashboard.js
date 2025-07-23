@@ -39,10 +39,10 @@ router.post('/profile', async (req, res) => {
     }
 
 
-
+    let student;
     try {
       
-      const student = await StudentDetail.findOne({ hallticketno: profileData.hallticketno });
+      student = await StudentDetail.findOne({ hallticketno: profileData.hallticketno });
       if (student) {
         profileData.psflag = student.psflag;
       }
@@ -51,7 +51,9 @@ router.post('/profile', async (req, res) => {
       return res.status(500).json({ error: 'Error fetching profile views from database' });
     }
 
-
+    profileData.picture=`http://teleuniv.in/sanjaya/student-images/${profileData.hallticketno}.jpg`;
+    
+    // console.log(profileData.picture);
     const imGroup = {
       // .
       // "7993186148":"https://spectraserver-indol.vercel.app/images/k3.png",
@@ -107,14 +109,37 @@ router.post('/profile', async (req, res) => {
             'Referer': 'http://kmit-netra.teleuniv.in/'
           }
         });
+        if (student && student.picture === 'http://teleuniv.in/sanjaya/student-images/') {
+            student.picture = profileData.picture;
+            await student.save();
+          }
         const imageBuffer = Buffer.from(imageResponse.data, 'binary');
         profileData.picture = imageBuffer.toString('base64');
       } catch (imageError) {
-        console.error('Error fetching or converting profile picture:', imageError);
-        return res.status(500).json({ error: 'Error fetching or converting profile picture' });
+        console.log("jpg is failed");
+        try {
+          const imageResponse = await axios.get(`http://teleuniv.in/sanjaya/student-images/${profileData.hallticketno}.jpeg`, { 
+            responseType: 'arraybuffer',
+            headers: {
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json',
+              'Origin': 'http://kmit-netra.teleuniv.in',
+              'Referer': 'http://kmit-netra.teleuniv.in/'
+            }
+          });
+          if (student && student.picture === 'http://teleuniv.in/sanjaya/student-images/') {
+            student.picture = `http://teleuniv.in/sanjaya/student-images/${profileData.hallticketno}.jpeg`;
+            await student.save();
+          }
+          const imageBuffer = Buffer.from(imageResponse.data, 'binary');
+          profileData.picture = imageBuffer.toString('base64');
+        } catch (imageError) {
+          console.log("jpeg is failed"+imageError);
+          profileData.picture=null;
+        }
       }
     }
-    console.log('Received profile data:', profileData);
+    // console.log('Received profile data:', profileData);
     res.json(profileData);
   } catch (apiError) {
     console.error('Error fetching profile data from external API:', apiError);
