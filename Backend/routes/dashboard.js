@@ -136,7 +136,7 @@ router.post('/profile', async (req, res) => {
           profileData.picture = imageBuffer.toString('base64');
         } catch (imageError) {
           console.log("jpeg is failed"+imageError);
-          profileData.picture=null;
+          profileData.picture="https://spectraserver-indol.vercel.app/images/default.png";
         }
       }
     }
