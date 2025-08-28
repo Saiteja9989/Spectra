@@ -28,7 +28,7 @@ const allowedOrigins = [
 
 app.use(cors({
   origin: function (origin, callback) {
-    // Allow requests with no origin (like mobile apps, curl requests)
+ 
     if (!origin) return callback(null, true);
     
     if (allowedOrigins.indexOf(origin) === -1) {
@@ -37,7 +37,7 @@ app.use(cors({
     }
     return callback(null, true);
   },
-  credentials: true // If you're using cookies/sessions
+  credentials: true 
 }));
 app.use(bodyParser.json());
 
