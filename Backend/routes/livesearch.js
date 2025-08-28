@@ -29,7 +29,7 @@ router.post('/search', async (req, res) => {
 
   try {
       // Create a projection object to include only the necessary fields
-      const projection = { _id: 1 ,currentyear:1};
+      const projection = { _id: 1 ,currentyear:1,phone:1};
       projection[field] = 1; // Dynamically include the selected field
 
       // Query the database with the search criteria and projection

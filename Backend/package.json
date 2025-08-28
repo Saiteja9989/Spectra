@@ -61,6 +61,7 @@
     "is-extglob": "^2.1.1",
     "is-glob": "^4.0.3",
     "is-number": "^7.0.0",
+    "jsonwebtoken": "^9.0.2",
     "kareem": "^2.5.1",
     "lru-cache": "^6.0.0",
     "media-typer": "^0.3.0",

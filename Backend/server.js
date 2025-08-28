@@ -21,9 +21,8 @@ const app = express();
 
 // CORS configuration
 app.use(cors({
-  origin: '*',
-  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-  allowedHeaders: 'Content-Type,Authorization'
+  origin: "http://localhost:5173", // your frontend URL
+  credentials: true, // allow cookies
 }));
 
 app.use(bodyParser.json());

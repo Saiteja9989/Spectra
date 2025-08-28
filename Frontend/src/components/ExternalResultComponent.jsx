@@ -1,29 +1,41 @@
 import React from "react";
-import Loader from "./Loader";
 
 const ExternalResultComponent = ({ resultData, totalBacklogs, darkMode }) => {
   if (!resultData || resultData.length === 0) {
-    return  <div className="flex justify-center items-center h-32">
-    <div className={`animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 ${
-      darkMode ? "border-indigo-400" : "border-indigo-600"
-    }`}></div>
-  </div>;
+    return (
+      <div className="flex justify-center items-center h-32">
+        <p className={`text-sm ${darkMode ? "text-gray-400" : "text-gray-500"}`}>
+          No result data available
+        </p>
+      </div>
+    );
   }
 
   return (
     <div className="space-y-2 sm:space-y-3 md:space-y-4">
-      {/* Total Backlogs */}
+      {/* Total Backlogs - Highlighted at the top */}
       {totalBacklogs !== null && (
-        <div
-          className={`${
-            darkMode ? "bg-red-900 border-red-700" : "bg-red-50 border-red-500"
-          } border-l-4 p-1 sm:p-2 md:p-3 rounded-md mb-1 sm:mb-2 md:mb-3`}
-        >
-          <p className={`text-[10px] sm:text-xs ${
-            darkMode ? "text-red-200" : "text-red-700"
-          } font-medium`}>
-            Total Backlogs: {totalBacklogs}
-          </p>
+        <div className={`${darkMode ? "bg-gray-800" : "bg-white"} rounded-lg p-4 shadow-md`}>
+          <div className={`flex items-center justify-between ${darkMode ? "bg-red-900" : "bg-red-100"} p-3 rounded-lg`}>
+            <div className="flex items-center">
+              <span className={`text-lg font-semibold ${darkMode ? "text-red-100" : "text-red-800"}`}>
+                Backlog Status:
+              </span>
+            </div>
+            <div className={`text-xl font-bold ${darkMode ? "text-red-100" : "text-red-800"} bg-red-600 px-3 py-1 rounded-full`}>
+              {totalBacklogs} {totalBacklogs === 1 ? "Backlog" : "Backlogs"}
+            </div>
+          </div>
+          {totalBacklogs > 0 && (
+            <p className={`mt-2 text-sm ${darkMode ? "text-red-200" : "text-red-600"}`}>
+              You have {totalBacklogs} subject(s) that need to be cleared.
+            </p>
+          )}
+          {totalBacklogs === 0 && (
+            <p className={`mt-2 text-sm ${darkMode ? "text-green-200" : "text-green-600"}`}>
+              Congratulations! You have no backlogs.
+            </p>
+          )}
         </div>
       )}
 

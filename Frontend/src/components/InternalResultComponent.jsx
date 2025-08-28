@@ -1,17 +1,19 @@
 import React from "react";
-import Loader from "./Loader";
 
 const InternalResultComponent = ({ resultData, darkMode }) => {
   if (!resultData || resultData.length === 0) {
-    return  <div className="flex justify-center items-center h-32">
-    <div className={`animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 ${
-      darkMode ? "border-indigo-400" : "border-indigo-600"
-    }`}></div>
-  </div>
+    return (
+      <div className="flex justify-center items-center h-32">
+        <p className={`text-sm ${darkMode ? "text-gray-400" : "text-gray-500"}`}>
+          No internal result data available
+        </p>
+      </div>
+    );
   }
 
   return (
     <div className="space-y-2 sm:space-y-3 md:space-y-4">
+      {/* Internal Results */}
       {resultData.map((semester, idx) => (
         <div
           key={idx}
@@ -30,7 +32,7 @@ const InternalResultComponent = ({ resultData, darkMode }) => {
                 darkMode ? "text-gray-200" : "text-gray-900"
               }`}
             >
-              {semester.title}
+              Year {semester.year}, Semester {semester.semester} - Internal Assessment {semester.internalType}
             </h3>
           </div>
 
