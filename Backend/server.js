@@ -20,11 +20,25 @@ const fetchqr = require('./routes/fetchqr');
 const app = express();
 
 // CORS configuration
-app.use(cors({
-  origin: "http://localhost:5173", // your frontend URL
-  credentials: true, // allow cookies
-}));
+const allowedOrigins = [
+  'http://localhost:5173', // Local development
+  'https://spectra-beta.vercel.app', // Your production domain
+  'https://spectra.vercel.app' // Add other domains if needed
+];
 
+app.use(cors({
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps, curl requests)
+    if (!origin) return callback(null, true);
+    
+    if (allowedOrigins.indexOf(origin) === -1) {
+      const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
+      return callback(new Error(msg), false);
+    }
+    return callback(null, true);
+  },
+  credentials: true // If you're using cookies/sessions
+}));
 app.use(bodyParser.json());
 
 // Serve static files
