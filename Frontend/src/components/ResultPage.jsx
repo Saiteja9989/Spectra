@@ -8,156 +8,215 @@ import { BookOpen, GraduationCap, ArrowLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import Loader from "./Loader";
 import Navbar from "./Navbar";
-import { useDarkMode } from './DarkModeContext' // Import useDarkMode hook
+import { useDarkMode } from './DarkModeContext';
 
 const ResultPage = () => {
   const [internalResultData, setInternalResultData] = useState([]);
   const [externalResultData, setExternalResultData] = useState([]);
   const [selectedTab, setSelectedTab] = useState("internal");
   const [totalBacklogs, setTotalBacklogs] = useState(null);
-  const [isLoading, setIsLoading] = useState(true); // Loading state
+  const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
-  const { darkMode } = useDarkMode(); // Access dark mode state
+  const { darkMode } = useDarkMode();
 
   useEffect(() => {
-    const rollno = Cookies.get("rollno");
-    if (rollno) {
-      fetchInternalResultData(rollno);
-      fetchExternalResultData(rollno);
+    const token = Cookies.get("token");
+    const rollno = Cookies.get("id");
+    
+    if (token && rollno) {
+      fetchExternalResultData(token, rollno);
+      fetchInternalResultData(token, rollno);
     } else {
-      console.error("Roll number not found in cookies");
+      console.error("Token or roll number not found in cookies");
       setIsLoading(false);
     }
   }, []);
 
-  const fetchInternalResultData = async (rollno) => {
+  const fetchExternalResultData = async (token, rollno) => {
     try {
-      const response = await axios.post(`${baseUrl}/api/internalResultData`, {
-        mid: 76,
-        rollno: rollno,
-      });
-      parseHtml(response.data, setInternalResultData);
-    } catch (error) {
-      console.error("Error fetching internal result data:", error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const fetchExternalResultData = async (rollno) => {
-    try {
-      const yearRange = [1, 2, 3, 4];
-      const semesterRange = [1, 2];
-      const allResults = [];
-
-      for (let year of yearRange) {
-        for (let semester of semesterRange) {
-          const response = await axios.post(`${baseUrl}/api/externalResultData`, {
-            year,
-            semester,
-            rollno: rollno,
-          });
-          const parsedData = parseHtml1(response.data);
-          if (parsedData) {
-            allResults.push({
-              year,
-              semester,
-              ...parsedData,
-            });
+      const response = await axios.post(`${baseUrl}/api/externalResultData`, 
+        { rollno }, 
+        {
+          headers: {
+            Authorization: `Bearer ${token}`
           }
         }
+      );
+      
+      if (response.data.Error) {
+        console.error("Error fetching external result data:", response.data.message);
+        return;
       }
-
-      setExternalResultData(allResults);
-
-      const backlogResponse = await axios.post(`${baseUrl}/api/backlogs`, {
-        rollno: rollno,
-      });
-      setTotalBacklogs(backlogResponse.data);
+      
+      // Transform the API response to match our component's expected format
+      const transformedData = transformApiData(response.data.payload);
+      setExternalResultData(transformedData);
+      
+      // Calculate total backlogs
+      const backlogs = calculateTotalBacklogs(response.data.payload);
+      setTotalBacklogs(backlogs);
     } catch (error) {
-      console.error("Error fetching external result data:", error);
+      console.error('Error fetching external result data:', error);
+      if (error.response && error.response.status === 401) {
+        // Token is invalid, redirect to login
+        navigate('/login');
+      }
     } finally {
       setIsLoading(false);
     }
   };
 
-  const parseHtml = (htmlData, setData) => {
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(htmlData, "text/html");
-    const tables = doc.querySelectorAll(".box-body");
-
-    const parsedData = Array.from(tables).map((table) => {
-      const titleElement = table.querySelector("h2");
-      const title = titleElement ? titleElement.textContent : "";
-
-      const thElements = table.querySelectorAll("th");
-      const columns = Array.from(thElements).map((th) => th.textContent);
-
-      const dataRows = table.querySelectorAll("tr");
-      const data = Array.from(dataRows)
-        .slice(1)
-        .map((row) => {
-          const rowData = {};
-          const tdElements = row.querySelectorAll("td");
-          tdElements.forEach((td, index) => {
-            if (columns[index]) {
-              rowData[columns[index]] = td.textContent;
-            }
-          });
-          return rowData;
-        });
-
-      return { title, columns, data };
-    });
-
-    setData(parsedData);
-  };
-
-  const parseHtml1 = (htmlData) => {
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(htmlData, "text/html");
-    const table = doc.querySelector(".tableofcmm");
-
-    if (!table) {
-      console.error("Table not found in HTML data");
-      return null;
-    }
-
-    const columns = Array.from(table.querySelectorAll("th")).map((th) =>
-      th.textContent.trim()
-    );
-    const rows = Array.from(table.querySelectorAll("tbody tr"));
-
-    if (rows.length === 0) {
-      console.warn("No rows found in the table");
-      return { columns, data: [], creditsAcquired: "N/A", sgpa: "N/A" };
-    }
-
-    const data = rows.map((row) => {
-      const rowData = {};
-      Array.from(row.querySelectorAll("td")).forEach((td, index) => {
-        let textContent = td.textContent.trim();
-        if (textContent.toUpperCase() === "NA") {
-          textContent = "N/A";
+  const fetchInternalResultData = async (token, rollno) => {
+    try {
+      const response = await axios.post(`${baseUrl}/api/internalResultData`, 
+        { rollno }, 
+        {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
         }
-        rowData[columns[index]] = textContent;
-      });
-      return rowData;
-    });
-
-    let creditsAcquired = "N/A";
-    let sgpa = "N/A";
-    const tfoot = table.querySelector("tfoot");
-    if (tfoot) {
-      const creditsAcquiredElement = tfoot.querySelector(".creditsacquired");
-      const sgpaElement = tfoot.querySelector("td:last-child");
-      if (creditsAcquiredElement && sgpaElement) {
-        creditsAcquired = creditsAcquiredElement.textContent.trim();
-        sgpa = sgpaElement.textContent.trim();
+      );
+      
+      if (response.data.Error) {
+        console.error("Error fetching internal result data:", response.data.message);
+        return;
+      }
+      
+      // Transform the API response to match our component's expected format
+      const transformedData = transformInternalApiData(response.data.payload);
+      setInternalResultData(transformedData);
+    } catch (error) {
+      console.error('Error fetching internal result data:', error);
+      if (error.response && error.response.status === 401) {
+        // Token is invalid, redirect to login
+        navigate('/login');
       }
     }
+  };
 
-    return { columns, data, creditsAcquired, sgpa };
+  // Transform API data to match the expected format
+  const transformApiData = (apiData) => {
+    const result = [];
+    
+    if (!apiData || !apiData.yearlyResults) return result;
+    
+    Object.entries(apiData.yearlyResults).forEach(([yearKey, yearData]) => {
+      const year = parseInt(yearKey.split(" ")[1]);
+      
+      Object.entries(yearData).forEach(([semesterKey, semesterData]) => {
+        const semester = parseInt(semesterKey.split(" ")[1]);
+        
+        // Create only the required columns
+        const columns = [
+          "Sno",
+          "Subject Name",
+          "Grade",
+          "Grade Points",
+          "Credits"
+        ];
+        
+        // Transform results data with only required fields
+        const data = semesterData.results.map((subject, index) => ({
+          "Sno": index + 1,
+          "Subject Name": subject.subjectName,
+          "Grade": subject.grade,
+          "Grade Points": subject.gradepoints,
+          "Credits": subject.credits
+        }));
+        
+        // Add semester data to result array
+        result.push({
+          year,
+          semester,
+          columns,
+          data,
+          creditsAcquired: semesterData.SGPA?.totalCredits || "N/A",
+          sgpa: semesterData.SGPA?.sgpa || "N/A"
+        });
+      });
+    });
+    
+    return result;
+  };
+
+  // Transform internal API data to match the expected format
+  const transformInternalApiData = (apiData) => {
+    const result = [];
+    
+    if (!apiData || !Array.isArray(apiData)) return result;
+    
+    apiData.forEach(yearData => {
+      const year = parseInt(yearData.year);
+      
+      yearData.semesters.forEach(semesterData => {
+        const semester = parseInt(semesterData.semester);
+        
+        semesterData.internal_types.forEach(internalType => {
+          const internalTypeNum = parseInt(internalType.internalType);
+          
+          // Create columns for internal results
+          const columns = [
+            "Sno",
+            "Subject Name",
+            "Subject Type",
+            "Total Marks",
+            "Assignment",
+            "Descriptive",
+            "Objective"
+          ];
+          
+          // Transform subject data
+          const data = internalType.subjects.map((subject, index) => {
+            const rowData = {
+              "Sno": index + 1,
+              "Subject Name": subject.name,
+              "Subject Type": subject.subject_type,
+              "Total Marks": subject.totalMarks
+            };
+            
+            // Extract marks by type
+            subject.types.forEach(type => {
+              rowData[type.type] = type.marks;
+            });
+            
+            // Ensure all columns have values
+            if (!rowData.Assignment) rowData.Assignment = "N/A";
+            if (!rowData.Descriptive) rowData.Descriptive = "N/A";
+            if (!rowData.Objective) rowData.Objective = "N/A";
+            
+            return rowData;
+          });
+          
+          // Add internal type data to result array
+          result.push({
+            year,
+            semester,
+            internalType: internalTypeNum,
+            columns,
+            data
+          });
+        });
+      });
+    });
+    
+    return result;
+  };
+
+  // Calculate total backlogs from API data
+  const calculateTotalBacklogs = (apiData) => {
+    let backlogs = 0;
+    
+    if (!apiData || !apiData.yearlyResults) return backlogs;
+    
+    Object.values(apiData.yearlyResults).forEach(yearData => {
+      Object.values(yearData).forEach(semesterData => {
+        if (semesterData.SGPA && semesterData.SGPA.backlogcount) {
+          backlogs += semesterData.SGPA.backlogcount;
+        }
+      });
+    });
+    
+    return backlogs;
   };
 
   const handleTabChange = (key) => {
@@ -181,11 +240,11 @@ const ResultPage = () => {
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {isLoading ? (
-           <div className="flex justify-center items-center h-32">
-           <div className={`animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 ${
-             darkMode ? "border-indigo-400" : "border-indigo-600"
-           }`}></div>
-         </div> // Show loader while data is being fetched
+          <div className="flex justify-center items-center h-32">
+            <div className={`animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 ${
+              darkMode ? "border-indigo-400" : "border-indigo-600"
+            }`}></div>
+          </div>
         ) : (
           <div className={`${darkMode ? 'bg-gray-800' : 'bg-white'} rounded-xl shadow-lg overflow-hidden`}>
             {/* Tabs */}

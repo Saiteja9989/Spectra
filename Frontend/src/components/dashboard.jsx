@@ -95,7 +95,7 @@ function ProfilePage() {
           }
         }
       );
-       console.log(response.data)
+      //  console.log(response.data)
       // Process the response to match expected format
       const { dayObjects = [], totalPercentage = 0, twoWeekSessions = { present: 0, absent: 0, nosessions: 0 } } = response.data || {};
       

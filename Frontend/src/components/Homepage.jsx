@@ -11,6 +11,8 @@ import HCaptcha from "@hcaptcha/react-hcaptcha";
 import { Typography } from "antd";
 import HomePageResult from '../Loaders/HomePageResult';
 
+const SITEKEY = import.meta.env.VITE_BASE_URL
+
 const { Text } = Typography;
 
 const HCaptchaWrapper = ({ onVerify }) => {
@@ -18,7 +20,7 @@ const HCaptchaWrapper = ({ onVerify }) => {
   
   return (
     <HCaptcha
-      sitekey={"898273e0-27c2-47fa-bf84-7bb23b6432d4"}
+      sitekey={SITEKEY}
       onVerify={onVerify}
     />
   );

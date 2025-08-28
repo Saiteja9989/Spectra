@@ -6,27 +6,48 @@ const router = express.Router();
 
 router.use(bodyParser.json());
 
-
 router.post('/internalResultData', async (req, res) => {
-  const { mid, rollno } = req.body;
-
   try {
-    const response = await axios.get('http://teleuniv.in/trinetra/pages/lib/student_ajaxfile.php', {
-      params: { mid, rollno },
-      // headers: {
-      //   'Cookie': '_ga=GA1.2.128655953.1713779717; _ga_1XGBKWGPY0=GS1.1.1713779717.1.0.1713779718.0.0.0',
-      //   'Referer': `http://teleuniv.in/trinetra/pages/templates/wrapper/studentmanagement/internalmarks_app.php?sid=${rollno}`
-      // },
+    const token = req.headers.authorization;
+    const { rollno } = req.body;
+    
+    if (!token) {
+      return res.status(401).json({ error: 'Authorization token required' });
+    }
+    
+    if (!rollno) {
+      return res.status(400).json({ error: 'Roll number is required' });
+    }
+
+    
+    // Make request to internal results API
+    const response = await axios.get(`https://kmit-api.teleuniv.in/sanjaya/getInternalResultsbyStudent/${rollno}`, {
+      headers: {
+        Authorization: token,
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        Origin: "https://kmit.teleuniv.in",
+        Referer: "https://kmit.teleuniv.in/"
+      }
     });
 
-    // console.log(response.data); 
-    res.send(response.data);
+    res.json(response.data);
   } catch (error) {
     console.error('Error fetching internal result data:', error);
-    res.status(500).send('Error fetching internal result data');
+    
+    if (error.response) {
+      res.status(error.response.status).json({ 
+        error: 'Error fetching internal result data',
+        details: error.response.data 
+      });
+    } else if (error.request) {
+      res.status(503).json({ error: 'No response from server' });
+    } else {
+      res.status(500).json({ error: error.message });
+    }
   }
 });
-  
+
 
 
 module.exports = router;
