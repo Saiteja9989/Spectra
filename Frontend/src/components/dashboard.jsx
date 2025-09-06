@@ -87,7 +87,7 @@ function ProfilePage() {
     try {
       const response = await axios.post(
         `${baseUrl}/api/attendance`,
-        {}, // No need for method/tar in new API
+        {},
         { 
           headers: { 
             Authorization: `Bearer ${token}`,
@@ -95,8 +95,7 @@ function ProfilePage() {
           }
         }
       );
-      //  console.log(response.data)
-      // Process the response to match expected format
+      
       const { dayObjects = [], totalPercentage = 0, twoWeekSessions = { present: 0, absent: 0, nosessions: 0 } } = response.data || {};
       
       setAttendanceData(dayObjects);
@@ -120,6 +119,15 @@ function ProfilePage() {
     navigate("/search");
   };
 
+  const handleNetraQRClick = () => {
+    // Store QR code data in sessionStorage to pass to NetraQR page
+    if (profileQRCode) {
+      sessionStorage.setItem('netraQRCode', profileQRCode);
+      sessionStorage.setItem('studentHallticket', profileDetails?.htno || '');
+    }
+    navigate("/netraqr");
+  };
+
   if (isLoading) {
     return (
       <div className={`flex justify-center items-center h-screen ${darkMode ? "bg-gray-900" : "bg-gray-50"}`}>
@@ -137,7 +145,7 @@ function ProfilePage() {
     { icon: Calendar, label: "Attendance", color: "bg-blue-100 text-blue-600", onClick: () => navigate("/attendance") },
     { icon: BarChart3, label: "Results", color: "bg-green-100 text-green-600", onClick: () => navigate("/result") },
     { icon: School2, label: "Timetable", color: "bg-yellow-100 text-yellow-600", onClick: () => navigate("/timetable") },
-    { icon: QrCode, label: "Netra QR", color: "bg-indigo-100 text-indigo-600", onClick: () => navigate("/netraqr") },
+    { icon: QrCode, label: "Netra QR", color: "bg-indigo-100 text-indigo-600", onClick: handleNetraQRClick },
     { icon: MessageSquare, label: "Feedback", color: "bg-pink-100 text-pink-600", onClick: () => navigate("/feedback") },
   ];
 
@@ -177,10 +185,6 @@ function ProfilePage() {
               <p className={`${darkMode ? "text-gray-400" : "text-gray-500"} text-xs`}>{profileDetails?.htno || "N/A"}</p>
 
               <div className="mt-4 w-full space-y-2">
-                {/* <div className="flex items-center justify-between py-1.5 border-b border-gray-100">
-                  <span className={`${darkMode ? "text-gray-400" : "text-gray-600"} text-xs`}>Department</span>
-                  <span className={`font-medium ${darkMode ? "text-gray-200" : "text-gray-900"} text-sm`}>{profileDetails?.branch?.name || "N/A"}</span>
-                </div> */}
                 <div className="flex items-center justify-between py-1.5 border-b border-gray-100">
                   <span className={`${darkMode ? "text-gray-400" : "text-gray-600"} text-xs`}>Section</span>
                   <span className={`font-medium ${darkMode ? "text-gray-200" : "text-gray-900"} text-sm`}>

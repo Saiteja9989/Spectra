@@ -87,9 +87,7 @@ router.post("/userinfo", async (req, res) => {
   }
 });
 
-
 router.post('/attendance', async (req, res) => {
-  // const { method, tar } = req.body;
   const token = req.headers.authorization && req.headers.authorization.split(' ')[1];
   
   try {
@@ -101,22 +99,38 @@ router.post('/attendance', async (req, res) => {
         'Referer': 'https://kmit.teleuniv.in/'
       }
     });
-    
 
     // Process the new response structure to match the old format
-    const { payload } = response.data;
+    const payload = response.data.payload || response.data;
     
     const attendanceDetails = payload?.attendanceDetails || [];
     const totalPercentage = payload?.overallAttendance || "0";
 
     // Convert to dayobjects format
-    const dayObjects = attendanceDetails.map(day => ({
-      date: day.date,
-      sessions: day.periods.reduce((sessions, period) => {
-        sessions[`period_${period.period_no}`] = period.status;
-        return sessions;
-      }, {})
-    }));
+    const dayObjects = attendanceDetails.map(day => {
+      // Handle the special case where date is "Today"
+      let date = day.date;
+      if (date === "Today") {
+        date = new Date().toISOString().split('T')[0]; // Convert "Today" to actual date
+      }
+      
+      return {
+        date: date,
+        sessions: day.periods.reduce((sessions, period) => {
+          sessions[`period_${period.period_no}`] = period.status;
+          return sessions;
+        }, {})
+      };
+    });
+
+    // Sort dayObjects to put today's date first, then newest dates
+    const today = new Date().toISOString().split('T')[0];
+    
+    dayObjects.sort((a, b) => {
+      if (a.date === today) return -1;
+      if (b.date === today) return 1;
+      return new Date(b.date) - new Date(a.date); // Newest first
+    });
 
     // Calculate twoWeekSessions counts
     const twoWeekSessions = {
@@ -125,10 +139,10 @@ router.post('/attendance', async (req, res) => {
       nosessions: 0
     };
 
-    attendanceDetails.forEach(day => {
-      day.periods.forEach(period => {
-        if (period.status === 1) twoWeekSessions.present++;
-        else if (period.status === 0) twoWeekSessions.absent++;
+    dayObjects.forEach(day => {
+      Object.values(day.sessions).forEach(status => {
+        if (status === 1) twoWeekSessions.present++;
+        else if (status === 0) twoWeekSessions.absent++;
         else twoWeekSessions.nosessions++;
       });
     });
@@ -139,19 +153,15 @@ router.post('/attendance', async (req, res) => {
       totalPercentage,
       twoWeekSessions
     };
-
-    // Maintain the special case handling (if needed)
     
-
     res.json(attendanceData);
   } catch (error) {
     console.error('Error fetching attendance data from external API:', error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
-  
-
 
 
 
 module.exports = router;
+

@@ -1,6 +1,6 @@
 import React, { useState, useRef } from "react";
 import { Avatar } from "antd";
-import { UserOutlined, PhoneOutlined, IdcardOutlined } from "@ant-design/icons";
+import { UserOutlined, PhoneOutlined, IdcardOutlined, CloseOutlined } from "@ant-design/icons";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
@@ -16,8 +16,6 @@ const SITEKEY = import.meta.env.VITE_BASE_URL
 const { Text } = Typography;
 
 const HCaptchaWrapper = ({ onVerify }) => {
-  // const isDev = process.env.NODE_ENV === 'development';
-  
   return (
     <HCaptcha
       sitekey={SITEKEY}
@@ -39,6 +37,7 @@ const UserInputPage = () => {
   const [modalContent, setModalContent] = useState(null);
   const [modalAction, setModalAction] = useState(null);
   const [onRejectAction, setOnRejectAction] = useState(null);
+  const [showVoteBanner, setShowVoteBanner] = useState(true); // State to control banner visibility
   const captchaRef = useRef(null);
   const navigate = useNavigate();
 
@@ -118,7 +117,7 @@ const UserInputPage = () => {
   };
 
   const handleResultClick = (result) => {
-    console.log("Selected student:", result); // Debug log
+    console.log("Selected student:", result);
     openModal(
       "Verify Captcha",
       "info",
@@ -251,31 +250,26 @@ const UserInputPage = () => {
 
   const fetchUserInfo = async (tokenFromLogin) => {
   try {
-    // Get token from login or from cookies
     const token = tokenFromLogin || Cookies.get("token");
 
-    // Call backend /userinfo which will decode JWT and fetch KMIT API
     const response = await axios.post(
       `${baseUrl}/api/userinfo`,
-      {}, // No body needed
+      {},
       { 
         headers: { 
           Authorization: `Bearer ${token}`
         },
-        withCredentials: true, // send cookies if any
+        withCredentials: true,
         timeout: 10000
       }
     );
 
     if (response.data) {
-      // console.log(response.data)
-      // Save the roll number from API response to cookie
       Cookies.set("id", response.data.payload.student.id, { 
         expires: 7, 
         sameSite: "strict",
       });
 
-      // Navigate to user dashboard
       navigate("/user");
     }
   } catch (error) {
@@ -340,8 +334,29 @@ const UserInputPage = () => {
 
   return (
     <div className={`min-h-screen ${darkMode ? "bg-gray-900" : "bg-gradient-to-b from-blue-50 to-white"}`}>
+      {/* Voting Banner */}
+      {/* {showVoteBanner && (
+        <div className={`sticky top-0 z-50 w-full py-2 px-4 flex items-center justify-between ${
+          darkMode ? "bg-indigo-800" : "bg-indigo-600"
+        } shadow-md`}>
+          <div className="flex-1 text-center">
+            <p className={`text-sm font-medium ${darkMode ? "text-indigo-100" : "text-white"}`}>
+              🗳️ Vote for <span className="font-bold">K.ANJALI </span> for President!
+            </p>
+          </div>
+          <button
+            onClick={() => setShowVoteBanner(false)}
+            className={`ml-4 p-1 rounded-full ${
+              darkMode ? "hover:bg-indigo-700 text-indigo-200" : "hover:bg-indigo-500 text-white"
+            }`}
+            aria-label="Close banner"
+          >
+            <CloseOutlined className="text-xs" />
+          </button>
+        </div>
+      )} */}
+      
       <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-4 sm:py-8">
-        {/* Announcement Banner */}
         <div className={`mb-4 sm:mb-8 rounded-lg ${darkMode ? "bg-gray-800" : "bg-blue-500"} p-3 sm:p-4 ${darkMode ? "text-gray-200" : "text-white"} shadow-lg`}>
           <p className="text-center text-xs sm:text-sm font-medium">
             First-year students: Register on Spectra to access your academic profile
