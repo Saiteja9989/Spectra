@@ -1,49 +1,62 @@
-import React from 'react'
-import ContentLoader from 'react-content-loader'
+import React from 'react';
+import { useDarkMode } from '../components/DarkModeContext';
 
-const GithubProfile = props => {
+const DashboardLoader = () => {
+  const { darkMode } = useDarkMode();
+  const base = darkMode ? 'bg-gray-700/60' : 'bg-gray-200/80';
+  const card = darkMode ? 'bg-gray-800/80 border-white/5' : 'bg-white border-gray-100';
+
   return (
-    <ContentLoader
-      height={300}
-      width={450}
-      viewBox="0 0 450 300"
-      backgroundColor="#f5f5f5"
-      foregroundColor="#dbdbdb"
-      {...props}
-    >
-      <circle cx="75" cy="75" r="70" />
-      <rect x="160" y="15" rx="3" ry="3" width="50" height="15" />
-      <rect x="215" y="15" rx="3" ry="3" width="50" height="15" />
-      <rect x="270" y="15" rx="3" ry="3" width="50" height="15" />
-      <rect x="325" y="15" rx="3" ry="3" width="50" height="15" />
+    <div className="grid grid-cols-12 gap-4 w-full">
+      {/* Profile card skeleton */}
+      <div className={`col-span-12 md:col-span-4 rounded-2xl border p-5 ${card}`}>
+        <div className="flex flex-col items-center gap-3">
+          <div className={`w-20 h-20 rounded-2xl ${base} shimmer`} />
+          <div className={`h-3.5 w-32 rounded-full ${base} shimmer`} />
+          <div className={`h-2.5 w-20 rounded-full ${base} shimmer`} />
+          <div className="w-full mt-2 space-y-3">
+            {[1,2,3,4].map(i => (
+              <div key={i} className="flex justify-between">
+                <div className={`h-2.5 w-16 rounded-full ${base} shimmer`} />
+                <div className={`h-2.5 w-20 rounded-full ${base} shimmer`} />
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
 
-      <rect x="160" y="35" rx="3" ry="3" width="290" height="1" />
+      {/* Attendance card skeleton */}
+      <div className={`col-span-12 md:col-span-8 rounded-2xl border p-5 ${card}`}>
+        <div className={`h-3.5 w-36 rounded-full ${base} shimmer mb-5`} />
+        <div className={`h-3 w-full rounded-full ${base} shimmer mb-6`} />
+        <div className="space-y-3">
+          {[1,2,3,4,5].map(i => (
+            <div key={i} className="flex items-center gap-3">
+              <div className={`h-2.5 w-16 rounded-full ${base} shimmer`} />
+              <div className="flex gap-1.5">
+                {[1,2,3,4,5,6,7].map(j => (
+                  <div key={j} className={`w-6 h-6 rounded-lg ${base} shimmer`} />
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
 
-      <rect x="160" y="45" rx="3" ry="3" width="35" height="8" />
-      <rect x="380" y="45" rx="3" ry="3" width="70" height="8" />
+      {/* Actions skeleton */}
+      <div className={`col-span-12 rounded-2xl border p-5 ${card}`}>
+        <div className={`h-3.5 w-28 rounded-full ${base} shimmer mb-4`} />
+        <div className="grid grid-cols-3 md:grid-cols-6 gap-3">
+          {[1,2,3,4,5,6].map(i => (
+            <div key={i} className="flex flex-col items-center gap-2">
+              <div className={`w-10 h-10 rounded-xl ${base} shimmer`} />
+              <div className={`h-2 w-12 rounded-full ${base} shimmer`} />
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
 
-      <rect x="160" y="60" rx="3" ry="3" width="140" height="50" />
-      <rect x="310" y="60" rx="3" ry="3" width="140" height="50" />
-      <rect x="160" y="120" rx="3" ry="3" width="140" height="50" />
-      <rect x="310" y="120" rx="3" ry="3" width="140" height="50" />
-      <rect x="160" y="180" rx="3" ry="3" width="140" height="50" />
-      <rect x="310" y="180" rx="3" ry="3" width="140" height="50" />
-
-      <rect x="5" y="150" rx="3" ry="3" width="130" height="15" />
-      <rect x="5" y="170" rx="3" ry="3" width="70" height="10" />
-      <rect x="10" y="190" rx="3" ry="3" width="115" height="15" />
-      <rect x="10" y="210" rx="3" ry="3" width="35" height="8" />
-      <rect x="50" y="210" rx="3" ry="3" width="35" height="8" />
-      <rect x="90" y="210" rx="3" ry="3" width="35" height="8" />
-    </ContentLoader>
-  )
-}
-
-GithubProfile.metadata = {
-  name: 'Nikhil Anand', // My name
-  github: 'anandnkhl', // Github username
-  description: 'Latest Github Profile', // Little tagline
-  filename: 'GithubProfile', // filename of your loaderr
-}
-
-export default GithubProfile
+export default DashboardLoader;

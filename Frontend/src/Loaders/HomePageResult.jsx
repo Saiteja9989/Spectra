@@ -1,34 +1,23 @@
-import React from 'react'
-import ContentLoader from 'react-content-loader'
+import React from 'react';
+import { useDarkMode } from '../components/DarkModeContext';
 
-const InstaChatlist = props => {
+const HomePageResult = () => {
+  const { darkMode } = useDarkMode();
+  const base = darkMode ? 'bg-gray-700/60' : 'bg-gray-200/80';
+
   return (
-    <ContentLoader
-      viewBox="0 0 380 200"
-      backgroundColor="#f3f3f3"
-      foregroundColor="#ecebeb"
-      {...props}
-    >
-      <circle cx="25" cy="25" r="25" />
-      <rect x="60" y="7" rx="5" ry="5" width="230" height="12" />
-      <rect x="60" y="28" rx="5" ry="5" width="150" height="11" />
+    <div className="w-full space-y-3 px-1">
+      {[1, 2, 3].map(i => (
+        <div key={i} className="flex items-center gap-3">
+          <div className={`w-8 h-8 rounded-full ${base} shimmer flex-shrink-0`} />
+          <div className="flex-1 space-y-1.5">
+            <div className={`h-3 rounded-full ${base} shimmer`} style={{ width: `${55 + i * 10}%` }} />
+            <div className={`h-2.5 rounded-full ${base} shimmer`} style={{ width: `${30 + i * 8}%` }} />
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+};
 
-      <circle cx="25" cy="100" r="25" />
-      <rect x="60" y="82" rx="5" ry="5" width="230" height="12" />
-      <rect x="60" y="103" rx="5" ry="5" width="150" height="11" />
-
-      <circle cx="25" cy="175" r="25" />
-      <rect x="60" y="157" rx="5" ry="5" width="230" height="12" />
-      <rect x="60" y="178" rx="5" ry="5" width="150" height="11" />
-    </ContentLoader>
-  )
-}
-
-InstaChatlist.metadata = {
-  name: 'Ritik Dixit',
-  github: 'ritikdixit1',
-  description: 'Instagram chat list',
-  filename: 'InstaChatlist',
-}
-
-export default InstaChatlist;
+export default HomePageResult;

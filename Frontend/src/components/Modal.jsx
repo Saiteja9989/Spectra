@@ -1,92 +1,94 @@
 import { useDarkMode } from './DarkModeContext';
-import { X } from 'lucide-react'; // Import the X icon
+import { X, CheckCircle, AlertCircle, Info } from 'lucide-react';
 
 const Modal = ({ isOpen, onClose, title, type = 'info', children, onConfirm, onReject }) => {
-  const { darkMode } = useDarkMode(); // Access dark mode state
-
+  const { darkMode } = useDarkMode();
   if (!isOpen) return null;
 
-  // Function to determine background color based on type and dark mode
-  const getBgColor = () => {
-    switch (type) {
-      case 'success':
-        return darkMode ? 'bg-green-900' : 'bg-green-50';
-      case 'error':
-        return darkMode ? 'bg-red-900' : 'bg-red-50';
-      default:
-        return darkMode ? 'bg-blue-900' : 'bg-blue-50';
-    }
+  const config = {
+    success: {
+      icon: CheckCircle,
+      iconClass: 'text-emerald-400',
+      accent: 'from-emerald-500/20 to-emerald-600/5',
+      border: 'border-emerald-500/20',
+      btn: 'bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 shadow-emerald-500/30',
+    },
+    error: {
+      icon: AlertCircle,
+      iconClass: 'text-red-400',
+      accent: 'from-red-500/20 to-red-600/5',
+      border: 'border-red-500/20',
+      btn: 'bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 shadow-red-500/30',
+    },
+    warning: {
+      icon: AlertCircle,
+      iconClass: 'text-amber-400',
+      accent: 'from-amber-500/20 to-amber-600/5',
+      border: 'border-amber-500/20',
+      btn: 'bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 shadow-amber-500/30',
+    },
+    info: {
+      icon: Info,
+      iconClass: 'text-indigo-400',
+      accent: 'from-indigo-500/20 to-indigo-600/5',
+      border: 'border-indigo-500/20',
+      btn: 'bg-gradient-to-r from-indigo-500 to-violet-600 hover:from-indigo-600 hover:to-violet-700 shadow-indigo-500/30',
+    },
   };
 
-  // Function to determine text color based on dark mode
-  const getTextColor = () => {
-    return darkMode ? 'text-gray-100' : 'text-gray-800'; // Adjust text color for dark mode
-  };
+  const c = config[type] || config.info;
+  const Icon = c.icon;
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto">
-      {/* Blurred Background */}
-      <div className="fixed inset-0 backdrop-blur-sm bg-black/30" onClick={onClose} />
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+      {/* Backdrop */}
+      <div className="fixed inset-0 bg-black/60 glass" onClick={() => { onClose(); onReject?.(); }} />
 
-      {/* Modal Content */}
-      <div className="flex min-h-screen items-center justify-center p-4">
-        <div className={`relative rounded-lg ${getBgColor()} p-8 shadow-xl transition-all sm:w-full sm:max-w-lg`}>
-          {/* Close Button */}
-          <div className="absolute right-4 top-4">
+      {/* Card */}
+      <div className={`relative w-full max-w-md rounded-2xl border overflow-hidden shadow-2xl animate-float ${
+        darkMode ? `bg-gray-900 ${c.border}` : `bg-white ${c.border}`
+      }`} style={{ animation: 'none', transform: 'none' }}>
+        {/* Top gradient strip */}
+        <div className={`absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r ${c.accent}`} />
+
+        {/* Header */}
+        <div className={`flex items-center gap-3 px-5 pt-5 pb-4 border-b ${darkMode ? 'border-white/5' : 'border-gray-100'}`}>
+          <div className={`w-9 h-9 rounded-xl bg-gradient-to-br ${c.accent} flex items-center justify-center flex-shrink-0`}>
+            <Icon className={`w-5 h-5 ${c.iconClass}`} />
+          </div>
+          <h3 className={`font-semibold text-base flex-1 ${darkMode ? 'text-white' : 'text-gray-900'}`}>{title}</h3>
+          <button
+            onClick={() => { onClose(); onReject?.(); }}
+            className={`p-1.5 rounded-lg transition-colors ${darkMode ? 'hover:bg-white/8 text-gray-500 hover:text-gray-300' : 'hover:bg-gray-100 text-gray-400 hover:text-gray-600'}`}
+          >
+            <X className="w-4 h-4" />
+          </button>
+        </div>
+
+        {/* Body */}
+        <div className={`px-5 py-4 text-sm ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+          {children}
+        </div>
+
+        {/* Actions */}
+        {onConfirm && (
+          <div className={`flex gap-2 px-5 pb-5 pt-1`}>
             <button
-              onClick={() => {
-                console.log("Modal closed or canceled"); // Debugging
-                onClose();
-                onReject?.(); // Trigger onReject when the modal is closed
-              }}
-              className="rounded-full p-1 hover:bg-gray-200 focus:outline-none"
+              onClick={() => { onClose(); onReject?.(); }}
+              className={`flex-1 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 border ${
+                darkMode ? 'border-white/10 text-gray-300 hover:bg-white/5' : 'border-gray-200 text-gray-600 hover:bg-gray-50'
+              }`}
             >
-              <X className="h-5 w-5 text-gray-500" />
+              Cancel
+            </button>
+            <button
+              onClick={() => { onConfirm(); onClose(); }}
+              className={`flex-1 py-2.5 rounded-xl text-sm font-semibold text-white transition-all duration-200 shadow-lg hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0 ${c.btn}`}
+            >
+              Confirm
             </button>
           </div>
-
-          {/* Modal Title */}
-          <div className="mb-4">
-            <h3 className={`text-lg font-medium leading-6 ${getTextColor()}`}>
-              {title}
-            </h3>
-          </div>
-
-          {/* Modal Content */}
-          <div className={`mt-2 ${getTextColor()}`}>
-            {children}
-          </div>
-
-          {/* Modal Actions */}
-          {onConfirm && (
-            <div className="mt-4 flex justify-end space-x-2">
-              <button
-                onClick={() => {
-                  console.log("Cancel button clicked"); // Debugging
-                  onClose();
-                  onReject?.(); // Trigger onReject when the user cancels
-                }}
-                className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-200 rounded-md hover:bg-gray-300"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={() => {
-                  console.log("Confirm button clicked"); // Debugging
-                  onConfirm(); // Trigger onConfirm when the user confirms
-                  onClose();
-                }}
-                className={`px-4 py-2 text-sm font-medium text-white ${
-                  type === 'success' ? 'bg-green-600 hover:bg-green-700' :
-                  type === 'error' ? 'bg-red-600 hover:bg-red-700' :
-                  'bg-blue-600 hover:bg-blue-700'
-                } rounded-md`}
-              >
-                Confirm
-              </button>
-            </div>
-          )}
-        </div>
+        )}
       </div>
     </div>
   );

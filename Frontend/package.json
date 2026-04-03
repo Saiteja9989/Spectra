@@ -16,6 +16,7 @@
     "@emotion/styled": "^11.11.0",
     "@fontsource/inter": "^5.2.6",
     "@hcaptcha/react-hcaptcha": "^1.12.1",
+    "@marsidev/react-turnstile": "^1.4.2",
     "@mui/icons-material": "^5.15.14",
     "@mui/material": "^5.15.14",
     "@mui/system": "^5.15.14",

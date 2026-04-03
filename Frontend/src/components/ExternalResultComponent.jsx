@@ -1,9 +1,20 @@
 import React from "react";
+import { Trophy, AlertTriangle } from "lucide-react";
+
+const gradeColor = (grade, darkMode) => {
+  if (!grade || grade === "N/A") return darkMode ? "text-gray-500" : "text-gray-400";
+  const g = grade.toUpperCase();
+  if (g === "O" || g === "A+") return "text-emerald-500";
+  if (g === "A" || g === "B+") return "text-blue-500";
+  if (g === "B" || g === "C") return "text-amber-500";
+  if (g === "F" || g === "AB") return "text-red-500";
+  return darkMode ? "text-gray-300" : "text-gray-700";
+};
 
 const ExternalResultComponent = ({ resultData, totalBacklogs, darkMode }) => {
   if (!resultData || resultData.length === 0) {
     return (
-      <div className="flex justify-center items-center h-32">
+      <div className="flex flex-col items-center justify-center py-12">
         <p className={`text-sm ${darkMode ? "text-gray-400" : "text-gray-500"}`}>
           No result data available
         </p>
@@ -12,93 +23,87 @@ const ExternalResultComponent = ({ resultData, totalBacklogs, darkMode }) => {
   }
 
   return (
-    <div className="space-y-2 sm:space-y-3 md:space-y-4">
-      {/* Total Backlogs - Highlighted at the top */}
+    <div className="space-y-4">
+      {/* Backlog status */}
       {totalBacklogs !== null && (
-        <div className={`${darkMode ? "bg-gray-800" : "bg-white"} rounded-lg p-4 shadow-md`}>
-          <div className={`flex items-center justify-between ${darkMode ? "bg-red-900" : "bg-red-100"} p-3 rounded-lg`}>
-            <div className="flex items-center">
-              <span className={`text-lg font-semibold ${darkMode ? "text-red-100" : "text-red-800"}`}>
-                Backlog Status:
-              </span>
-            </div>
-            <div className={`text-xl font-bold ${darkMode ? "text-red-100" : "text-red-800"} bg-red-600 px-3 py-1 rounded-full`}>
-              {totalBacklogs} {totalBacklogs === 1 ? "Backlog" : "Backlogs"}
+        <div className={`rounded-2xl border p-4 flex items-center justify-between ${
+          totalBacklogs > 0
+            ? darkMode ? "bg-red-500/10 border-red-500/20" : "bg-red-50 border-red-100"
+            : darkMode ? "bg-emerald-500/10 border-emerald-500/20" : "bg-emerald-50 border-emerald-100"
+        }`}>
+          <div className="flex items-center gap-3">
+            {totalBacklogs > 0
+              ? <AlertTriangle className="w-5 h-5 text-red-500" />
+              : <Trophy className="w-5 h-5 text-emerald-500" />
+            }
+            <div>
+              <p className={`text-xs font-semibold ${totalBacklogs > 0 ? "text-red-600" : "text-emerald-600"}`}>
+                Backlog Status
+              </p>
+              <p className={`text-xs mt-0.5 ${darkMode ? "text-gray-400" : "text-gray-500"}`}>
+                {totalBacklogs > 0
+                  ? `${totalBacklogs} subject(s) need to be cleared`
+                  : "No backlogs — great job!"}
+              </p>
             </div>
           </div>
-          {totalBacklogs > 0 && (
-            <p className={`mt-2 text-sm ${darkMode ? "text-red-200" : "text-red-600"}`}>
-              You have {totalBacklogs} subject(s) that need to be cleared.
-            </p>
-          )}
-          {totalBacklogs === 0 && (
-            <p className={`mt-2 text-sm ${darkMode ? "text-green-200" : "text-green-600"}`}>
-              Congratulations! You have no backlogs.
-            </p>
-          )}
+          <span className={`text-2xl font-bold ${totalBacklogs > 0 ? "text-red-500" : "text-emerald-500"}`}>
+            {totalBacklogs}
+          </span>
         </div>
       )}
 
-      {/* Semester Results */}
+      {/* Semester results */}
       {resultData.map((semester, idx) => (
         <div
           key={idx}
-          className={`${
-            darkMode ? "bg-gray-800 border-gray-700" : "bg-white border-gray-200"
-          } rounded-lg border overflow-hidden`}
+          className={`rounded-2xl border overflow-hidden ${
+            darkMode ? "bg-gray-900 border-white/5" : "bg-white border-gray-100"
+          }`}
         >
           {/* Header */}
-          <div
-            className={`${
-              darkMode ? "bg-gray-700 border-gray-600" : "bg-gray-50 border-gray-200"
-            } px-1 py-1 sm:px-2 sm:py-2 md:px-3 md:py-3 border-b`}
-          >
-            <h3
-              className={`text-[10px] sm:text-xs md:text-sm font-semibold ${
-                darkMode ? "text-gray-200" : "text-gray-900"
-              }`}
-            >
-              Year {semester.year}, Semester {semester.semester}
+          <div className={`px-4 py-3 border-b ${darkMode ? "bg-gray-800/50 border-white/5" : "bg-gray-50 border-gray-100"}`}>
+            <h3 className={`text-xs font-bold tracking-wide ${darkMode ? "text-gray-200" : "text-gray-800"}`}>
+              Year {semester.year} &middot; Semester {semester.semester}
             </h3>
           </div>
 
           {/* Table */}
           <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-200">
-              <thead className={`${darkMode ? "bg-gray-700" : "bg-gray-50"}`}>
-                <tr>
-                  {semester.columns.map((column, colIdx) => (
-                    <th
-                      key={colIdx}
-                      className={`px-1 py-1 sm:px-2 sm:py-2 md:px-3 md:py-3 text-left text-[10px] sm:text-xs font-medium ${
-                        darkMode ? "text-gray-300" : "text-gray-500"
-                      } uppercase`}
-                    >
-                      {column}
+            <table className="min-w-full">
+              <thead>
+                <tr className={darkMode ? "bg-gray-800/30" : "bg-gray-50/80"}>
+                  {semester.columns.map((col, i) => (
+                    <th key={i} className={`px-3 py-2.5 text-left text-[10px] font-semibold tracking-wider uppercase ${darkMode ? "text-gray-500" : "text-gray-400"}`}>
+                      {col}
                     </th>
                   ))}
                 </tr>
               </thead>
-              <tbody
-                className={`${
-                  darkMode ? "bg-gray-800 divide-gray-700" : "bg-white divide-gray-200"
-                } divide-y`}
-              >
+              <tbody>
                 {semester.data.map((row, rowIdx) => (
                   <tr
                     key={rowIdx}
-                    className={`${
-                      darkMode ? "hover:bg-gray-700" : "hover:bg-gray-50"
+                    className={`border-t transition-colors ${
+                      darkMode ? "border-white/5 hover:bg-white/3" : "border-gray-50 hover:bg-gray-50/80"
                     }`}
                   >
-                    {semester.columns.map((column, colIdx) => (
+                    {semester.columns.map((col, colIdx) => (
                       <td
                         key={colIdx}
-                        className={`px-1 py-1 sm:px-2 sm:py-2 md:px-3 md:py-3 text-[10px] sm:text-xs ${
-                          darkMode ? "text-gray-200" : "text-gray-900"
+                        className={`px-3 py-2.5 text-xs ${
+                          col === "Sno"
+                            ? darkMode ? "text-gray-500" : "text-gray-400"
+                            : col === "Subject Name"
+                            ? `font-medium ${darkMode ? "text-gray-200" : "text-gray-800"}`
+                            : col === "Grade"
+                            ? `font-bold ${gradeColor(row[col], darkMode)}`
+                            : col === "Grade Points"
+                            ? `font-semibold ${darkMode ? "text-indigo-400" : "text-indigo-600"}`
+                            : darkMode ? "text-gray-400" : "text-gray-600"
                         }`}
                       >
-                        {row[column]}
+                        {row[col]}
                       </td>
                     ))}
                   </tr>
@@ -107,39 +112,17 @@ const ExternalResultComponent = ({ resultData, totalBacklogs, darkMode }) => {
             </table>
           </div>
 
-          {/* Footer (SGPA and Credits Acquired) */}
-          <div
-            className={`${
-              darkMode ? "bg-gray-700 border-gray-600" : "bg-gray-50 border-gray-200"
-            } px-1 py-1 sm:px-2 sm:py-2 md:px-3 md:py-3 border-t flex justify-between items-center`}
-          >
-            <div>
-              <span className={`text-[10px] sm:text-xs ${
-                darkMode ? "text-gray-300" : "text-gray-500"
-              }`}>
-                SGPA:
-              </span>
-              <span
-                className={`ml-1 text-[10px] sm:text-xs font-medium ${
-                  darkMode ? "text-green-300 bg-green-900" : "text-green-700 bg-green-100"
-                } px-1 py-1 rounded`}
-              >
+          {/* Footer */}
+          <div className={`px-4 py-3 border-t flex items-center justify-between gap-4 ${darkMode ? "bg-gray-800/50 border-white/5" : "bg-gray-50 border-gray-100"}`}>
+            <div className="flex items-center gap-1.5">
+              <span className={`text-xs ${darkMode ? "text-gray-500" : "text-gray-400"}`}>SGPA</span>
+              <span className={`text-xs font-bold px-2 py-0.5 rounded-lg ${darkMode ? "bg-emerald-500/20 text-emerald-400" : "bg-emerald-100 text-emerald-700"}`}>
                 {semester.sgpa}
               </span>
             </div>
-            <div>
-              <span className={`text-[10px] sm:text-xs ${
-                darkMode ? "text-gray-300" : "text-gray-500"
-              }`}>
-                Credits Acquired:
-              </span>
-              <span
-                className={`ml-1 text-[10px] sm:text-xs font-medium ${
-                  darkMode ? "text-gray-200" : "text-gray-900"
-                }`}
-              >
-                {semester.creditsAcquired}
-              </span>
+            <div className="flex items-center gap-1.5">
+              <span className={`text-xs ${darkMode ? "text-gray-500" : "text-gray-400"}`}>Credits</span>
+              <span className={`text-xs font-bold ${darkMode ? "text-gray-200" : "text-gray-700"}`}>{semester.creditsAcquired}</span>
             </div>
           </div>
         </div>

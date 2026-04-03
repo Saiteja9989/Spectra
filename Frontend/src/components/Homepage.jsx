@@ -1,28 +1,12 @@
-import React, { useState, useRef } from "react";
-import { Avatar } from "antd";
-import { UserOutlined, PhoneOutlined, IdcardOutlined, CloseOutlined } from "@ant-design/icons";
+import React, { useState } from "react";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
 import { baseUrl } from "../baseurl";
 import { useDarkMode } from "./DarkModeContext";
 import Modal from "./Modal";
-import HCaptcha from "@hcaptcha/react-hcaptcha";
-import { Typography } from "antd";
 import HomePageResult from '../Loaders/HomePageResult';
-
-const SITEKEY = import.meta.env.VITE_BASE_URL
-
-const { Text } = Typography;
-
-const HCaptchaWrapper = ({ onVerify }) => {
-  return (
-    <HCaptcha
-      sitekey={SITEKEY}
-      onVerify={onVerify}
-    />
-  );
-};
+import { Search, User, Phone, CreditCard, Zap, ChevronRight, UserPlus } from "lucide-react";
 
 const UserInputPage = () => {
   const { darkMode } = useDarkMode();
@@ -37,8 +21,6 @@ const UserInputPage = () => {
   const [modalContent, setModalContent] = useState(null);
   const [modalAction, setModalAction] = useState(null);
   const [onRejectAction, setOnRejectAction] = useState(null);
-  const [showVoteBanner, setShowVoteBanner] = useState(true); // State to control banner visibility
-  const captchaRef = useRef(null);
   const navigate = useNavigate();
 
   const openModal = (title, type, content, onConfirm, onReject) => {
@@ -64,27 +46,19 @@ const UserInputPage = () => {
       return;
     }
 
-    if (source) {
-      source.cancel("Operation canceled due to new input.");
-    }
+    if (source) source.cancel("Operation canceled due to new input.");
 
     const cancelToken = axios.CancelToken;
     const newSource = cancelToken.source();
     setSource(newSource);
-
     determineSearchType(inputValue, newSource);
   };
 
   const determineSearchType = async (inputValue, cancelTokenSource) => {
-    if (/^\d{10}$/.test(inputValue)) {
-      setSearchType("phone");
-    } else if (/^\d{1,9}$/.test(inputValue)) {
-      setSearchType("partialPhone");
-    } else if (/^2[a-zA-Z0-9]+$/.test(inputValue)) {
-      setSearchType("hallticketno");
-    } else {
-      setSearchType("name");
-    }
+    if (/^\d{10}$/.test(inputValue)) setSearchType("phone");
+    else if (/^\d{1,9}$/.test(inputValue)) setSearchType("partialPhone");
+    else if (/^2[a-zA-Z0-9]+$/.test(inputValue)) setSearchType("hallticketno");
+    else setSearchType("name");
     await fetchResults(inputValue, cancelTokenSource);
   };
 
@@ -94,377 +68,272 @@ const UserInputPage = () => {
       const response = await axios.post(
         `${baseUrl}/api/search`,
         { searchInput: inputValue },
-        { 
-          cancelToken: cancelTokenSource.token,
-          timeout: 10000 
-        }
+        { cancelToken: cancelTokenSource.token, timeout: 10000 }
       );
       setSearchResults(response.data);
     } catch (error) {
       if (!axios.isCancel(error)) {
-        console.error("Error fetching search results:", error);
-        openModal(
-          "Error", 
-          "error", 
-          <p>Failed to fetch search results. Please try again.</p>,
-          null,
-          () => setSearchQuery("")
-        );
+        openModal("Search Error", "error", <p>Failed to fetch search results. Please try again.</p>, null, () => setSearchQuery(""));
       }
     } finally {
       setLoading(false);
     }
   };
 
-  const handleResultClick = (result) => {
-    console.log("Selected student:", result);
+  const handleResultClick = (result) => handleBrowserLogin(result);
+
+  const handleBrowserLogin = async (result) => {
     openModal(
-      "Verify Captcha",
+      "Logging in...",
       "info",
-      <div className="flex flex-col items-center space-y-4">
-        <p className={`${darkMode ? "text-gray-300" : "text-gray-700"}`}>
-          Please verify you're human
+      <div className="flex flex-col items-center gap-3 py-2">
+        <div className="relative">
+          <div className="w-10 h-10 rounded-full border-2 border-white/10" />
+          <div className="absolute inset-0 w-10 h-10 rounded-full border-2 border-transparent border-t-indigo-500 border-r-violet-500 animate-spin" />
+        </div>
+        <p className={`text-sm text-center ${darkMode ? "text-gray-300" : "text-gray-600"}`}>
+          Verifying with college server. This may take ~10 seconds.
         </p>
-        <HCaptchaWrapper 
-          onVerify={(token) => {
-            closeModal();
-            handleCaptchaSuccess(result, token);
-          }} 
-        />
       </div>,
-      null,
-      () => setSearchQuery("")
+      null, null
     );
-  };
 
-  const handleCaptchaSuccess = async (result, captchaToken) => {
     try {
-      const response = await axios.post(
-        `${baseUrl}/api/def-token`,
-        {
-          username: result.phone,
-          password: "Kmit123$",
-          captcha: captchaToken,
-          application: "netra"
-        },
-        { timeout: 30000 } 
-      );
-
+      const response = await axios.post(`${baseUrl}/api/browser-login`, { username: result.phone }, { timeout: 40000 });
       if (response.data.success === 1 && response.data.token) {
-        Cookies.set("token", response.data.token, { 
-          expires: 7, 
-          sameSite: "strict",
-        });
+        closeModal();
+        Cookies.set("token", response.data.token, { expires: 7, sameSite: "strict" });
         await fetchUserInfo(response.data.token);
       } else {
-        showPasswordPrompt(result, captchaToken);
+        closeModal();
+        showPasswordPrompt(result);
       }
     } catch (error) {
-      console.error("Login error:", error);
-      
+      closeModal();
       let errorMessage = "Login failed. Please try again.";
-      if (error.code === "ECONNABORTED") {
-        errorMessage = "Request timeout. Please check your connection.";
-      } else if (error.response?.data?.error) {
-        errorMessage = error.response.data.error;
-      }
-      
-      openModal(
-        "Error", 
-        "error", 
-        <p>{errorMessage}</p>,
-        null,
-        () => setSearchQuery("")
-      );
+      if (error.code === "ECONNABORTED") errorMessage = "Request timeout. Please check your connection.";
+      else if (error.response?.data?.error) errorMessage = error.response.data.error;
+      openModal("Login Failed", "error", <p>{errorMessage}</p>, null, () => setSearchQuery(""));
     }
   };
 
-  const showPasswordPrompt = (result, captchaToken) => {
+  const showPasswordPrompt = (result) => {
     openModal(
       "Enter Password",
       "info",
-      <div className="space-y-4">
+      <div className="space-y-3">
+        <p className={`text-sm ${darkMode ? "text-gray-400" : "text-gray-500"}`}>
+          Default password didn't work. Enter your Netra password.
+        </p>
         <div>
-          <label className={`block text-sm font-medium mb-1 ${darkMode ? "text-gray-300" : "text-gray-700"}`}>
-            Password
+          <label className={`block text-xs font-medium mb-1.5 ${darkMode ? "text-gray-300" : "text-gray-700"}`}>
+            Netra Password
           </label>
           <input
             type="password"
             id="password"
-            className={`w-full p-2 rounded border ${
-              darkMode ? "bg-gray-700 border-gray-600 text-white" : "bg-white border-gray-300"
+            className={`w-full px-3 py-2.5 rounded-xl border text-sm outline-none transition-all ${
+              darkMode
+                ? "bg-gray-800 border-white/10 text-white focus:border-indigo-500"
+                : "bg-gray-50 border-gray-200 text-gray-900 focus:border-indigo-500"
             }`}
+            placeholder="Enter your password"
             autoComplete="current-password"
           />
         </div>
       </div>,
       async () => {
         const password = document.getElementById("password").value;
-        if (!password) {
-          openModal("Error", "error", <p>Password is required.</p>);
-          return;
-        }
+        if (!password) { openModal("Error", "error", <p>Password is required.</p>); return; }
         try {
-          const response = await axios.post(
-            `${baseUrl}/api/get-token`,
-            {
-              username: result.phone,
-              password,
-              captcha: captchaToken,
-              application: "netra"
-            },
-            { timeout: 10000 }
-          );
-          
+          const response = await axios.post(`${baseUrl}/api/browser-login`, { username: result.phone, password }, { timeout: 40000 });
           if (response.data.token) {
-            Cookies.set("token", response.data.token, { 
-              expires: 7, 
-              sameSite: "strict",
-              secure: process.env.NODE_ENV === 'production'
-            });
+            Cookies.set("token", response.data.token, { expires: 7, sameSite: "strict" });
             await fetchUserInfo(response.data.token);
           } else {
-            openModal(
-              "Error", 
-              "error", 
-              <p>Invalid password. Please try again.</p>,
-              () => showPasswordPrompt(result, captchaToken)
-            );
+            openModal("Invalid Password", "error", <p>Invalid password. Please try again.</p>, () => showPasswordPrompt(result));
           }
         } catch (error) {
-          console.error("Login error:", error);
           let errorMessage = "Login failed. Please try again.";
-          if (error.response?.data?.error) {
-            errorMessage = error.response.data.error;
-          }
-          openModal(
-            "Error", 
-            "error", 
-            <p>{errorMessage}</p>,
-            () => showPasswordPrompt(result, captchaToken)
-          );
+          if (error.response?.data?.error) errorMessage = error.response.data.error;
+          openModal("Login Failed", "error", <p>{errorMessage}</p>, () => showPasswordPrompt(result));
         }
       }
     );
   };
 
   const fetchUserInfo = async (tokenFromLogin) => {
-  try {
-    const token = tokenFromLogin || Cookies.get("token");
-
-    const response = await axios.post(
-      `${baseUrl}/api/userinfo`,
-      {},
-      { 
-        headers: { 
-          Authorization: `Bearer ${token}`
-        },
-        withCredentials: true,
-        timeout: 10000
+    try {
+      const token = tokenFromLogin || Cookies.get("token");
+      const response = await axios.post(
+        `${baseUrl}/api/userinfo`, {},
+        { headers: { Authorization: `Bearer ${token}` }, withCredentials: true, timeout: 10000 }
+      );
+      if (response.data) {
+        Cookies.set("id", response.data.payload.student.id, { expires: 7, sameSite: "strict" });
+        navigate("/user");
       }
-    );
-
-    if (response.data) {
-      Cookies.set("id", response.data.payload.student.id, { 
-        expires: 7, 
-        sameSite: "strict",
-      });
-
-      navigate("/user");
+    } catch (error) {
+      let errorMessage = "Failed to fetch user information.";
+      if (error.response?.data?.error) errorMessage = error.response.data.error;
+      openModal("Error", "error", <p>{errorMessage}</p>, null, () => { Cookies.remove("token"); setSearchQuery(""); });
     }
-  } catch (error) {
-    console.error("Error fetching user info:", error);
+  };
 
-    let errorMessage = "Failed to fetch user information.";
-    if (error.response?.data?.error) {
-      errorMessage = error.response.data.error;
-    }
-
-    openModal(
-      "Error", 
-      "error", 
-      <p>{errorMessage}</p>,
-      null,
-      () => {
-        Cookies.remove("token");
-        setSearchQuery("");
-      }
-    );
-  }
-};
-
-  const getAvatar = (result) => {
-    let icon;
+  const getIcon = () => {
     switch (searchType) {
-      case "name": 
-        icon = <UserOutlined />; 
-        break;
-      case "phone":
-      case "partialPhone": 
-        icon = <PhoneOutlined />; 
-        break;
-      case "hallticketno": 
-        icon = <IdcardOutlined />; 
-        break;
-      default: 
-        icon = <UserOutlined />;
+      case "name": return User;
+      case "phone": case "partialPhone": return Phone;
+      case "hallticketno": return CreditCard;
+      default: return User;
     }
-    return (
-      <Avatar 
-        style={{ backgroundColor: "#1890ff", verticalAlign: "middle" }} 
-        size="small" 
-        icon={icon} 
-      />
-    );
   };
 
   const getResultText = (result) => {
     switch (searchType) {
-      case "name":
-        return `${result.firstname} ${result.lastname || ''}`.trim();
-      case "hallticketno":
-        return `${result.hallticketno}`;
-      case "phone":
-      case "partialPhone":
-        return `${result.phone}`;
-      default:
-        return "";
+      case "name": return `${result.firstname} ${result.lastname || ''}`.trim();
+      case "hallticketno": return result.hallticketno;
+      case "phone": case "partialPhone": return result.phone;
+      default: return "";
     }
   };
 
+  const getSubText = (result) => {
+    if (searchType === "name") return result.hallticketno || result.phone || "";
+    if (searchType === "hallticketno") return `${result.firstname} ${result.lastname || ''}`.trim();
+    if (searchType === "phone" || searchType === "partialPhone") return `${result.firstname} ${result.lastname || ''}`.trim();
+    return "";
+  };
+
+  const ResultIcon = getIcon();
+
   return (
-    <div className={`min-h-screen ${darkMode ? "bg-gray-900" : "bg-gradient-to-b from-blue-50 to-white"}`}>
-      {/* Voting Banner */}
-      {/* {showVoteBanner && (
-        <div className={`sticky top-0 z-50 w-full py-2 px-4 flex items-center justify-between ${
-          darkMode ? "bg-indigo-800" : "bg-indigo-600"
-        } shadow-md`}>
-          <div className="flex-1 text-center">
-            <p className={`text-sm font-medium ${darkMode ? "text-indigo-100" : "text-white"}`}>
-              🗳️ Vote for <span className="font-bold">K.ANJALI </span> for President!
-            </p>
+    <div className={`min-h-screen ${darkMode ? "bg-gray-950" : "bg-gray-50"} relative overflow-hidden`}>
+      {/* Background decoration */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        <div className="absolute -top-40 -right-40 w-96 h-96 rounded-full bg-indigo-500/5 blur-3xl" />
+        <div className="absolute -bottom-40 -left-40 w-96 h-96 rounded-full bg-violet-500/5 blur-3xl" />
+      </div>
+
+      <div className="relative mx-auto max-w-2xl px-4 pt-16 pb-10">
+        {/* Hero */}
+        <div className="text-center mb-10 pt-8">
+          <div className="inline-flex items-center gap-2 mb-5">
+            <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center shadow-lg shadow-indigo-500/30">
+              <Zap className="w-5 h-5 text-white" />
+            </div>
+            <span className={`text-2xl font-bold tracking-tight ${darkMode ? "text-white" : "text-gray-900"}`}>SPECTRA</span>
           </div>
-          <button
-            onClick={() => setShowVoteBanner(false)}
-            className={`ml-4 p-1 rounded-full ${
-              darkMode ? "hover:bg-indigo-700 text-indigo-200" : "hover:bg-indigo-500 text-white"
-            }`}
-            aria-label="Close banner"
-          >
-            <CloseOutlined className="text-xs" />
-          </button>
+          <h1 className={`text-3xl sm:text-4xl font-bold tracking-tight mb-3 ${darkMode ? "text-white" : "text-gray-900"}`}>
+            Your Academic{" "}
+            <span className="gradient-text">Portal</span>
+          </h1>
+          <p className={`text-sm sm:text-base ${darkMode ? "text-gray-400" : "text-gray-500"}`}>
+            Access attendance, results &amp; academic profile in one place
+          </p>
         </div>
-      )} */}
-      
-      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-4 sm:py-8">
-        <div className={`mb-4 sm:mb-8 rounded-lg ${darkMode ? "bg-gray-800" : "bg-blue-500"} p-3 sm:p-4 ${darkMode ? "text-gray-200" : "text-white"} shadow-lg`}>
-          <p className="text-center text-xs sm:text-sm font-medium">
+
+        {/* Info banner */}
+        <div className={`mb-6 rounded-2xl border px-4 py-3 flex items-center gap-3 ${
+          darkMode ? "bg-indigo-500/10 border-indigo-500/20" : "bg-indigo-50 border-indigo-100"
+        }`}>
+          <div className="w-1.5 h-1.5 rounded-full bg-indigo-400 flex-shrink-0" />
+          <p className={`text-xs font-medium ${darkMode ? "text-indigo-300" : "text-indigo-700"}`}>
             First-year students: Register on Spectra to access your academic profile
           </p>
         </div>
 
-        {/* Hero Section */}
-        <div className="mb-6 sm:mb-12 text-center">
-          <h1 className={`text-3xl sm:text-5xl font-bold tracking-tight ${darkMode ? "text-gray-200" : "text-gray-900"}`}>
-            KMIT SPECTRA
-          </h1>
-          <p className={`mt-3 text-sm sm:text-lg ${darkMode ? "text-gray-400" : "text-gray-600"} font-medium`}>
-            Access your attendance, results, and academic profile in one place
-          </p>
-        </div>
+        {/* Search card */}
+        <div className={`rounded-2xl border p-5 ${
+          darkMode ? "bg-gray-900 border-white/5" : "bg-white border-gray-100"
+        } shadow-sm`}>
+          <label className={`block text-xs font-semibold tracking-wide uppercase mb-3 ${darkMode ? "text-gray-400" : "text-gray-500"}`}>
+            Search Profile
+          </label>
+          <div className="relative">
+            <Search className={`absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 ${darkMode ? "text-gray-500" : "text-gray-400"}`} />
+            <input
+              type="text"
+              className={`w-full pl-10 pr-4 py-3 rounded-xl border text-sm outline-none transition-all duration-200 ${
+                darkMode
+                  ? "bg-gray-800 border-white/8 text-white placeholder-gray-500 focus:border-indigo-500/50 focus:bg-gray-800"
+                  : "bg-gray-50 border-gray-200 text-gray-900 placeholder-gray-400 focus:border-indigo-400 focus:bg-white"
+              }`}
+              placeholder="Name, Phone Number, or Roll No"
+              value={searchQuery}
+              onChange={handleInputChange}
+              autoComplete="off"
+            />
+          </div>
 
-        {/* Search Input and Results */}
-        <div className={`mt-6 sm:mt-10 ${darkMode ? "bg-gray-800" : "bg-white"} rounded-lg shadow-md p-4 sm:p-6`}>
-          <form onSubmit={(e) => e.preventDefault()} className="space-y-4 sm:space-y-6">
-            <div>
-              <label htmlFor="search" className={`block text-sm sm:text-base font-medium ${darkMode ? "text-gray-300" : "text-gray-700"} mb-3`}>
-                Search Profile
-              </label>
-              <div className="mt-1 flex rounded-md shadow-sm">
-                <input
-                  type="text"
-                  name="search"
-                  id="search"
-                  className={`flex-1 min-w-0 block w-full px-3 py-2 sm:px-2 sm:py-1 rounded-md border ${
-                    darkMode ? "bg-gray-700 border-gray-600 text-white" : "bg-white border-gray-300"
-                  } focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm sm:text-base placeholder-gray-400 transition-all duration-200`}
-                  placeholder="Enter Name/ Phone / Roll No"
-                  value={searchQuery}
-                  onChange={handleInputChange}
-                  autoComplete="off"
-                />
-              </div>
-            </div>
-          </form>
-
-          {/* Register Button */}
-          <div className="mt-4 sm:mt-6 text-center">
-            <p className={`mb-2 sm:mb-3 text-sm sm:text-base ${darkMode ? "text-gray-400" : "text-gray-600"} font-medium`}>
-              Not found in the search results?
+          {/* Register link */}
+          <div className="mt-4 pt-4 border-t flex items-center justify-between" style={{ borderColor: darkMode ? 'rgba(255,255,255,0.05)' : '#f3f4f6' }}>
+            <p className={`text-xs ${darkMode ? "text-gray-500" : "text-gray-400"}`}>
+              Not found in results?
             </p>
             <button
               onClick={() => navigate("/register")}
-              className={`inline-flex items-center px-4 py-2 sm:px-3 sm:py-1.5 border border-transparent text-sm sm:text-base font-semibold rounded-md shadow-sm ${
-                darkMode ? "bg-green-600 hover:bg-green-700" : "bg-green-600 hover:bg-green-700"
-              } text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-all duration-200`}
+              className="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-500 hover:text-emerald-400 transition-colors"
             >
+              <UserPlus className="w-3.5 h-3.5" />
               Register on Spectra
             </button>
           </div>
         </div>
 
-        {/* Search Results */}
-        {!loading && searchQuery && (
-          <div className="mt-4 sm:mt-6 max-w-md mx-auto">
-            <div className={`${darkMode ? "bg-gray-800" : "bg-white"} rounded-lg shadow-md p-3 sm:p-4`}>
-              <div className="space-y-2 sm:space-y-3">
-                {searchResults.map((result, index) => (
-                  <div
-                    key={index}
-                    onClick={() => handleResultClick(result)}
-                    className={`group p-2 sm:p-3 rounded-lg ${
-                      darkMode ? "hover:bg-gray-700" : "hover:bg-gray-50"
-                    } cursor-pointer transition-all duration-200`}
-                  >
-                    <div className="flex items-center space-x-2 sm:space-x-3">
-                      <div className="flex-shrink-0">{getAvatar(result)}</div>
-                      <div className="flex-1 min-w-0">
-                        <p className={`text-sm sm:text-base font-semibold ${darkMode ? "text-gray-200" : "text-gray-900"} truncate`}>
-                          {getResultText(result)}
-                        </p>
-                        {result.currentyear && (
-                          <p className={`text-xs sm:text-sm ${darkMode ? "text-gray-400" : "text-gray-500"} mt-0.5`}>
-                            <span className="font-medium">Current Year:</span> {result.currentyear}
-                          </p>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
+        {/* Loading skeleton */}
+        {loading && (
+          <div className={`mt-3 rounded-2xl border p-4 ${darkMode ? "bg-gray-900 border-white/5" : "bg-white border-gray-100"}`}>
+            <HomePageResult />
           </div>
         )}
 
-        {/* Loader */}
-        {loading && (
-          <div className="mt-4 sm:mt-6 max-w-md mx-auto">
-            <div className={`${darkMode ? "bg-gray-800" : "bg-white"} rounded-lg shadow-md p-3 sm:p-4`}>
-              <div className="flex justify-center items-center">
-                <HomePageResult/>
-              </div>
+        {/* Results */}
+        {!loading && searchQuery && searchResults.length > 0 && (
+          <div className={`mt-3 rounded-2xl border overflow-hidden ${darkMode ? "bg-gray-900 border-white/5" : "bg-white border-gray-100"}`}>
+            {searchResults.map((result, index) => (
+              <button
+                key={index}
+                onClick={() => handleResultClick(result)}
+                className={`w-full flex items-center gap-3 px-4 py-3 text-left transition-all duration-150 ${
+                  darkMode ? "hover:bg-white/5 border-white/5" : "hover:bg-gray-50 border-gray-50"
+                } ${index !== 0 ? "border-t" : ""}`}
+              >
+                <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-indigo-500/20 to-violet-500/20 flex items-center justify-center flex-shrink-0">
+                  <ResultIcon className={`w-4 h-4 ${darkMode ? "text-indigo-400" : "text-indigo-600"}`} />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className={`text-sm font-semibold truncate ${darkMode ? "text-white" : "text-gray-900"}`}>
+                    {getResultText(result)}
+                  </p>
+                  {getSubText(result) && (
+                    <p className={`text-xs truncate mt-0.5 ${darkMode ? "text-gray-500" : "text-gray-400"}`}>
+                      {getSubText(result)}
+                      {result.currentyear && ` • Year ${result.currentyear}`}
+                    </p>
+                  )}
+                </div>
+                <ChevronRight className={`w-4 h-4 flex-shrink-0 ${darkMode ? "text-gray-600" : "text-gray-300"}`} />
+              </button>
+            ))}
+          </div>
+        )}
+
+        {/* No results */}
+        {!loading && searchQuery && searchResults.length === 0 && (
+          <div className={`mt-3 rounded-2xl border p-8 text-center ${darkMode ? "bg-gray-900 border-white/5" : "bg-white border-gray-100"}`}>
+            <div className={`w-12 h-12 rounded-2xl mx-auto mb-3 flex items-center justify-center ${darkMode ? "bg-gray-800" : "bg-gray-100"}`}>
+              <Search className={`w-5 h-5 ${darkMode ? "text-gray-500" : "text-gray-400"}`} />
             </div>
+            <p className={`text-sm font-medium ${darkMode ? "text-gray-400" : "text-gray-500"}`}>No results found</p>
+            <p className={`text-xs mt-1 ${darkMode ? "text-gray-600" : "text-gray-400"}`}>Try a different search term</p>
           </div>
         )}
       </div>
 
-      {/* Modal Component */}
       <Modal
         isOpen={isModalOpen}
-        onClose={() => {
-          setIsModalOpen(false);
-          onRejectAction?.();
-        }}
+        onClose={() => { setIsModalOpen(false); onRejectAction?.(); }}
         title={modalTitle}
         type={modalType}
         onConfirm={modalAction}

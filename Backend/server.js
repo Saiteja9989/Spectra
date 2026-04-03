@@ -15,29 +15,31 @@ const internalexam = require('./routes/internalres');
 const externalexam = require('./routes/externalres');
 const netraqr = require('./routes/gethallticketnumfromnetraid');
 const fetchqr = require('./routes/fetchqr');
+const browserlogin = require('./routes/puppeteerlogin');
 // const getSubjects = require('./routes/getSemSubjects');
 
 const app = express();
 
 // CORS configuration
 const allowedOrigins = [
-  'http://localhost:5173', // Local development
-  'https://spectra-beta.vercel.app', // Your production domain
-  'https://spectra.vercel.app' // Add other domains if needed
+  'https://spectra-beta.vercel.app',
+  'https://spectra.vercel.app'
 ];
 
 app.use(cors({
   origin: function (origin, callback) {
- 
     if (!origin) return callback(null, true);
-    
+    // Allow all localhost and local network origins in development
+    if (/^http:\/\/(localhost|127\.0\.0\.1|192\.168\.\d+\.\d+)(:\d+)?$/.test(origin)) {
+      return callback(null, true);
+    }
     if (allowedOrigins.indexOf(origin) === -1) {
       const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
       return callback(new Error(msg), false);
     }
     return callback(null, true);
   },
-  credentials: true 
+  credentials: true
 }));
 app.use(bodyParser.json());
 
@@ -60,6 +62,7 @@ app.use('/api', internalexam);
 app.use('/api', externalexam);
 app.use('/api', netraqr);
 app.use('/api', fetchqr);
+app.use('/api', browserlogin);
 // app.use('/api', getSubjects);
 
 const db = process.env.CONNECTION;
